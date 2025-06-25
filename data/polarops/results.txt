@@ -1,0 +1,31 @@
+seed = 123
+     eval_accuracy: 0.868
+           eval_f1: 0.788
+         eval_loss: 0.340
+    eval_precision: 0.812
+       eval_recall: 0.765
+
+
+seed = 456
+     eval_accuracy: 0.887
+           eval_f1: 0.870
+         eval_loss: 0.387
+    eval_precision: 0.870
+       eval_recall: 0.870
+
+
+seed = 789
+     eval_accuracy: 0.830
+           eval_f1: 0.757
+         eval_loss: 0.401
+    eval_precision: 0.875
+       eval_recall: 0.667
+
+
+seed = 1234
+     eval_accuracy: 0.849
+           eval_f1: 0.826
+         eval_loss: 0.373
+    eval_precision: 0.792
+       eval_recall: 0.864
+

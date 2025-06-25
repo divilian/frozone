@@ -1,0 +1,31 @@
+Enter text (or 'done'): obama and clinton both made good points, but i still like biden
+   HEALTHY: 0.741
+ polarized: 0.259
+Enter text (or 'done'): obama and clinton were both idiots, and biden is hopeless old man
+   healthy: 0.408
+ POLARIZED: 0.592
+Enter text (or 'done'): how would you ever know that, though?
+   HEALTHY: 0.567
+ polarized: 0.433
+Enter text (or 'done'): what about all the illegals crossing the border!
+   healthy: 0.489
+ POLARIZED: 0.511
+Enter text (or 'done'): trumpkin
+   healthy: 0.436
+ POLARIZED: 0.564
+Enter text (or 'done'): trump
+   healthy: 0.454
+ POLARIZED: 0.546
+Enter text (or 'done'): the president has the duty to be truthful with all americans
+   HEALTHY: 0.818
+ polarized: 0.182
+Enter text (or 'done'): the president can do anything he wants
+   HEALTHY: 0.739
+ polarized: 0.261
+Enter text (or 'done'): the president can use the justice system against his enemies
+   HEALTHY: 0.790
+ polarized: 0.210
+Enter text (or 'done'): how dare he use the justice system against his enemies!
+   healthy: 0.437
+ POLARIZED: 0.563
+
