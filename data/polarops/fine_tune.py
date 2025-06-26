@@ -1,4 +1,6 @@
+import argparse
 import os
+import sys
 
 import polars as pl
 import torch
@@ -12,6 +14,9 @@ from transformers import (
     TrainingArguments
 )
 from datasets import Dataset, ClassLabel, Features, Value, DatasetDict
+
+sys.path.append(os.path.abspath("/home/stephen/src/lib"))
+from utils import set_all_seeds
 
 def prep_dataset(
     csv_filename: str,
@@ -50,6 +55,7 @@ def fine_tune(
     ft_model_prefix: str,
     additional_data_csv_filename: str,
     seed: int,
+    erase_pretraining: bool = False,
     return_cached: bool = True,
 ):
     ft_model_name = f'{ft_model_prefix}-{base_model_name}'
@@ -73,6 +79,16 @@ def fine_tune(
         )
 
     model = AutoModelForSequenceClassification.from_pretrained(base_model_name)
+
+    if erase_pretraining:
+        # Reset the weights back to what they were before pre-training.
+        def reinit_weights(module):
+            if hasattr(module, 'reset_parameters'):
+                # Not in the torch docs anywhere (!) but this is an internal
+                # helper function to intelligently initialize the weights of a
+                # model to have good initial statistical properties.
+                module.reset_parameters()
+        model.apply(reinit_weights)
 
     training_args = TrainingArguments(
         output_dir="./results",
@@ -98,10 +114,19 @@ def fine_tune(
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--seed",
+        required=True,
+        type=int,
+        help="seed for train/test split"
+    )
+    args = parser.parse_args()
+    set_all_seeds(args.seed)
     model, tokenizer, label_mapper = fine_tune(
         base_model_name='distilbert-base-uncased',
         ft_model_prefix='polarops-finetuned',
         additional_data_csv_filename='polarops.csv',
-        seed=1234,
+        seed=args.seed,
         return_cached=False,
     )
