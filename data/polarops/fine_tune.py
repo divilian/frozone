@@ -129,4 +129,5 @@ if __name__ == "__main__":
         additional_data_csv_filename='polarops.csv',
         seed=args.seed,
         return_cached=False,
+        erase_pretraining=False
     )

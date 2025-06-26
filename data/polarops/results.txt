@@ -1,15 +1,20 @@
-seed = 123
-     eval_accuracy: 0.887
-           eval_f1: 0.812
-         eval_loss: 0.338
-    eval_precision: 0.867
-       eval_recall: 0.765
+seed = 123 
+      (with pre-training)   (without pre-training)
+     eval_accuracy: 0.887     eval_accuracy: 0.755
+           eval_f1: 0.812           eval_f1: 0.480
+         eval_loss: 0.338         eval_loss: 0.551
+    eval_precision: 0.867    eval_precision: 0.750
+       eval_recall: 0.765       eval_recall: 0.353
 
 
 seed = 1234
-     eval_accuracy: 0.811
-           eval_f1: 0.792
-         eval_loss: 0.379
-    eval_precision: 0.731
-       eval_recall: 0.864
+      (with pre-training)   (without pre-training)
+     eval_accuracy: 0.811     eval_accuracy: 0.642
+           eval_f1: 0.792           eval_f1: 0.387
+         eval_loss: 0.379         eval_loss: 0.613
+    eval_precision: 0.731    eval_precision: 0.667
+       eval_recall: 0.864       eval_recall: 0.273
 
+
+With pre-training, the recall is massively improved. (Precision is slightly
+improved.) So a pre-trained model is more able to detect polarization patterns?
