@@ -11,3 +11,8 @@ __pycache__/
 
 # Checkpoints
 results
+
+# Developer-specific stuff
+dev/SD/**
+dev/GM/**
+dev/LR/**
