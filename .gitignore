@@ -13,6 +13,6 @@ __pycache__/
 results
 
 # Developer-specific stuff
-dev/SD/**
-dev/GM/**
-dev/LR/**
+dev/SD
+dev/GM
+dev/LR
