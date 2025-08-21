@@ -7,4 +7,4 @@ perhaps improved, through intercession by LLMs.
 
 * Stephen Davies, Ph.D.
 * Garrett McKenzie
-* Laur Rider
+* Laura Rider
