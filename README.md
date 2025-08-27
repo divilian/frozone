@@ -1,5 +1,5 @@
 <p align = center>
-# Project Frozone
+  <b>Project Frozone</b>
   <img width="142" height="190" alt="image" src="https://github.com/user-attachments/assets/cab24a9f-a2b7-4897-b38d-da96f1e57478" />
 </p>
 
