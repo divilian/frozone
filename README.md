@@ -10,13 +10,13 @@ perhaps improved, through intercession by LLMs.
 
 ## Staff
 
-# University of Mary Washington
+### University of Mary Washington
 
 * Stephen Davies, Ph.D. (SD)
 * Bethanie Hackett (BH)
 * Garrett McKenzie (GM)
 * Laura Rider (LR)
 
-# MITRE Corporation
+### MITRE Corporation
 
 * Noah Fine (NF)
