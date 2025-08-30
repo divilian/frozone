@@ -8,8 +8,15 @@
 An investigation into politicized dialogue -- how it can be analyzed, and
 perhaps improved, through intercession by LLMs.
 
-## Staff (from the University of Mary Washington)
+## Staff
 
-* Stephen Davies, Ph.D.
-* Garrett McKenzie
-* Laura Rider
+# University of Mary Washington
+
+* Stephen Davies, Ph.D. (SD)
+* Bethanie Hackett (BH)
+* Garrett McKenzie (GM)
+* Laura Rider (LR)
+
+# MITRE Corporation
+
+* Noah Fine (NF)
