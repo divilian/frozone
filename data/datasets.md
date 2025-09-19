@@ -19,6 +19,7 @@
   and
   [`factchecking_datasets2`](https://files.zotero.net/eyJleHBpcmVzIjoxNzU3Njk0NzkzLCJoYXNoIjoiYWI2YTQzMDc3OWIyMjdkMzBjZTE2NDU2NmRhZDMxMjAiLCJpdGVtIjoiMjA4MTcwNThcL0E2NlNaNThFIiwiZmlsZW5hbWUiOiJmYWN0Y2hlY2tpbmdfZGF0YXNldHMyLnBuZyIsImNvbnRlbnRUeXBlIjoiaW1hZ2VcL3BuZyJ9/6d5b011e800a64479a4684d86ef6011866b3823359ed17fc3ece8ddddbe9b2f6/factchecking_datasets2.png) images in "misinfo/disinfo" | "datasets"
   Z folder
+* [LIAR Dataset](https://sites.cs.ucsb.edu/~william/papers/acl2017.pdf) Statements collected from POLITIFACT.COM rated on a scale of truthfulness with context and justification
 
 ## Polarization
 * [PolarOps](http://stephendavies.org/writings/IC2S2_2022abstract.pdf) (Cagle 2021): 522 nested Reddit threads labeled as "polarized" or "not"
