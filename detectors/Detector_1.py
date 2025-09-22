@@ -220,17 +220,6 @@ if __name__ == "__main__":
 		else:
 			break
 	
-"""
-import re as re
-pattern = "{.*}"
-text="My name is garrett and I hate the government. The government is bad because they are evil."
-detectTemp = Detector_1()			
-result = detectTemp.detect_misinformation_zeroShot(text)
-found = re.findall(pattern,result)
-print(found[0])
-"""
-		
-	
 	
 	
 		
