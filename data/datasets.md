@@ -61,3 +61,12 @@ Overview: https://www.zubiaga.org/datasets/
 ## Polarization
 * [PolarOps](http://stephendavies.org/writings/IC2S2_2022abstract.pdf) (Cagle 2021): 522 nested Reddit threads labeled as "polarized" or "not"
 
+
+## Toxicity
+
+* [ToxiGen](https://www.microsoft.com/en-us/research/publication/toxigen-a-large-scale-machine-generated-dataset-for-adversarial-and-implicit-hate-speech-detection/): A Large-Scale Machine-Generated Dataset for Adversarial and Implicit Hate Speech Detection (274k statements)
+* [DeToxy](https://ar5iv.labs.arxiv.org/html/2110.07592): A Large-Scale Multimodal Dataset for Toxicity Classification in Spoken Utterances (2M+ statements)
+* [Multilingual Toxicity Detection Dataset](https://huggingface.co/datasets/textdetox/multilingual_toxicity_dataset) (2.5k toxic and 2.5k non-toxic samples for each language)
+* [A Strategy Labelled Dataset of Counterspeech](https://aclanthology.org/2024.woah-1.20/), 1000 hate speech/counterspeech pairs from an existing dataset with strategies established in the social sciences
+- [Empathy-based counterspeech](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ARZ9PU) from study cited earlier (1350 data points)
+
