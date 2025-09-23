@@ -21,6 +21,43 @@
   Z folder
 * [LIAR Dataset](https://sites.cs.ucsb.edu/~william/papers/acl2017.pdf) Statements collected from POLITIFACT.COM rated on a scale of truthfulness with context and justification
 
+## Misrepresentation of sources
+
+* FEVER / FEVEROUS (claim→evidence→support/refute/NEI)
+https://huggingface.co/datasets/fever/fever
+https://huggingface.co/datasets/fever/feverous
+
+* VitaminC (contrastive evidence—tiny wording changes flip the label; perfect for “seems to support but doesn’t”)
+Paper: https://aclanthology.org/2021.naacl-main.52/ Data: https://github.com/TalSchuster/VitaminC
+
+* MultiFC (26 fact-checking sites; rich metadata; real-world claims)
+Paper: https://aclanthology.org/D19-1475/
+
+* AVeriTeC (real-world, multi-org fact checks; lots of social posts as sources/claims)
+https://neurips.cc/virtual/2023/poster/73517
+
+* Attribution/faithfulness specific
+https://huggingface.co/datasets/McGill-NLP/FaithDial
+
+* AttributionBench (eval whether answers are supported by citations):
+https://arxiv.org/abs/2402.15089o
+
+* RARR (pipeline to find support & revise unsupported spans): https://arxiv.org/abs/2210.08726
+
+* https://aclanthology.org/2020.emnlp-main.623/
+
+* Emergent — claim↔article stance; journalists labeled veracity & stance.
+Paper (PDF): https://aclanthology.org/N16-1138.pdf
+
+* SemEval-2016 Task 6 (Twitter stance) — for short, informal posts.
+https://aclanthology.org/S16-1003/
+
+* PHEME — rumor threads with support/deny/uncertain/evidence.
+Overview: https://www.zubiaga.org/datasets/
+
+* Quotebank — 178M–235M attributed quotations across news; use to verify exact
+ wording/at  (Great for catching "the source doesn't say that")
+
 ## Polarization
 * [PolarOps](http://stephendavies.org/writings/IC2S2_2022abstract.pdf) (Cagle 2021): 522 nested Reddit threads labeled as "polarized" or "not"
 
