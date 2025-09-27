@@ -16,28 +16,6 @@ This detector currently does not do misrepresentation of sources!!!!
 This detector currently does not do affective polarization!!!!
 Also, the fact_checking is slow because of API augmented RAG.
 The other option for fact_checking is zero-shot using gpt-4o which is not research backed but works as far as I can tell.
-
-Dependencies:
-	
-python 3.13.7 or greater (I got it to work at 3.13.7)
-pip install detoxify
-pip install python-fade
-pip install groq
-pip install rich
-pip install factverifai
-pip install transformers
-pip install dotenv
-pip install ipywidgets
-pip install openai
-pip install genbit
-pip install tf-keras
-
-First:
-https://ollama.com/download
-Then:
-ollama pull gemma3
-
-
 """
 
 class Detector_1(Detector):
@@ -49,10 +27,10 @@ class Detector_1(Detector):
 		
 		#load in modules for detecting stuff and things
 		
-		#Himel7 bias detector (https://huggingface.co/himel7/bias-detector?utm_source=chatgpt.com)
+		#Himel7 bias detector (https://huggingface.co/himel7/bias-detector)
 		self.classifierH = pipeline("text-classification", model="himel7/bias-detector", tokenizer="roberta-base")
 		
-		#social media fairness classifier (https://huggingface.co/Social-Media-Fairness/Classifier-Bias-SG?utm_source=chatgpt.com)
+		#social media fairness classifier (https://huggingface.co/Social-Media-Fairness/Classifier-Bias-SG)
 		self.tokenizerSMF = AutoTokenizer.from_pretrained("Social-Media-Fairness/Classifier-Bias-SG")
 		self.modelSMF = AutoModelForSequenceClassification.from_pretrained("Social-Media-Fairness/Classifier-Bias-SG")
 		self.classifierSMF = pipeline("text-classification", model=self.modelSMF, tokenizer=self.tokenizerSMF)
@@ -63,7 +41,7 @@ class Detector_1(Detector):
 		else:
 			self.toxicAnalyzer = Detoxify('original' , device = 'cpu')
 			
-		#multi-class fallacy ("https://huggingface.co/MidhunKanadan/roberta-large-fallacy-classification?utm_source=chatgpt.com")
+		#multi-class fallacy ("https://huggingface.co/MidhunKanadan/roberta-large-fallacy-classification")
 		model_path = "MidhunKanadan/roberta-large-fallacy-classification"
 		self.tokenizer = AutoTokenizer.from_pretrained(model_path)
 		if torch.cuda.is_available():
@@ -219,7 +197,3 @@ if __name__ == "__main__":
 				
 		else:
 			break
-	
-	
-	
-		
