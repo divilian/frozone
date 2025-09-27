@@ -1,0 +1,143 @@
+This file includes briefs about each of the detection methods used in detector one. All of the methods in detector one are either open source or a zero-shot classifier utilizing an LLM backend.
+
+As a side note, a zero-shot classifier is a model which is capable of predicting a class that it has never seen during training. In this case, the term is used to describe an LLM that is instructed to apply a label from a specified set to a given text.
+
+BABE Dataset
+
+Authors:
+Media Bias Group
+
+Link To Kaggle:
+https://www.kaggle.com/datasets/timospinde/babe-media-bias-annotations-by-experts
+
+Link To HF:
+https://huggingface.co/mediabiasgroup
+
+Desc:
+This is a dataset of expert annotated text with labels such as political leaning, biased words, and factuality.
+
+Logical Fallacy Detection Dataset
+
+Authors:
+Zhijing Jin, Abhinav Lalwani, Tejas Vaidhya, Xiaoyu Shen, Yiwen Ding, Zhiheng Lyu, Mrinmaya Sachan, Rada Mihalcea and Bernhard Schölkopf
+
+Link To Paper: (Good read)
+https://arxiv.org/abs/2202.13758
+
+Link To GitHub:
+https://github.com/causalNLP/logical-fallacy
+
+Desc:
+An expert annotated dataset of text to the labels Intentional Fallacy, Appeal to Emotion, Faulty Generalization, Fallacy of Credibility, Ad Hominem, Fallacy of Relevance, Deductive Fallacy, False Causality, Fallacy of Extension, Ad Populum, False Dilemma, Equivocation, and Circular Claim
+
+HIMEL 7 Bias Detector
+
+Authors: 
+Himel Ghosh, Ahmed Mosharafa, and Georg Groh
+
+Link To Paper: 
+https://arxiv.org/abs/2505.13010
+
+Link To HF: 
+https://huggingface.co/himel7/bias-detector
+
+Desc:
+This is a RoBERTa based model fine-tuned on the BABE dataset. 
+
+Output:
+label: biased or not biased
+number: confidence in label
+
+Social Media Fairness Classifier
+
+Authors:
+Shardul Ghuge
+
+Link To HF:
+https://huggingface.co/Social-Media-Fairness/Classifier-Bias-SG
+
+Desc:
+A distilbert-base-uncased architecture fine tuned on the BABE dataset for bias detection.
+
+Output:
+label: Biased or Not Biased
+number: confidence in label
+
+Detoxify
+
+Authors:
+Laura Hanu working at Unitary
+
+Link To PyPi:
+https://pypi.org/project/detoxify/
+
+Link To GitHub:
+https://github.com/unitaryai/detoxify
+
+Desc:
+A model fit on date from the "Toxic Comment Classification Challenge" by Kaggle https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge which classifies a given text as being toxic, severe_toxic, obscene, threat, insult, or identity_hate.
+
+Output:
+label: toxic, severe_toxic, obscene, threat, insult, or identity_hate
+number: confidence
+
+Roberta-Large-Fallacy-Classification
+
+Authors:
+Midhun Kanadan
+
+Link To HF:
+https://huggingface.co/MidhunKanadan/roberta-large-fallacy-classification
+
+Desc:
+A roberta-large model, a meta LLM, fine-tuned on the logical fallacy detection dataset referenced earlier in this documentation. Notably this is a completely independent non-researcher author but the original training data is from a credible source.
+
+Output:
+label: Intentional Fallacy, Appeal to Emotion, Faulty Generalization, Fallacy of Credibility, Ad Hominem, Fallacy of Relevance, Deductive Fallacy, False Causality, Fallacy of Extension, Ad Populum, False Dilemma, Equivocation, and Circular Claim
+number: confidence
+
+Zero-Shot Binary Fallacy 
+
+Authors:
+Garrett McKenzie
+
+Groq:
+https://groq.com/
+
+Desc:
+This is a zero-shot classifier that utilizes the groq API and prompt engineering to classify a text as containing or not containing a logical fallacy. This is approach is very "meh" and is really meant to supplement the roberta approach.
+
+Output:
+label: fallacy or none
+
+FactVerifAI
+
+Authors:
+Adela Lliescu and Tom Mac
+
+Link To GitHub:
+https://github.com/a-i-flo/factverifai
+
+Link To PyPi:
+https://pypi.org/project/factverifai/
+
+Desc:
+A python package that uses a local ollama model along with RAG to enable fact-checking of claims made in text. It can also me modeled to support an OpenAI API blackened but I had issues getting that set up.
+
+Output:
+A nested dictionary of the below structure
+{"claimX":{"original":text,"rephrased":text,"accuracy":float,"justification":text,"refrences":[arr]}}
+
+OpenAI Zero Shot Misinformation Detection
+
+Authors:
+Garrett McKenzie
+
+Desc:
+This is a zero-shot multi-class classification model which uses ChatGPT4o via OpenAI API to perform fallacy detection. The model is capable of web-search to validate claims and is instructed to cite its sources while also having an internal dialogue about the process.
+
+Output:
+Either a dictionary of below structure 
+{"truth_value":text,"accuracy":float}
+
+OR the string "bad output"

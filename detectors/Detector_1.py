@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 import os
 from openai import OpenAI
 from transformers import pipeline
+import re as re
 
 """
 This detector currently does not do misrepresentation of sources!!!!
@@ -125,7 +126,12 @@ class Detector_1(Detector):
 			temperature = 0.5,
 		)
 		#maybe regex to pull out the {} part
-		return response.output_text
+        pattern = r"{.*}"
+		result = re.findall(pattern, response.output_text)
+		if len(result) != 1:
+			return "bad output"
+		else:
+			return result[0]
 	
 	def detect(self,text , **kwargs):
 		choice = "both"
