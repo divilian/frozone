@@ -38,8 +38,4 @@ Pip Installing All Requirements
 Get the requirments.txt file from GitHub or your local repo
 
 2)
-Run the command pip install requirments.txt
-
-
-
-
+Run the command pip install -r requirments.txt
