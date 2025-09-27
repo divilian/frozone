@@ -197,3 +197,4 @@ jiter==0.11.0
 joblib==1.5.2
 jsonpatch==1.33
 jsonpointer==3.0.0
+regex==2023.12.25
