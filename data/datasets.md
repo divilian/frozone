@@ -70,7 +70,8 @@ Overview: https://www.zubiaga.org/datasets/
 * [DeToxy](https://ar5iv.labs.arxiv.org/html/2110.07592): A Large-Scale Multimodal Dataset for Toxicity Classification in Spoken Utterances (2M+ statements)
 * [Multilingual Toxicity Detection Dataset](https://huggingface.co/datasets/textdetox/multilingual_toxicity_dataset) (2.5k toxic and 2.5k non-toxic samples for each language)
 * [A Strategy Labelled Dataset of Counterspeech](https://aclanthology.org/2024.woah-1.20/), 1000 hate speech/counterspeech pairs from an existing dataset with strategies established in the social sciences
-- [Empathy-based counterspeech](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ARZ9PU) from study cited earlier (1350 data points)
+* [Empathy-based counterspeech](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ARZ9PU) from study cited earlier (1350 data points)
+* [Detoxify](https://huggingface.co/unitary/unbiased-toxic-roberta): trained model using the three "Jigsaw challenges"
 
 
 ## Fallacious Reasoning
