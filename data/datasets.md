@@ -79,3 +79,6 @@ Overview: https://www.zubiaga.org/datasets/
 * [LOGIC (and LOGICCLIMATE)](https://github.com/causalNLP/logical-fallacy): Identifies thirteen different types of logical fallacies. The LOGIC dataset contains general examples of these logical fallacies. The LOGICCLIMATE dataset contains examples of these logical fallacies in climate-related text/media.
 * [MAFALDA](https://github.com/ChadiHelwe/MAFALDA): Identifies twenty-three different types of logical fallacies.
 * [CAMPFIRE](https://github.com/melissatorgbi/CAMPFIRE): Identifies twenty-five different types of logical fallacies. The datasets include documents on three news topics: COVID, Ukranian conflict, and the Ohio train derailment.
+
+## Counter-Speech for bias
+* [DIALCONAN](https://github.com/marcoguerini/CONAN?tab=readme-ov-file#dialoconan): Expert counter narrative responses to hate speech.
