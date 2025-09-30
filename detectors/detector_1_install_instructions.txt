@@ -37,5 +37,6 @@ Pip Installing All Requirements
 1)
 Get the requirments.txt file from GitHub or your local repo
 
-2)
+2) ## We are having some issues with our req.txt files. At the moment there are two. For this detector make sure to pip install the requirments.txt in the detectors directory ##
 Run the command pip install -r requirments.txt
+Note that you may need to specifically say python3.13 -m pip install -r requirments.txt
