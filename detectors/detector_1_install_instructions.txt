@@ -29,6 +29,9 @@ pip install ollama
 3)
 run the command ollama pull gemma3
 
+4)
+run the command ollama pull llama3.1
+
 Setting Up The .env File (There are spooky API keys in here so don't edit the file)
 1)
 Move it into the directory where you have detector.py and detector_1.py
