@@ -11,13 +11,16 @@ import os
 from openai import OpenAI
 from transformers import pipeline
 import re as re
+from torch import argmax
+from torch.nn.functional import softmax
 
 """
 This detector currently does not do misrepresentation of sources!!!!
-This detector currently does not do affective polarization!!!!
 Also, the fact_checking is slow because of API augmented RAG.
 The other option for fact_checking is zero-shot using gpt-4o which is not research backed but works as far as I can tell.
 """
+
+TF_ENABLE_ONEDNN_OPTS=0
 
 class Detector_1(Detector):
     
@@ -27,6 +30,8 @@ class Detector_1(Detector):
         super(Detector,self).__init__()
         
         #load in modules for detecting stuff and things
+        self.tokenizerPOLITICS = AutoTokenizer.from_pretrained("launch/POLITICS")
+        self.modelPOLITICS = AutoModelForSequenceClassification.from_pretrained("matous-volf/political-leaning-politics")
         
         #Himel7 bias detector (https://huggingface.co/himel7/bias-detector)
         self.classifierH = pipeline("text-classification", model="himel7/bias-detector", tokenizer="roberta-base")
@@ -81,8 +86,14 @@ class Detector_1(Detector):
         
         #zero-shot classification
         chat_completion = self.client.chat.completions.create(messages=[{"role": "system","content": self.system_prompt,},{"role": "user","content": text,}],model="groq/compound",temperature=0.5,max_tokens=1,top_p=1,stop=None,stream=False,)
-        return chat_completion.choices[0].message.content
-    
+        result = chat_completion.choices[0].message.content
+        pattern = r"{.*}"
+        result = re.findall(pattern, result)
+        if len(result) != 1:
+            return "bad output"
+        else:
+            return result[0]
+
     def detect_toxicity(self,text):
         results = self.toxicAnalyzer.predict(text)
         return(("toxicity",results["toxicity"]))
@@ -132,7 +143,17 @@ class Detector_1(Detector):
             return "bad output"
         else:
             return result[0]
-    
+
+    def detectPOLITICS(self,text):
+        label_map = {0 : "Left" , 1 : "Center" , 2 : "Right"}
+        tokens = self.tokenizerPOLITICS(text, return_tensors = "pt")
+        output = self.modelPOLITICS(**tokens)
+        logits = output.logits
+        label = argmax(logits,dim=1).item()
+        probabilities = softmax(logits , dim = 1)
+        score = probabilities[0 , label]
+        return (label_map[label] , score)
+
     def detect(self,text , **kwargs):
         choice = "both"
         if "fact_check_choice" in kwargs.keys():
@@ -169,7 +190,11 @@ class Detector_1(Detector):
         result = self.detect_bias_SMF(text)
         returnMe["SMF_bias_label"] = result[0]
         returnMe["SMF_bias_score"] = result[1]
-        
+
+        result = self.detectPOLITICS(text)
+        returnMe["POLITICS_label"] =  result[0]
+        returnMe["POLITICS_score"] = result[1]
+
         return returnMe
         
 if __name__ == "__main__":
@@ -199,7 +224,6 @@ if __name__ == "__main__":
             result = detect.detect(text,fact_check_choice = choice)
             print("Classifications:")
             for k,v in result.items():
-                print(f"{k} : {v}")
-                
+                print(f"{k} : {v}")    
         else:
             break
