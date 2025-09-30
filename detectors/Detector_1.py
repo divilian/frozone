@@ -101,7 +101,7 @@ class Detector_1(Detector):
     def detect_misinformation(self,text):
         result = fact_check(
             text,
-            model="gemma3",
+            model="llama3.1",
             llm_backend="ollama",
             max_workers=25,
             verbose=True,
