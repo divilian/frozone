@@ -11,7 +11,7 @@ If you set 3.13.7 to be your default then saying python --version or python3 --v
 Use "python3.13 -m venv <dirname>" to create a new virtual environment.
 
 4)
-Use "source <path/to/venv>/bin/activate" to activate your virtual environment.
+Use "source <relative/path/to/venv>/bin/activate" to activate your virtual environment.
 
 5)
 When done use "deactivate" to terminate the environment.
@@ -34,7 +34,7 @@ Setting Up The .env File (There are spooky API keys in here so don't edit the fi
 Move the .env file into the directory where you have detector.py and detector_1.py. This file contains api_keys. In this development stage, we can all use the same keys and the .env file should be attached in an email I sent out a little bit ago. Note that outlook appends a random string before hidden files so you will have to rename it to .env manually after you download it.
 
 2)
-Make sure it is literally named .env
+Make sure it is literally named .env and located in the detectors directory.
 
 3)
 Make sure if you ever push to the repo that you do not include the .env file as that will leak our keys. This isn't a big deal right now because we are only using free level stuff, it may be later so get in the habit.
