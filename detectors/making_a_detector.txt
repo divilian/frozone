@@ -1,0 +1,18 @@
+The way Detector_1 is designed is that it is a class which does two seperate things. 
+
+Firstly, it loads in all the pre-built models for each aspect we want to detect in some text. Then, it defines a series of functions which, given that text and some optional **kwargs, uses the respective pre-built model to get an output and returns it.
+
+Secondly, Detector_1 defines a detect(self,text,**kwargs) method which it must implement because it subclasses the Detector abstract class. Inside this method, Detector_1 calls each function for each aspects and conjoins them all together into a dictionary output which it returns
+
+If you would like to contribute by making a detector you can do one of two things.
+
+A) Combine a bunch of sub-detectors,one for each aspect of text we want to detect, in one object which calls them all in the detect(self,text,**kwargs) method in order to return a dictionary.
+
+B) Make a detector which implements detection only for a single aspect of text we want to detect and within the detect(self,text,**kwargs)method, implement that detection and return it in a dictionary.
+
+Essentially, there are only two rules if you want to make a detector.
+
+1) It must implement the detect(self,text,**kwargs) method.
+2) It must return a dictionary which is structured as {"detectionMethod1":{outputOfMethod1},"detectionMethod2":{outputOfMethod2}}
+
+I have generally found it best to structure outputOfMethod# as {"label":result,"probability":result}.However, that is model dependent so is not a mandatory.

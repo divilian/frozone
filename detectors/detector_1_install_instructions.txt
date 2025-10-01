@@ -12,19 +12,16 @@ Use "python3.13 -m venv <dirname>" to create a new virtual environment.
 
 4)
 Use "source <path/to/venv>/bin/activate" to activate your virtual environment.
-# SD->GM: I believe this needs "/bin/activate" here (I added it)
 
 5)
 When done use "deactivate" to terminate the environment.
 
 Getting llama
 1) 
-Go to https://ollama.com/download and follow the instructions there.
-# SD->GM: does this install in a certain place? how will pip find it? Or is
-this step incompatible with step 2), below?
+Go to https://ollama.com/download and follow the instructions there. Once you download and pip install ollama, you will have a new terminal command "ollama pull <modelID>" which will download the model to your machine. Then, the code in detector uses the python interface through the ollama python package to utlize that model for infrence locally. It is a little weird but just trust the process.
 
 2)
-pip install ollama
+pip install ollama or python -m pip install ollama
 
 3)
 run the command ollama pull gemma3
@@ -34,18 +31,18 @@ run the command ollama pull llama3.1
 
 Setting Up The .env File (There are spooky API keys in here so don't edit the file)
 1)
-Move it into the directory where you have detector.py and detector_1.py
-# SD->GM: and when you say "it" here, what exactly do you mean? Is there a
-# file we need to download from somewhere, and then rename?
+Move the .env file into the directory where you have detector.py and detector_1.py. This file contains api_keys. In this development stage, we can all use the same keys and the .env file should be attached in an email I sent out a little bit ago. Note that outlook appends a random string before hidden files so you will have to rename it to .env manually after you download it.
 
 2)
 Make sure it is literally named .env
 
+3)
+Make sure if you ever push to the repo that you do not include the .env file as that will leak our keys. This isn't a big deal right now because we are only using free level stuff, it may be later so get in the habit.
+
 Pip Installing All Requirements
 1)
-Get the requirements.txt file from GitHub or your local repo
+Go to the requirements.txt file from GitHub or your local repo
 
-2) ## We are having some issues with our req.txt files. At the moment there are
-two. For this detector make sure to pip install the requirements.txt in the detectors directory ##
+2)
 Run the command pip install -r requirements.txt
 Note that you may need to specifically say python3.13 -m pip install -r requirments.txt
