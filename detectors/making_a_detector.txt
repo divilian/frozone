@@ -10,9 +10,12 @@ A) Combine a bunch of sub-detectors,one for each aspect of text we want to detec
 
 B) Make a detector which implements detection only for a single aspect of text we want to detect and within the detect(self,text,**kwargs)method, implement that detection and return it in a dictionary.
 
-Essentially, there are only two rules if you want to make a detector.
+Essentially, there are only three rules if you want to make a detector.
 
-1) It must implement the detect(self,text,**kwargs) method.
-2) It must return a dictionary which is structured as {"detectionMethod1":{outputOfMethod1},"detectionMethod2":{outputOfMethod2}}
+1) Must include the line "from Detector import Detector" 
+2) It must implement the detect(self,text,**kwargs) method.
+3) The detect method must return a dictionary which is structured as {"detectionMethod1":{outputOfMethod1},"detectionMethod2":{outputOfMethod2}}
 
 I have generally found it best to structure outputOfMethod# as {"label":result,"probability":result}.However, that is model dependent so is not a mandatory.
+
+It is also recommended, though not mandatory, that you document the detector you make. The documentation need not include information about the code so much as information about the open-source models you use or datasets you use within that detector.
