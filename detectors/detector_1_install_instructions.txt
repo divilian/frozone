@@ -11,7 +11,8 @@ If you set 3.13.7 to be your default then saying python --version or python3 --v
 Use "python3.13 -m venv <dirname>" to create a new virtual environment.
 
 4)
-Use "source <path/to/venv>" to activate your virtual environment.
+Use "source <path/to/venv>/bin/activate" to activate your virtual environment.
+# SD->GM: I believe this needs "/bin/activate" here (I added it)
 
 5)
 When done use "deactivate" to terminate the environment.
@@ -19,6 +20,8 @@ When done use "deactivate" to terminate the environment.
 Getting llama
 1) 
 Go to https://ollama.com/download and follow the instructions there.
+# SD->GM: does this install in a certain place? how will pip find it? Or is
+this step incompatible with step 2), below?
 
 2)
 pip install ollama
@@ -29,14 +32,17 @@ run the command ollama pull gemma3
 Setting Up The .env File (There are spooky API keys in here so don't edit the file)
 1)
 Move it into the directory where you have detector.py and detector_1.py
+# SD->GM: and when you say "it" here, what exactly do you mean? Is there a
+# file we need to download from somewhere, and then rename?
 
 2)
 Make sure it is literally named .env
 
 Pip Installing All Requirements
 1)
-Get the requirments.txt file from GitHub or your local repo
+Get the requirements.txt file from GitHub or your local repo
 
-2) ## We are having some issues with our req.txt files. At the moment there are two. For this detector make sure to pip install the requirments.txt in the detectors directory ##
-Run the command pip install -r requirments.txt
+2) ## We are having some issues with our req.txt files. At the moment there are
+two. For this detector make sure to pip install the requirements.txt in the detectors directory ##
+Run the command pip install -r requirements.txt
 Note that you may need to specifically say python3.13 -m pip install -r requirments.txt
