@@ -17,3 +17,6 @@ dev/SD
 dev/GM
 dev/LR
 dev/BH
+
+#API Keys
+detectors/.env
