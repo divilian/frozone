@@ -45,4 +45,4 @@ Go to the requirements.txt file from GitHub or your local repo
 
 2)
 Run the command pip install -r requirements.txt
-Note that you may need to specifically say python3.13 -m pip install -r requirments.txt
+Note that you may need to specifically say python3.13 -m pip install -r requirements.txt
