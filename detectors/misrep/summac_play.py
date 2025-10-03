@@ -1,4 +1,11 @@
-# (All these warnings are harmless, so suppressing for now to reduce clutter.)
+#!/usr/bin/env python3
+# An interactive program to play with the SummaC family of NLI summarization
+# inconsistency detectors. (To possibly be used for detecting misrepresentation
+# of sources.)
+# Project Frozone
+# (C) 2025
+
+# (All the warnings below are harmless; suppressing for now to reduce clutter.)
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)

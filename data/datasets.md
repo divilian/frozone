@@ -25,6 +25,11 @@
 
 ## Misrepresentation of sources
 
+* [SummaC](https://github.com/tingofurro/summac) from Laban et al 2022
+    - needs "summac", "nltk", and `nltk.download('punkt_tab')`
+
+* [AlignScore](https://huggingface.co/yzha/AlignScore) from Zha et al 2023
+
 * FEVER / FEVEROUS (claim→evidence→support/refute/NEI)
 https://huggingface.co/datasets/fever/fever
 https://huggingface.co/datasets/fever/feverous
