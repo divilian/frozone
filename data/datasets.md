@@ -92,7 +92,7 @@ Expert single post responses to hate speech.
 * [Thou Shall Not Hate](https://github.com/hate-alert/Countering_Hate_Speech_ICWSM2019):
 Several counter speech responses from multiple users, intended to counter hate-speech.
 
-## Bias (implicit)
+## Bias
 * [BABE](https://huggingface.co/datasets/mediabiasgroup/BABE):
 Bias in news specifically.
 * [Detecting Unintended Social Bias](https://github.com/sahoonihar/ToxicBias_CoNLL_2022/blob/main/Data/toxicbias_test.csv)
@@ -100,8 +100,8 @@ Implicit bias detection on social media.
 * [Social Bias Frames](https://github.com/devitoska/social_bias_frames?tab=readme-ov-file):
 Implicit bias detection on social media, again.
 
-## Bias (explicit)
+## Other
 * [Biasly](https://huggingface.co/datasets/mila-ai4h/biasly-data):
 Misogyny detection specifically.
-
-
+* [Hate-Speech Detection](https://github.com/t-davidson/hate-speech-and-offensive-language):
+Hate speech and/or offensive language.
