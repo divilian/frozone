@@ -121,46 +121,159 @@
 
 ### ATTEMPT 3
 
+# import random
+# import torch
+# from datasets import load_dataset  # I did pip install datasets
+# from sentence_transformers import SentenceTransformer  # I did pip install sentence transformers
+# import faiss  # I did pip install faiss-cpu
+
+# # 1. Load dataset
+# print("Loading dataset...")
+# ds = load_dataset("allenai/prosocial-dialog", split="train")
+
+# # We'll keep just toxic comment + prosocial response pairs
+# pairs = [(ex["context"], ex["response"]) for ex in ds]
+
+# # 2. Build embeddings for retrieval
+# print("Building embeddings...")
+# embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")  # small + CPU friendly
+# corpus = [p[0] for p in pairs]
+# corpus_embeddings = embedder.encode(corpus, convert_to_numpy=True, show_progress_bar=True)
+
+# # 3. Build FAISS index for fast similarity search
+# dim = corpus_embeddings.shape[1]
+# index = faiss.IndexFlatL2(dim)
+# index.add(corpus_embeddings)
+
+# def get_prosocial_reply(user_input, top_k=3):
+#     # Embed user input
+#     q_emb = embedder.encode([user_input], convert_to_numpy=True)
+#     # Search
+#     D, I = index.search(q_emb, top_k)
+#     # Pick one of the top replies at random for variety
+#     best_idx = random.choice(I[0])
+#     toxic_example, prosocial_reply = pairs[best_idx]
+#     return prosocial_reply
+
+# # 4. Interactive loop
+# if __name__ == "__main__":
+#     print("Prosocial Bot ready! Type 'quit' to exit.\n")
+#     while True:
+#         text = input("You: ")
+#         if text.lower() in ["quit", "exit"]:
+#             break
+#         reply = get_prosocial_reply(text)
+#         print("Bot:", reply)
+
+
+### ATTEMPT 4
+
+#!/usr/bin/env python3
+# Conversational bot with prosocial responses for toxic input
+# CPU-friendly, no FAISS
+# (C) 2025
+
 import random
-import torch
 from datasets import load_dataset
 from sentence_transformers import SentenceTransformer
-import faiss
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+import torch
+import numpy as np
 
-# 1. Load dataset
-print("Loading dataset...")
+# ------------------------------
+# 1. Load toxicity detector
+# ------------------------------
+print("Loading toxicity detector...")
+detector = pipeline(
+    "text-classification",
+    model="unitary/toxic-bert",
+    tokenizer="unitary/toxic-bert",
+)
+
+# ------------------------------
+# 2. Load conversational model (DialoGPT-medium)
+# ------------------------------
+print("Loading conversational model...")
+tokenizer_chat = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
+model_chat = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model_chat.to(device)
+
+# ------------------------------
+# 3. Load ProsocialDialog dataset and embeddings
+# ------------------------------
+print("Loading ProsocialDialog dataset...")
 ds = load_dataset("allenai/prosocial-dialog", split="train")
-
-# We'll keep just toxic comment + prosocial response pairs
 pairs = [(ex["context"], ex["response"]) for ex in ds]
 
-# 2. Build embeddings for retrieval
 print("Building embeddings...")
-embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")  # small + CPU friendly
+embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 corpus = [p[0] for p in pairs]
 corpus_embeddings = embedder.encode(corpus, convert_to_numpy=True, show_progress_bar=True)
 
-# 3. Build FAISS index for fast similarity search
-dim = corpus_embeddings.shape[1]
-index = faiss.IndexFlatL2(dim)
-index.add(corpus_embeddings)
+# ------------------------------
+# 4. Function to retrieve prosocial reply
+# ------------------------------
+def get_prosocial_reply(user_input, history, top_k=3):
+    # Include last few turns for context
+    combined_input = " ".join(history[-5:] + [user_input])
+    q_emb = embedder.encode([combined_input], convert_to_numpy=True)
+    distances = ((corpus_embeddings - q_emb) ** 2).sum(axis=1)
+    top_indices = distances.argsort()[:top_k]
+    best_idx = random.choice(top_indices)
+    return pairs[best_idx][1]
 
-def get_prosocial_reply(user_input, top_k=3):
-    # Embed user input
-    q_emb = embedder.encode([user_input], convert_to_numpy=True)
-    # Search
-    D, I = index.search(q_emb, top_k)
-    # Pick one of the top replies at random for variety
-    best_idx = random.choice(I[0])
-    toxic_example, prosocial_reply = pairs[best_idx]
-    return prosocial_reply
+# ------------------------------
+# 5. Interactive loop
+# ------------------------------
+chat_history = []
 
-# 4. Interactive loop
-if __name__ == "__main__":
-    print("Prosocial Bot ready! Type 'quit' to exit.\n")
-    while True:
-        text = input("You: ")
-        if text.lower() in ["quit", "exit"]:
-            break
-        reply = get_prosocial_reply(text)
-        print("Bot:", reply)
+print("\nProsocial ChatBot ready! Type 'quit' to exit.\n")
+
+while True:
+    user_input = input("You: ")
+    if user_input.lower() in ["quit", "exit"]:
+        break
+
+    chat_history.append(f"You: {user_input}")
+
+    # Step 1: detect toxicity
+    result = detector(user_input)[0]
+    toxic_prob = result['score'] if result['label'] == 'toxic' else 1 - result['score']
+
+    if toxic_prob > 0.6:
+        # Step 2: retrieve prosocial response for toxic input
+        reply = get_prosocial_reply(user_input, chat_history)
+    else:
+        # Step 3: normal conversational model
+        new_input_ids = tokenizer_chat.encode(
+            user_input + tokenizer_chat.eos_token, return_tensors='pt'
+        ).to(device)
+
+        # Include previous chat history
+        if len(chat_history) > 1:
+            history_ids = tokenizer_chat.encode(" ".join(chat_history), return_tensors='pt').to(device)
+            bot_input_ids = torch.cat([history_ids, new_input_ids], dim=-1)
+        else:
+            bot_input_ids = new_input_ids
+
+        with torch.inference_mode():
+            output_ids = model_chat.generate(
+                bot_input_ids,
+                max_length=1000,
+                pad_token_id=tokenizer_chat.eos_token_id,
+                do_sample=True,
+                top_k=50,
+                top_p=0.95,
+                temperature=0.7
+            )
+
+        # Decode only new tokens
+        reply = tokenizer_chat.decode(output_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
+
+        # Fallback if model generates empty string
+        if not reply.strip():
+            reply = "Hmm, interesting."
+
+    print("Bot:", reply)
+    chat_history.append(f"Bot: {reply}")
