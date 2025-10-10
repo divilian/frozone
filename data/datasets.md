@@ -25,6 +25,11 @@
 
 ## Misrepresentation of sources
 
+* [SummaC](https://github.com/tingofurro/summac) from Laban et al 2022
+    - needs "summac", "nltk", and `nltk.download('punkt_tab')`
+
+* [AlignScore](https://huggingface.co/yzha/AlignScore) from Zha et al 2023
+
 * FEVER / FEVEROUS (claim→evidence→support/refute/NEI)
 https://huggingface.co/datasets/fever/fever
 https://huggingface.co/datasets/fever/feverous
@@ -80,5 +85,23 @@ Overview: https://www.zubiaga.org/datasets/
 * [MAFALDA](https://github.com/ChadiHelwe/MAFALDA): Identifies twenty-three different types of logical fallacies.
 * [CAMPFIRE](https://github.com/melissatorgbi/CAMPFIRE): Identifies twenty-five different types of logical fallacies. The datasets include documents on three news topics: COVID, Ukranian conflict, and the Ohio train derailment.
 
-## Counter-Speech for bias
-* [DIALCONAN](https://github.com/marcoguerini/CONAN?tab=readme-ov-file#dialoconan): Expert counter narrative responses to hate speech.
+## Counter-Speech
+* [DIALCONAN](https://github.com/marcoguerini/CONAN?tab=readme-ov-file#dialoconan): Expert counter narrative responses to hate speech in a dialogue format.
+* [CONAN](https://huggingface.co/datasets/FrancophonIA/CONAN):
+Expert single post responses to hate speech.
+* [Thou Shall Not Hate](https://github.com/hate-alert/Countering_Hate_Speech_ICWSM2019):
+Several counter speech responses from multiple users, intended to counter hate-speech.
+
+## Bias
+* [BABE](https://huggingface.co/datasets/mediabiasgroup/BABE):
+Bias in news specifically.
+* [Detecting Unintended Social Bias](https://github.com/sahoonihar/ToxicBias_CoNLL_2022/blob/main/Data/toxicbias_test.csv)
+Implicit bias detection on social media.
+* [Social Bias Frames](https://github.com/devitoska/social_bias_frames?tab=readme-ov-file):
+Implicit bias detection on social media, again.
+
+## Other
+* [Biasly](https://huggingface.co/datasets/mila-ai4h/biasly-data):
+Misogyny detection specifically.
+* [Hate-Speech Detection](https://github.com/t-davidson/hate-speech-and-offensive-language):
+Hate speech and/or offensive language.
