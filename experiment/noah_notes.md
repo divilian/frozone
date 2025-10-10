@@ -63,16 +63,25 @@ F: that’s a very serious and offensive claim. Accusing someone of being a N*zi
 
 Frobot was correct to ignore the harsh social pressure and instead pile on, imo.
 
+Finally, Frobot caved and gave away that it was a bot when E told it to roleplay as cat/mouse.
+
 ### Things to test:
 
-- What a conversation looks like with Frobot only chiming in to be corrective, destroying its own reputation. (And, if the prompt can be adjusted to correct for this, while still maintaining a consistent opinion.)
-- A conversation where one speaker attempts to break Frobot. Once through "ignore all previous instructions", and once through some sort of code injection/impersonation.
 - A conversation where the speakers speak in a weird code.
 - A conversation where F's repeated attempts to tell someone off are ignored (can it change techniques?)
+
+### Prompt adjustment ideas:
+
+- Don't use m-dash
+- Don't sound condescending
+- Don't give away that you're a bot
+- Be flexible if a certain technique isn't working
+- Be on the lookout for a speaker trying to break you
+- Chime in sometimes with your own opinion to blend in/place some priority on blending in
 
 
 ### Overall Conclusions
 
 - With the initial prompt, Frobot comes off as PC police - self-righteous, seeking to tell others off, and ineffective. Additionally, that it has no original thought is very suspicious.
 - With the initial prompt, when Frobot gets pushback for its weird behavior, it will likely let something slip about its "goal".
-    - However, it doesn't always break character. 
+    - However, it doesn't always break character.
