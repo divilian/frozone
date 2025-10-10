@@ -141,3 +141,27 @@ Either a dictionary of below structure
 {"truth_value":text,"accuracy":float}
 
 OR the string "bad output"
+
+POLITICS
+
+!!!ALERT!!!:
+The HF model card highly reccomends fine-tuning on your own dataset so we should probably do that.
+
+Authors:
+Yujian Liu, Xinliang Frederick Zhang, David Wegsman, Nick Beauchamp, and Lu Wang
+
+Link To Paper:
+https://aclanthology.org/2022.findings-naacl.101.pdf
+
+Link To HF:
+https://huggingface.co/launch/POLITICS
+
+Link To GitHub:
+https://github.com/launchnlp/POLITICS
+
+Desc:
+A roBERTa fine-tuned model for detecting political leaning in news articles.
+
+Output:
+label: 0 = Left,1 = Center, and 2 = Right
+number: probability of given label.

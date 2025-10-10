@@ -1,5 +1,3 @@
-#!/usr/bin/env python3 
-# An interactive program to play with HF classifiers.
 # Project Frozone
 # (C) 2025
 
