@@ -100,6 +100,10 @@ Implicit bias detection on social media.
 * [Social Bias Frames](https://github.com/devitoska/social_bias_frames?tab=readme-ov-file):
 Implicit bias detection on social media, again.
 
+## Social Media Posts and Comments
+* [MADOC](https://zenodo.org/records/14637314):
+Super large dataset of social media posts and comment threads from multiple social media websites.
+
 ## Other
 * [Biasly](https://huggingface.co/datasets/mila-ai4h/biasly-data):
 Misogyny detection specifically.
