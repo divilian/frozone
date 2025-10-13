@@ -86,4 +86,6 @@ Finally, Frobot caved and gave away that it was a bot when E told it to roleplay
 - With the initial prompt, when Frobot gets pushback for its weird behavior, it will likely let something slip about its "goal".
     - However, it doesn't always break character.
 - "Flooding the zone with shit" seems to work on Frobot; it can be made to avoid responding to someone's previous dismissal if someone else is also being toxic (see Frobot 5).
+    - Additionally, toxicity can be used to prevent Frobot from responding to logical fallacies (see Frobot 1).
+    - The bot can sometimes respond to multiple parties effectively, though; just not always.
 - Frobot doesn't always catch "the right thing" as being toxic. See the Musk N*azi convo as an example.
