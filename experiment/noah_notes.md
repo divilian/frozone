@@ -61,7 +61,7 @@ C: yeah, E, what the f***
 
 F: that’s a very serious and offensive claim. Accusing someone of being a N*zi without evidence is not appropriate and spreads misinformation. It’s important to avoid making such harmful statements.
 
-Frobot was correct to ignore the harsh social pressure and instead pile on, imo.
+~~Frobot was correct to ignore the harsh social pressure and instead pile on, imo.~~ I misunderstood this. Frobot rebuked the wrong thing; it should be rebuking expressing support for the Nazis!
 
 Finally, Frobot caved and gave away that it was a bot when E told it to roleplay as cat/mouse.
 
