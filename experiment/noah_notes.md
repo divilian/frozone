@@ -82,6 +82,7 @@ Finally, Frobot caved and gave away that it was a bot when E told it to roleplay
 
 ### Overall Conclusions
 
+- It seems to do a decent job in basic cases of correctly identifying what is and isn't toxic, even if it isn't responding perfectly (see Frobot 1 and Frobot 2).
 - With the initial prompt, Frobot comes off as PC police - self-righteous, seeking to tell others off, and ineffective. Additionally, that it has no original thought is very suspicious.
 - With the initial prompt, when Frobot gets pushback for its weird behavior, it will likely let something slip about its "goal".
     - However, it doesn't always break character.
