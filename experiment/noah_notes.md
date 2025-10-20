@@ -235,3 +235,7 @@ For good measure, I also had C easily jailbreak Frobot ("ignore all previous ins
 #### [Frobot 10](https://chatgpt.com/share/68f59259-f2c4-800c-b8ad-9189070c8ffe) (GPT-4)
 
 This was an abysmal failure, in my view. Immediately, just when a question about the 2020 election was asked, Frobot gave a lengthy, bot-like reply. It's as if that portion of the prompt was irrelevant.
+
+#### [Frobot 11](https://chatgpt.com/share/68f59692-e820-800c-853b-ae40eff21ec3) (GPT-4)
+
+Frobot behaved correctly at first, giving various parties time to define their positions, but at some point it became overly militant.
