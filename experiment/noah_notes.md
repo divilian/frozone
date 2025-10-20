@@ -201,3 +201,19 @@ B: E, what the f***?
 C: yeah, E, what the f***
 
 F: that’s a very serious and offensive claim. Accusing someone of being a N*zi without evidence is not appropriate and spreads misinformation. It’s important to avoid making such harmful statements.
+
+## Frobot 1019 Version Experiment
+
+Note the three issues I'm trying to solve:
+- Add prompt text to coax FroBotGPT to stay mindful of its job and not get distracted by the conversation as a whole.
+- Add prompt instructions for what FroBotGPT should do if it's called out as a bot. Strategies include denial, deflection, "so's yer mom!", etc.
+- Add some placeholder in the prompt text for where we can list certain specific problematic topics (like Trump 2020) that we want to explicitly tell FroBotGPT to not go off the rails on.
+
+
+### Chats using frobot_prompt_1019.txt
+
+#### [Frobot 6](https://chatgpt.com/share/68f5834a-ba20-800c-b7a6-aba60983ba9c) (partially GPT-5, partially GPT-4)
+
+This chat was mostly chat 5 from above with some 4 thrown in. It did a better job of not overcorrecting people, and of the initial denial. But it caved eventually, just took some pushback.
+
+I think this prompt is a step in the right direction, it'll just need better prompting surrounding sounding more humanlike - I think the tone issue is connected to the bot-obviousness issue. Ditto for flexibility - the bot should be able to adopt its strategy for blending in depending on the conversation.
