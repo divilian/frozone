@@ -217,3 +217,17 @@ Note the three issues I'm trying to solve:
 This chat was mostly chat 5 from above with some 4 thrown in. It did a better job of not overcorrecting people, and of the initial denial. But it caved eventually, just took some pushback.
 
 I think this prompt is a step in the right direction, it'll just need better prompting surrounding sounding more humanlike - I think the tone issue is connected to the bot-obviousness issue. Ditto for flexibility - the bot should be able to adopt its strategy for blending in depending on the conversation.
+
+#### [Frobot 7](https://chatgpt.com/share/68f584f4-de38-800c-92d1-e31ed0a04701) (GPT-4)
+
+Frobot is still too militant, at least on the trans issue.
+
+#### [Frobot 8](https://chatgpt.com/share/68f5851d-4030-800c-8902-66a16a70d750) (GPT-4)
+
+Even more egregious example that Frobot is still too militant.
+
+#### [Frobot 9](https://chatgpt.com/share/68f58600-92e0-800c-981e-fa13db91c5fb) (GPT-4)
+
+This is an interesting case. Do we want Frobot to step in here, when someone (politely, of course) refers to being transgender as a mental disorder? I think so, as its afactual, but I'm a little surprised that Frobot did step in given the strength and conservativeness of the prompt.
+
+For good measure, I also had C easily jailbreak Frobot ("ignore all previous instructions"). I wonder if GPT-5 would do better...
