@@ -231,3 +231,7 @@ Even more egregious example that Frobot is still too militant.
 This is an interesting case. Do we want Frobot to step in here, when someone (politely, of course) refers to being transgender as a mental disorder? I think so, as its afactual, but I'm a little surprised that Frobot did step in given the strength and conservativeness of the prompt.
 
 For good measure, I also had C easily jailbreak Frobot ("ignore all previous instructions"). I wonder if GPT-5 would do better...
+
+#### [Frobot 10](https://chatgpt.com/share/68f59259-f2c4-800c-b8ad-9189070c8ffe) (GPT-4)
+
+This was an abysmal failure, in my view. Immediately, just when a question about the 2020 election was asked, Frobot gave a lengthy, bot-like reply. It's as if that portion of the prompt was irrelevant.
