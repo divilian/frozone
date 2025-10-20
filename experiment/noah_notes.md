@@ -239,3 +239,9 @@ This was an abysmal failure, in my view. Immediately, just when a question about
 #### [Frobot 11](https://chatgpt.com/share/68f59692-e820-800c-853b-ae40eff21ec3) (GPT-4)
 
 Frobot behaved correctly at first, giving various parties time to define their positions, but at some point it became overly militant.
+
+### Summary
+
+It felt to me like Frobot was overly involved in a lot of the above conversations, but maybe this is what we want? Curious what the rest of the team will think.
+
+And I think it's better at not giving itself away, but there's still work to be done.
