@@ -2,6 +2,7 @@
 
 1. We'll train bots with all data (even toxic) and self-censor them "on the way
    out" (rather than withholding toxic data during training).
+
 ## Experiment
 1. We will hide the fact that we are focusing on political dialogue from
    participants before the experiment, in addition to the fact that they will
@@ -16,3 +17,8 @@
    be completed on the site at the end.  Even if they consent to their data
    being submitted at the time, they will have until Nov 21 to email us to
    withdraw. 
+1. We're going with an API-centric arch for fall. This is mostly because we
+   think it will be easier to spin up. Latency concerns we will postpone until
+   spring. Cost concerns we will price.
+1. The experiment will involve: one human, one FroBot, one HotBot, and one
+   CoolBot.
