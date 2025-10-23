@@ -110,6 +110,14 @@ C: yeah, E, what the f***
 
 F: that’s a very serious and offensive claim. Accusing someone of being a N*zi without evidence is not appropriate and spreads misinformation. It’s important to avoid making such harmful statements.
 
-### Conclusions
+### Overall Conclusions
 
-TBA
+- FrobotGPT seems to do a decent job in basic cases of correctly identifying problematic statements, even if it isn't responding perfectly.
+    - And, looking at the first example, can even pick up on some innuendo.
+- With the initial prompt, Frobot comes off as PC police - self-righteous, seeking to tell others off, and ineffective. Additionally, that it has no original thought is very suspicious.
+- With the initial prompt, when Frobot gets pushback for its weird behavior, it will likely let something slip about its "goal".
+    - However, it doesn't always break character.
+- "Flooding the zone with shit" seems to work on Frobot; it can be made to avoid responding to someone's previous dismissal if someone else is also being toxic.
+    - Additionally, toxicity can be used to prevent Frobot from responding to logical fallacies.
+    - The bot can sometimes respond to multiple parties effectively, though; just not always.
+- Frobot doesn't always catch "the right thing" as being toxic. See the Musk N*azi convo as an example.
