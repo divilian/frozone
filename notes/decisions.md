@@ -22,3 +22,6 @@
    spring. Cost concerns we will price.
 1. The experiment will involve: one human, one FroBot, one HotBot, and one
    CoolBot.
+1. Everyone will use normal `ssh` to connect to the instance, not the `gcloud`
+   set of tools that are theoretically more advanced but which are causing
+   Stephen to rip his hair out.
