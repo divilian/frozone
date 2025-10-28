@@ -49,24 +49,6 @@ Nov.~1, 2025\\
 
 \end{frame}
 
-% counterspeech
-% affective polarization
-% echo chambers
-% political intolerance
-% breakdown of trust
-%
-% * summarize literature on using LLMs as personas (GM)
-% * summarize literature on using LLMs to improve political convo (LR)
-% * write a concise thesis statement (GM)
-% * create architectural images (GM) 
-% * make a power point (SD) 
-% * make talking points (SD)
-% * prepare a demo of ChatGPT with your frobot prompt and hotbot (BH)
-% * prepare a "future directions" slide (BH)
-% * prepare a "this is what our experiment will do" slide (LR)
-
-
-
 %----------------------------------------------------------------------------
 \begin{frame}[c]{Politically polarized online conversation}
 
@@ -86,7 +68,7 @@ Many scholars have observed a degradation in political conversation.
   \begin{column}{0.01\textwidth}\hfill\end{column}
   \begin{column}{0.5\textwidth}
   This includes a rise in:\\
-    \RaggedRight % optional—keeps bullets from full justification
+    \RaggedRight
     \begin{compactitem}
         \item misinformation/disinformation
         \item political intolerance
@@ -164,6 +146,120 @@ The FroBot will observe and intervene in online conversations:
 
 \end{frame}
 %----------------------------------------------------------------------------
+\begin{frame}[c]{Improving online political conversation}
+
+\footnotesize
+\begin{itemize}
+\itemsep1em
+\item \textit{Insert (Bethanie's?) (Laur's?) refs here}
+\item (Definitely include a ``counterspeech'' ref or two)
+\end{itemize}
+
+\end{frame}
+%----------------------------------------------------------------------------
+\begin{frame}[c]{Experiment: purpose and methodology}
+
+Purpose: determine whether and how the FroBot approach can increase quality of a political dialogue.
+
+\pause
+Recruit volunteer participants to engage in online political dialogue (30 mins). 
+\pause
+
+Each participant will and be put in a chat room with:
+
+\begin{enumerate}
+\itemsep.1em
+\item One ``CoolBot'': mimics a generic social media user
+\item One ``HotBot'': aims to spark disagreement and controversy
+\item One FroBot: aims to improve dialogue quality
+\end{enumerate}
+
+\pause
+Capture full chat transcripts for later analysis.
+
+\pause
+Administer surveys for demographics, political leanings, and social media use.
+
+\end{frame}
+%--------------------------------------------
+\begin{frame}[c]{Fooling the user}
+
+\begin{columns}[c,onlytextwidth]
+  \begin{column}{0.25\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{surprised1.png}
+  \end{column}
+
+  \begin{column}{0.03\textwidth}\hfill\end{column}
+  \begin{column}{0.5\textwidth}
+An ethical consideration: are we being untruthful ourselves by deploying a 'bot in the guise of a human?
+  \end{column}
+
+  \begin{column}{0.03\textwidth}\hfill\end{column}
+  \begin{column}{0.2\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{surprised2.png}
+  \end{column}
+\end{columns}
+
+\pause
+
+Well.....yes.
+
+\pause
+
+Our project's purpose is to determine \textit{what effect a FroBot might have if deployed.}
+
+Balancing ethical costs vs.~societal benefits is something to consider later. (The question is moot if FroBot doesn't work.)
+
+\end{frame}
+%--------------------------------------------
+\begin{frame}[c]{LLM fine-tuning}
+
+\textit{NF inserts bullet points describing what it means to ``fine-tune an LLM'', and a couple sample prompts/responses designed to address toxicity or misinfo or whatever. I'm in favor of putting them on the slide in the same JSON format we actually use, so it's clear they're automated.}
+
+\end{frame}
+%--------------------------------------------
+\begin{frame}[c]{Architecture}
+
+\textit{GM inserts the cool diagram he made showing the Frozone instance (running the chat room code and making API calls); the Vertex AI VM (running models we have fine-tuned); and the human participant on a lab computer, all talking to each other during the experiment.}
+
+\end{frame}
+%--------------------------------------------
+\begin{frame}[c]{LLM prompts}
+
+\textit{LR inserts key aspects of the FroBot prompt on this and possibly additional slides. Be selective.}
+
+\textit{Maybe LR also inserts HotBot prompt snippets but my spidey sense says you won't be able to fit that into 20 mins.}
+
+\end{frame}
+%--------------------------------------------
+\begin{frame}[c]{Demo}
+
+\textit{BH inserts her demo video of a manually-orchestrated human/FroBot/HotBot interaction.}
+
+\end{frame}
+%--------------------------------------------
+\begin{frame}[c]{Next steps}
+
+We're fine-tuning our LLMs on select training data, and refining our prompts.
+
+\pause
+Later this month we'll conduct our experiment with student volunteers from UMW's DATA 101 and CPSC 110 courses.
+\pause
+
+
+\begin{columns}[c,onlytextwidth]
+  \begin{column}{0.6\textwidth}
+After analyzing experimental data, we plan to build an agent-based model (ABM) this spring to test FroBot's effect in a larger social network context.
+  \end{column}
+  \begin{column}{0.4\textwidth}
+    \includegraphics[width=\linewidth]{agraph.png}
+  \end{column}
+\end{columns}
+
+\end{frame}
+%--------------------------------------------
 \begin{frame}[c]{}
 
 \begin{center}
