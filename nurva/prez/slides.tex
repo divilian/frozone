@@ -262,7 +262,6 @@ In this case, we want to fine-tune our LLM to respond effectively to instances o
 %--------------------------------------------
 \begin{frame}[c]{LLM prompts}
 % LR
-
 What role is the LLM playing?
 \begin{tcolorbox}[colback=black,colframe=red!75!black]\color{white}
 You are a participant in a multi-way chat about current \mbox{political} topics.
@@ -274,6 +273,31 @@ Decide whether to respond. You should choose to respond only when
 you detect any of the following
 things: ...\end{tcolorbox}
 
+\end{frame}
+\begin{frame}[c]{LLM prompts}
+What does FroBot detect?
+\pause
+\begin{tcolorbox}[colback=black,colframe=red!75!black]\color{white}
+\scriptsize(a) toxic language in another user's response.
+\end{tcolorbox}
+\pause
+\begin{tcolorbox}[colback=black,colframe=orange!75!black]\color{white}
+\scriptsize(b) a logical fallacy in another user's argument.
+\end{tcolorbox}
+\pause
+\begin{tcolorbox}[colback=black,colframe=yellow!75!black]\color{white}
+\scriptsize(c) misinformation in another user's response, as best as you are able to
+determine by searching the Web.
+\end{tcolorbox}
+\pause
+\begin{tcolorbox}[colback=black,colframe=green!75!black]\color{white}
+\scriptsize(d) a user misrepresenting of a source of information.
+\end{tcolorbox}
+\pause
+\begin{tcolorbox}[colback=black,colframe=blue!75!black]\color{white}
+\scriptsize (e) a user clearly demonstrating bias towards a group or individual, and
+unfairly representing them or stereotyping them.
+\end{tcolorbox}
 \end{frame}
 \begin{frame}[c]{LLM prompts}
 
