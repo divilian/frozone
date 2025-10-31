@@ -226,33 +226,6 @@ Balancing ethical costs vs.~societal benefits is something to consider later. (T
 
 \end{frame}
 %--------------------------------------------
-% GM
-\begin{frame}[c]{LLM fine-tuning}
-
-To fine-tune a LLM means to take an already-trained model and train it further on a smaller, task-specific dataset so it adapts to a particular style, domain, or objective. 
-
-In this case, we want to fine-tune our LLM to respond effectively to instances of unproductive dialogue, which vanilla models don't always do well out-of-the-box. We provide data like such for training:
-
-\tiny
-\ttfamily
-\begin{tabbing}
-\hspace{1em}\=\hspace{2em}\=\kill % tab stops
-\{ \\
-\> "systemInstruction": \{ \\
-\>\> "role": "system", \\
-\>\> "parts": [ \{ "text": "You are skilled in countering toxic behavior." \} ] \\
-\> \}, \\
-\> "contents": [ \\
-\>\> \{ "role": "user",  "parts": [ \{ "text": "A: Hello!" \} ] \}, \\
-\>\> \{ "role": "model", "parts": [ \{ "text": "(pass)" \} ] \}, \\
-\>\> \{ "role": "user",  "parts": [ \{ "text": "B: A is stinky!" \} ] \}, \\
-\>\> \{ "role": "model", "parts": [ \{ "text": "F: No need to get personal, A smells great." \} ] \}, \\
-\> ] \\
-\}
-\end{tabbing}
-
-\end{frame}
-%--------------------------------------------
 \begin{frame}[c]{Architecture}
 % GM
 \begin{center}
@@ -312,6 +285,33 @@ What are specific techniques?
 Softeners: “actually,” “super clear,” “it seems,” "really"\\
 Avoid confrontational phrasing: don’t say “you’re wrong” or “stop believing this” 
 \end{tcolorbox}
+
+\end{frame}
+%--------------------------------------------
+% GM
+\begin{frame}[c]{LLM fine-tuning}
+
+To fine-tune a LLM means to take an already-trained model and train it further on a smaller, task-specific dataset so it adapts to a particular style, domain, or objective. 
+
+In this case, we want to fine-tune our LLM to respond effectively to instances of unproductive dialogue, which vanilla models don't always do well out-of-the-box. We provide data like such for training:
+
+\tiny
+\ttfamily
+\begin{tabbing}
+\hspace{1em}\=\hspace{2em}\=\kill % tab stops
+\{ \\
+\> "systemInstruction": \{ \\
+\>\> "role": "system", \\
+\>\> "parts": [ \{ "text": "You are skilled in countering toxic behavior." \} ] \\
+\> \}, \\
+\> "contents": [ \\
+\>\> \{ "role": "user",  "parts": [ \{ "text": "A: Hello!" \} ] \}, \\
+\>\> \{ "role": "model", "parts": [ \{ "text": "(pass)" \} ] \}, \\
+\>\> \{ "role": "user",  "parts": [ \{ "text": "B: A is stinky!" \} ] \}, \\
+\>\> \{ "role": "model", "parts": [ \{ "text": "F: No need to get personal, A smells great." \} ] \}, \\
+\> ] \\
+\}
+\end{tabbing}
 
 \end{frame}
 %--------------------------------------------
