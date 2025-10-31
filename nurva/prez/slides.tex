@@ -4,6 +4,7 @@
 \usepackage{caption}
 \usepackage{ragged2e}
 \usepackage{paralist}
+\usepackage{tcolorbox}
 \captionsetup[figure]{labelformat=empty}
 \useoutertheme{infolines}
 \usetheme{default}
@@ -254,17 +255,37 @@ In this case, we want to fine-tune our LLM to respond effectively to instances o
 %--------------------------------------------
 \begin{frame}[c]{Architecture}
 % GM
-
-\textit{GM inserts the cool diagram he made showing the Frozone instance (running the chat room code and making API calls); the Vertex AI VM (running models we have fine-tuned); and the human participant on a lab computer, all talking to each other during the experiment.}
-
+\includegraphics{Experiment Design.drawio.png}
 \end{frame}
 %--------------------------------------------
 \begin{frame}[c]{LLM prompts}
 % LR
 
-\textit{LR inserts key aspects of the FroBot prompt on this and possibly additional slides. Be selective.}
+What role is the LLM playing?
+\begin{tcolorbox}[colback=black,colframe=red!75!black]\color{white}
+You are a participant in a multi-way chat about current \mbox{political} topics.
+\end{tcolorbox}
+\pause
+What tasks should the LLM perform?
+\begin{tcolorbox}[colback=black,colframe=blue!75!black]\color{white}
+Decide whether to respond. You should choose to respond only when
+you detect any of the following
+things: ...\end{tcolorbox}
 
-\textit{Maybe LR also inserts HotBot prompt snippets but my spidey sense says you won't be able to fit that into 20 mins.}
+\end{frame}
+\begin{frame}[c]{LLM prompts}
+
+How should the LLM perform tasks?
+\begin{tcolorbox}[colback=black,colframe=red!75!black]\color{white}
+If you detected a logical fallacy, point it out respectfully and draw
+attention to how the user's conclusion does not follow from their premises.
+\end{tcolorbox}
+\pause
+What are specific techniques?
+\begin{tcolorbox}[colback=black,colframe=blue!75!black]\color{white}
+Softeners: “actually,” “super clear,” “it seems,” "really"\\
+Avoid confrontational phrasing: don’t say “you’re wrong” or “stop believing this” 
+\end{tcolorbox}
 
 \end{frame}
 %--------------------------------------------
