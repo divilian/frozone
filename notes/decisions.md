@@ -25,3 +25,9 @@
 1. Everyone will use normal `ssh` to connect to the instance, not the `gcloud`
    set of tools that are theoretically more advanced but which are causing
    Stephen to rip his hair out.
+1. We can use ChatGPT to help us refine and even suggest fine-tuning data, and
+   we don't think that's a problem.
+1. The highlight reels were a means to an end, we don't need to go through them
+   anymore.
+1. We're missing our mid-November date. Go ahead and plan for
+   post-Thanksgiving.
