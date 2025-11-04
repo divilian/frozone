@@ -13,6 +13,3 @@
 1. Thinking big: is there any way to measure someone's understanding of
     information after the chatroom experience? (So that the benefits of Frobot
     are longer-lasting than just "the chat was more productive?")
-
-1. How do we synthesize (or just choose between) responses when multiple
-    detectors are triggered?
