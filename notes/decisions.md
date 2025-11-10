@@ -31,3 +31,23 @@
    anymore.
 1. We're missing our mid-November date. Go ahead and plan for
    post-Thanksgiving.
+1. We are going to full-out lie at the beginning of the experiment and tell
+   them "you are talking to other people."
+1. When the participant completely (from the login screen) they will first see
+   a choice of topics, and will pick one. Then they will go to the chat room,
+   which will have two prominent things displayed: (1) the prompt, which does
+   not appear to have been written by someone else in the room, and (2) the
+   first "supposedly from a user" text response, to subtly convey that this is
+   an informal discussion and get the ball rolling.
+1. We won't police topic size/popularity. We'll give users a choice of 4
+   topics, for purposes of self-selecting out of triggering topics. Then, if we
+   get a lopsided set of choices, we're fine with that.
+1. We will "muddy" half of our fine-tuning data by making it sound like a real
+   user: shorter, clippy responses; grammar and spelling mistakes; internet
+   slang; and so forth.
+1. When participants begin, they will see nothing more than a screen that lets
+   them enter a little code which we will give them. The system will then
+   auto-assign a random fruit name, and auto-assign other fruit names to the
+   three bots. At end of chat time, the bot names can be sent as HTTP
+   parameters to the survey link, so that questions like "how well did Apple
+   contribute to the conversation?" are populated correctly.
