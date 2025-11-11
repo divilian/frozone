@@ -10,3 +10,5 @@ These sources provided the actual problamatic comments. Then, gpt-4.1-nano was u
 The code to do all this can be found at the below link. Note that it won't work out of the box as the data will need to be uploaded to the google colab enviornment.
 
 https://colab.research.google.com/drive/1A2srRA7gaVW64HFBiaCfNBCU3N4z-E54?usp=sharing
+
+You will see a few spots where the user comment is something like "Sorry I can't process that request" this is usually because the comment was just too toxic and it went over gpt-4o's safety parameters. You will also notice that I have a source instead of an issue label I can swap that later if we want.
