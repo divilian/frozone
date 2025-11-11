@@ -11,4 +11,6 @@ The code to do all this can be found at the below link. Note that it won't work 
 
 https://colab.research.google.com/drive/1A2srRA7gaVW64HFBiaCfNBCU3N4z-E54?usp=sharing
 
-You will see a few spots where the user comment is something like "Sorry I can't process that request" this is usually because the comment was just too toxic and it went over gpt-4o's safety parameters. You will also notice that I have a source instead of an issue label I can swap that later if we want.
+You will see a few spots where the user comment is something like "Sorry I can't process that request" this is usually because the comment was just too toxic and it went over gpt-4o's safety parameters. I was doubtful on what exactly to do with these. I could manually go over and swap them out but it is also true that this may be a good tripwire for our worry of "too toxic" and that these instances should just be removed. I left it in and figured we could deal with it later.
+
+You will also notice that I have a source instead of an issue label I can swap that later if we want. I just thought it was more representative of what the data was then an issue label.
