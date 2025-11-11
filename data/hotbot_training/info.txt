@@ -15,4 +15,4 @@ You will see a few spots where the user comment is something like "Sorry I can't
 
 You will also notice that I have a source instead of an issue label I can swap that later if we want. I just thought it was more representative of what the data was then an issue label.
 
-Finally, there are some null user comments. I am not actually sure why this is but there are not that many of them. In total there are a total of 48 rows with messed up user_messages. A dataset without these instances is also included.
+Finally, there are some null user comments. I am not actually sure why this is but there are not that many of them. In total there are a total of 48 rows with messed up user_messages. A dataset without these instances is also included as hotBotTrainingClean.csv.
