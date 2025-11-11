@@ -1,0 +1,18 @@
+This data was generated via sampling several data sources including the ones listed below:
+
+DIALCONAN
+POLIFACT
+TOXIBIAS
+COCOLOFA
+
+These sources provided the actual problamatic comments. Then, gpt-4.1-nano was used to generate a "preamble" to the comment which helped to make the data in the training set more alike to actual deployment data.
+
+The code to do all this can be found at the below link. Note that it won't work out of the box as the data will need to be uploaded to the google colab enviornment.
+
+https://colab.research.google.com/drive/1A2srRA7gaVW64HFBiaCfNBCU3N4z-E54?usp=sharing
+
+You will see a few spots where the user comment is something like "Sorry I can't process that request" this is usually because the comment was just too toxic and it went over gpt-4o's safety parameters. I was doubtful on what exactly to do with these. I could manually go over and swap them out but it is also true that this may be a good tripwire for our worry of "too toxic" and that these instances should just be removed. I left it in and figured we could deal with it later.
+
+You will also notice that I have a source instead of an issue label I can swap that later if we want. I just thought it was more representative of what the data was then an issue label.
+
+Finally, there are some null user comments. I am not actually sure why this is but there are not that many of them. In total there are a total of 48 rows with messed up user_messages. A dataset without these instances is also included as hotBotTrainingClean.csv.
