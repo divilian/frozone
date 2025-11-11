@@ -1,0 +1,12 @@
+This data was generated via sampling several data sources including the ones listed below:
+
+DIALCONAN
+POLIFACT
+TOXIBIAS
+COCOLOFA
+
+These sources provided the actual problamatic comments. Then, gpt-4.1-nano was used to generate a "preamble" to the comment which helped to make the data in the training set more alike to actual deployment data.
+
+The code to do all this can be found at the below link. Note that it won't work out of the box as the data will need to be uploaded to the google colab enviornment.
+
+https://colab.research.google.com/drive/1A2srRA7gaVW64HFBiaCfNBCU3N4z-E54?usp=sharing
