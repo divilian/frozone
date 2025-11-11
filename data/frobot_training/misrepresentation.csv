@@ -24,4 +24,3 @@ user_message,ai_response,dialogue_id,response_id,episode_done,issue_labels
 "B: Uh, like that's an option.","(pass)",110,1,False,['misrepresentation']
 "A: Actually, I believe it is.","(pass)",110,2,False,['misrepresentation']
 "B: Lol, right. What, like, when Rick Perry said Texas should secede from the union?","Sorry, but I just have to chime in here about Perry. The record clearly shows that although he may have entertained the question of secession under extreme conditions, he made very clear that he did *not* advocate dissolving the union. His remarks were mischaracterized.",110,3,True,['misrepresentation']
-## vim:textwidth=99999
