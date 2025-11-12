@@ -58,7 +58,7 @@ def csvs_to_jsonl(
         current_contents.append({"role": "model", "parts": [{"text": ai_resp}]})
 
         # If this episode is done, finalize
-        if row["episode_done"]:
+        if row["episode_done"]: 
             episodes.append({
                 "systemInstruction": {
                     "role": "system",
@@ -86,16 +86,17 @@ if __name__ == "__main__":
     if len(args) == 1:
         csvs_to_jsonl(
             csv_files=[
-                "data/frobot_training/bias.csv",
-                "data/frobot_training/misinformation.csv",
-                "data/frobot_training/misrepresentation.csv",
-                "data/frobot_training/pass.csv",
-                "data/frobot_training/prodding.csv",
-                "data/frobot_training/toxicity.csv",
+                "./frobot_training/bias.csv",
+                "./frobot_training/misinformation.csv",
+                "./frobot_training/misrepresentation.csv",
+                "./frobot_training/pass.csv",
+                "./frobot_training/prodding.csv",
+                "./frobot_training/toxicity.csv",
             ],
-            output_path="data/frobot_training/merged_training_data.jsonl",
+            output_path="./frobot_training/merged_training_data.jsonl",
             system_instructions="N/A for now"
         )
+
     else:
         try:
             if len(args) != 3:
