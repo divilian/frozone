@@ -30,10 +30,11 @@ def csvs_to_jsonl(
         with open(file, newline='', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             for row in reader:
+                print(row["episode_done"])
                 # Normalize types
                 row["dialogue_id"] = int(row["dialogue_id"])
                 row["response_id"] = int(row["response_id"])
-                row["episode_done"] = str(row["episode_done"]).strip().lower() == "true"
+                row["episode_done"] = ((str(row["episode_done"]).strip().lower() == "true") or (str(row["episode_done"]) == "1"))
                 all_rows.append(row)
 
     # Sort to ensure order
