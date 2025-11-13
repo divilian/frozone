@@ -1,0 +1,1 @@
+This is the training data for coolbot. As with the data for hotbot it has a source instead of issue label
