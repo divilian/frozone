@@ -73,6 +73,5 @@ if not hasattr(_ipcd, "display"):
     _ipcd.display = _ipd.display
 # </UGGH I HATE LIFE>
 
-if __name__ == "__main__":
-    ensure_gcloud()
+ensure_gcloud()
 
