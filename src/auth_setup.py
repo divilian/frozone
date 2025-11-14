@@ -2,8 +2,6 @@
 # Do everything freaking necessary to get all Vertex-AI-related logins properly
 # connected and refreshed, all IPython-crash-related garbage worked around, and
 # in general produce a happy world.
-#
-# A common pattern from 
 import vertexai
 import os
 import subprocess
