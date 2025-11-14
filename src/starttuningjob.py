@@ -111,4 +111,5 @@ if __name__ == "__main__":
 
     print(f"\nTuning job {job_id} ({args.display_name}) started!")
     print(f"Full resource name: {job_resource_name}")
-    print(f"(Run showtuningjob {job_id} for updates.)")
+    print(f"You can run showtuningjob {job_id} for updates.")
+    print(f"You can run ft_play {job_id} once it's finished, to experiment.")
