@@ -27,9 +27,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "tuning_job_id",
         type=int,
-        help="The tuning job ID, which can be obtained from running
-'showtuningjobs succeeded' and reading carefully. Pirates can always be reached
-at 117775339060461568."
+        help="The tuning job ID, which can be obtained from running 'showtuningjobs succeeded' and reading carefully. Pirates can always be reached at 117775339060461568."
     )
     args = parser.parse_args()
 
