@@ -16,5 +16,5 @@ JOB_PATH="projects/${PROJECT_ID}/locations/${REGION}/tuningJobs/${JOB_ID}"
 curl -fSs \
   -H "Authorization: Bearer $(gcloud auth print-access-token)" \
   "https://${REGION}-aiplatform.googleapis.com/v1/${JOB_PATH}" \
-| jq -r '{name, state, stateMessage, createTime, updateTime, tunedModel, tunedModelDisplayName}'
+| jq '{tunedModelDisplayName, name, labels, state, outputModel, hp: .supervisedTuningSpec.hyperParameters, exportLastOnly: .supervisedTuningSpec.exportLastCheckpointOnly}'
 
