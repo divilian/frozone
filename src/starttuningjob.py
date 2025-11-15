@@ -95,7 +95,7 @@ if __name__ == "__main__":
         epochs=args.num_epochs,
         #learning_rate_multiplier=1,
         #adapter_size=4,
-        tuned_model_display_name=args.display_name,
+        tuned_model_display_name="frozone-" + args.display_name,
 
         # This ability may be useful to help identify some jobs from others. For
         # now, I just leave it with a silly value to show how it can be done.
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     # Just the numeric job ID (last path segment)
     job_id = job_resource_name.split("/")[-1]
 
-    print(f"\nTuning job {job_id} ({args.display_name}) started!")
+    print(f"\nTuning job {job_id} ({"frozone-" + args.display_name}) started!")
     print(f"Full resource name: {job_resource_name}")
     print(f"You can run showtuningjob {job_id} for updates.")
     print(f"You can run ft_play {job_id} once it's finished, to experiment.")
