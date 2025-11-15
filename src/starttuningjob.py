@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # Be sure to pip install google-cloud-storage.
-# Make sure you have the auth_setup.py file in your same directory, and that it
-# has all these things set (it probably does).
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 from auth_setup import PROJECT_ID, REGION, ZONE, ensure_gcloud
 import makeIPythonSafe
 
 import os
-import sys
 import argparse
 
 import vertexai
@@ -40,18 +40,19 @@ if __name__ == "__main__":
         help="A unique-ish name that will help you identify your freaking job from all the many others."
     )
     parser.add_argument(
-        "train_dataset_bucket",
+        "train_dataset",
+        type=str,
+        help="The filename of the training dataset (in .jsonl format; see Noah's script to convert from .csv) in your local directory."
+    )
+    parser.add_argument(
+        "--train_dataset_bucket",
         type=str,
         help=("""
             The name of the Google Cloud bucket you want to create (or which
             has already been created) to store your fine-tuning dataset. This
             must have only lowercase letters, numbers, dashes, and dots.
-        """)
-    )
-    parser.add_argument(
-        "train_dataset",
-        type=str,
-        help="The filename of the training dataset (in .jsonl format; see Noah's script to convert from .csv) in your local directory."
+        """),
+        default="frozone-tuning"
     )
     parser.add_argument(
         "--base_model",
