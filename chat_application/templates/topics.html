@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="topic-container">
+  <h1>Select a Topic</h1>
+  <p>Welcome, ID#{{ session.get('user_id') }}. Choose a topic to discuss:</p>
+
+  <div id="topic-list">
+    {% for topic in topics %}
+      <form action="{{ url_for('choose') }}" method="post">
+	<input type="hidden" name="topic" value="{{ topic }}">
+	<button class="topic-btn" type="button" data-topic="{{ topic }}">{{ topic }}</button>
+      </form>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="topic-modal" class="modal">
+  <div class="modal-content">
+    <h3 id="topic-modal-heading"></h3>
+    <p id="topic-modal-body">
+    You will now be directed to a chat room discussing this topic. This action is permanent. You will not be able to switch topics. Are you sure you would like to choose this topic? 
+    </p>
+    <div class="modal-buttons">
+      <button class="modal-btn" id="topicYesBtn">Yes</button>
+      <button class="modal-btn" id="topicNoBtn">Back</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Track which form should be submitted
+  let selectedForm = null;
+  // Gets all the topic buttons
+  const topicButtons = document.querySelectorAll(".topic-btn");
+  const topicModal = document.getElementById("topic-modal");
+  const modalHeading = document.getElementById("topic-modal-heading");
+
+  topicButtons.forEach(btn => {
+    btn.addEventListener("click", function () {
+      // Find the form that contains this button
+      selectedForm = this.closest("form");
+
+      // Update modal message with topic selection
+      const topicName = this.dataset.topic;
+      modalHeading.textContent = `You selected "${topicName}"`;
+
+      // Show pop-up
+      topicModal.style.display = "block";
+    });
+  });
+
+  // Cancel button
+  document.getElementById("topicNoBtn").onclick = function () {
+    topicModal.style.display = "none";
+    selectedForm = null;
+  };
+
+  // Confirmation button - submit the selected form
+  document.getElementById("topicYesBtn").onclick = function () {
+    if (selectedForm) selectedForm.submit();
+  };
+</script>
+
+{% endblock %}
+
