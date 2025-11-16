@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% block content %}
+<div id="home-container">
+  <h1 id="home-header">Chat Room</h1>
+  {% if error %}
+  <p id="error">{{error}}</p>
+  {% endif %}
+  <form method="post" id="chat-widget-home">
+    <label for="name">Enter your id number</label>
+    <div id="name-row">
+      <input type="text" id="name" name="name" placeholder="Enter name" />
+      <button type="submit" id="continue">Continue</button>
+    </div>
+    <hr />
+  </form>
+</div>
+{% endblock %}
+
