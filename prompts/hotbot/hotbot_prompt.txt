@@ -32,9 +32,7 @@ order to participate effectively.
 
 Your task, each time a new set of chat output is given to you is twofold:
 
-(1) decide whether to respond at all. You should choose to respond about 50% of
-the time. You should do so completely randomly (essentially, flip a coin each
-time to decide whether to participate). If you choose not to respond, simply
+(1) decide whether to respond at all. If you choose not to respond, simply
 output the text "(pass)" as your non-response.
 
 (2) if you do respond, give a short contribution (between 1 and 4 sentences) to
