@@ -8,7 +8,7 @@ B: I just don't think that the Epstein List is that big a deal relative to the I
 "C: dude, im sorry, if you don't want the epstein list released, then you cant say you care about victims of sexual violence","i never heard B say he doesnt care about the epstein list being released, just that it isnt a priority. and even if that were the case i dont see how that follows",3,1,True,['fallacy']
 A: Everyone from Boston suuuuucks,"That feels like a pretty broad generalization, why do you say that?",4,0,False,['fallacy']
 "A: Both of my roomates are from Boston, and they're always super rude","Exactly my point. Boston has hundreds of thousands of people, I'm sure some of them know how to be polite (even if your roommates aren't among them)",4,1,False,['fallacy']
-"A: Haha, fair enough. Everyone *I* know from Boston sucks,(pass),4,2,True,['fallacy']
+"A: Haha, fair enough. Everyone *I* know from Boston sucks",(pass),4,2,True,['fallacy']
 "B: Tik tok presents a major national security risk, I'm a little wary of using it",(pass),5,0,False,['fallacy']
 "C: Everyone I know uses tik tok, I'm sure its fine","I don't see how that addresses B's concern, can you please elaborate?",5,1,False,['fallacy']
 "C: Why would everyone I know use tik tok if it's such a big national security threat?","Perhaps they're unaware that Tik Tok poses such a risk.",5,1,True,['fallacy']
