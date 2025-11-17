@@ -38,7 +38,9 @@
    which will have two prominent things displayed: (1) the prompt, which does
    not appear to have been written by someone else in the room, and (2) the
    first "supposedly from a user" text response, to subtly convey that this is
-   an informal discussion and get the ball rolling.
+   an informal discussion and get the ball rolling. (Btw, the first response
+   here will be from a different fruit than is assigned to any of the
+   cool/hot/frobot/users.)
 1. We won't police topic size/popularity. We'll give users a choice of 4
    topics, for purposes of self-selecting out of triggering topics. Then, if we
    get a lopsided set of choices, we're fine with that.
@@ -51,3 +53,8 @@
    three bots. At end of chat time, the bot names can be sent as HTTP
    parameters to the survey link, so that questions like "how well did Apple
    contribute to the conversation?" are populated correctly.
+1. We're going to assume good faith on the part of participants (in terms of
+   participants deliberately sabotaging the experiment).
+1. We'll start at k minutes past the hour. We will also allow people to be late
+   (up to n minutes) and we'll privately give them the instructions they
+   missed.  we'll decide on values for k and n on Thursday
