@@ -1,0 +1,157 @@
+{% extends 'base.html' %} {% block content %}
+<div id="room-container">
+  <div id="welcome-modal" class="modal">
+    <div class="modal-content">
+      <h3>Welcome!</h3>
+      <p>
+        Your display name for this chat session will be: 
+        <span id="displayNameText" style="font-weight:bold;"></span>.
+      </p>
+      <div class="modal-buttons">
+        <button class="modal-btn" id="welcomeOkBtn">OK</button>
+      </div>
+    </div>
+  </div>
+  <h1 id="home-header">Chat Room</h1>
+  <div id="room-subsection">
+    <div class="topic-header-row">
+      <h2 id="room-code-display">Topic: <span>{{ topic_info.title }}</span></h2>
+      <div class="topic-header-buttons">
+        <button id="end-exp-btn">Chat Session Ends</button>
+        <button id="abort-exp-btn">Abort Experiment</button>
+      </div>
+    </div>
+    <div id="end-modal" class="modal">
+      <div class="modal-content">
+	<h3>Only Exit This Way When Instructed.</h3>
+	<p>This signals the end of the chat session of the experiment. You will be redirected to the post-survey. This button is only to be used when the experiment ends, as indicated by the proctor. If you wish to exit the chat before instructed, use the "Abort Experiment" button instead.</p>
+        <div class="modal-buttons">
+          <button class="modal-btn" id="endYesBtn">Continue</button>
+          <button class="modal-btn" id="endNoBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div id="abort-modal" class="modal">
+      <div class="modal-content">
+        <h3>Are you sure you want to leave this experiment?</h3>
+        <p>This action is permanent. You will be redirected to the post-survey and will not be able to return to the chat room. However, if you do choose to leave, you will still receive the offered extra credit from your professor. If the chat session has ended, as signaled by the proctor, do NOT exit via this button. Use the "Chat Session Ends" button instead.</p>
+        <div class="modal-buttons">
+          <button class="modal-btn" id="abortYesBtn">Yes</button>
+          <button class="modal-btn" id="abortNoBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <p id="room-topic-desc" class="room-topic-desc">{{ topic_info.text }}</p>
+  </div>
+  <div id="chat-room-widget">
+    <div id="msgs-container">
+      <ul id="messages"></ul>
+    </div>
+    <div id="message-box">
+      <textarea id="message-input" name="message" placeholder="Enter your message" rows="1"></textarea>
+      <button type="submit" id="send-btn" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+  <script type="text/javascript">
+    // Push a state when entering the page
+    history.pushState(null, "", location.href);
+    window.addEventListener("popstate", function () {
+      // Immediately push another state to prevent backward navigation
+      history.pushState(null, "", location.href);
+    });
+    // Handler for the welcome modal
+    let welcomeModal = document.getElementById("welcome-modal");
+    const displayNameText = document.getElementById("displayNameText");
+    displayNameText.textContent = "{{ user }}";
+    // Show the modal instantly when the page loads
+    window.onload = function() {
+      welcomeModal.style.display = "block";
+    };
+    // Close the modal on OK
+    document.getElementById("welcomeOkBtn").onclick = function () {
+      welcomeModal.style.display = "none";
+    };
+    // Creates the post-survey link (based on the bot names)
+    const postSurveyLink =
+    	"https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ"
+    	  + "?CName={{ CoolBot_name }}"
+    	  + "&HName={{ HotBot_name }}"
+    	  + "&FName={{ FroBot_name }}";
+    var socketio = io();
+    socketio.on("message", function (message) { createChatItem(message.message, message.sender) });
+    function createChatItem(message, sender) {
+      var messages = document.getElementById("messages");
+      var content;
+      if (sender === "") {
+        content = `<p class="member-activity">${message}</p>`;
+      } else {
+        var senderIsUser = "{{user}}" === sender;
+        content = `
+          <li class="message-item ${senderIsUser ? "self-message-item" : "peer-message-item"}">
+              <p>${message}</p>
+              <small class="${senderIsUser ? "muted-text" : "muted-text-white"}">${sender}</small>
+         </li>
+      `;}
+      messages.insertAdjacentHTML("beforeend", content);
+    }
+    function sendMessage() {
+      var msgInput = document.getElementById("message-input");
+      if (msgInput.value === "") return;
+      var msg = msgInput.value;
+      socketio.emit("message", { message: msg });
+      msgInput.value = "";
+      msgInput.style.height = "auto";  // reset height
+    }
+    document.getElementById("message-input").addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault(); // prevent a newline or form submit
+      	sendMessage(); // call the same function as the Send button
+      }
+    });
+    const textarea = document.getElementById("message-input");
+    textarea.addEventListener("input", () => {
+      textarea.style.height = "auto";  // reset height
+      textarea.style.overflowY = "hidden";  // start by hiding the scrollbar
+      textarea.style.height = (textarea.scrollHeight + 8) + "px";  // set to fit content (+8 for bottom padding)
+      // If we've hit the max height, allow scrolling
+      if (textarea.scrollHeight > parseInt(getComputedStyle(textarea).maxHeight)) {
+        textarea.style.overflowY = "auto";
+      }
+    });
+    // Handler for the Experiment Ends confirmation pop-up
+    const endModal = document.getElementById("end-modal");
+    document.getElementById("end-exp-btn").onclick = function () {
+      endModal.style.display = "block";
+    };
+    document.getElementById("endNoBtn").onclick = function () {
+      endModal.style.display = "none";
+    };
+    document.getElementById("endYesBtn").onclick = function () {
+      // Redirect to ending survey
+      window.location.href = postSurveyLink;
+    };
+    // Handler for the Abort Experiment confirmation pop-up
+    let modal = document.getElementById("abort-modal");
+    document.getElementById("abort-exp-btn").onclick = function () {
+      modal.style.display = "block";
+    };
+    document.getElementById("abortNoBtn").onclick = function () {
+      modal.style.display = "none";
+    };
+    document.getElementById("abortYesBtn").onclick = function () {
+      // Mark that user aborted and redirect to ending survey
+      fetch("/abort", { method: "POST" })
+        .then(() => {
+          window.location.href = postSurveyLink;
+        });
+    };
+  </script>
+  <script type="text/javascript">
+    const initialMessages = {{ messages | tojson }};
+    initialMessages.forEach(msg => {
+      createChatItem(msg.message, msg.sender);
+    });
+  </script>
+</div>
+{% endblock %}
+
