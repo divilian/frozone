@@ -85,6 +85,10 @@ if __name__ == "__main__":
     args = sys.argv
 
     if len(args) == 1:
+        # frobot settings by default
+        system_instructions = ""
+        with open("./prompts/experiment/frobot_prompt.txt", "r", encoding="utf-8", errors="ignore") as f:
+            system_instructions = f.read()
         csvs_to_jsonl(
             csv_files=[
                 "./frobot_training/bias.csv",
@@ -95,13 +99,13 @@ if __name__ == "__main__":
                 "./frobot_training/toxicity.csv",
             ],
             output_path="./frobot_training/merged_training_data.jsonl",
-            system_instructions="N/A for now"
+            system_instructions=system_instructions
         )
 
     else:
         try:
-            if len(args) != 3:
-                raise Exception("Usage: python training_data_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl")
+            if len(args) != 3 and len(args) != 4:
+                raise Exception("Usage: python training_data_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [-c|-f|-h|]")
             else:
                 inputs = args[1].split(",")
                 output = args[2]
@@ -109,10 +113,28 @@ if __name__ == "__main__":
                 for f in inputs:
                     if ".csv" not in f:
                         raise Exception(f"File {f} is not a csv file!")
-                csvs_to_jsonl(inputs , output_path = output,system_instructions="N/A for now")
+                    
+                system_instructions="System instructions not provided"
+                if len(args) == 4:
+                    # populate system instructions
+                    prompt_file = ""
+                    if args[3] == '-c':
+                        prompt_file = "./prompts/experiment/coolbot_prompt.txt"
+                    elif args[3] == '-f':
+                        prompt_file = "./prompts/experiment/frobot_prompt.txt"
+                    elif args[3] == '-h':
+                        prompt_file = "./prompts/experiment/hotbot_prompt.txt"
+                    else:
+                        raise Exception(f"Flag {args[3]} is invalid! Must be one of -c, -f, or -h.")
+
+                    with open(prompt_file, "r", encoding="utf-8", errors="ignore") as f:
+                        system_instructions = f.read()
+                
+                csvs_to_jsonl(inputs, output_path = output, system_instructions=system_instructions)
 
                 if ".jsonl" not in output:
                     raise Exception(f"File {f} is not a .jsonl output!")
+
 
         except Exception as e:
             print(e)
