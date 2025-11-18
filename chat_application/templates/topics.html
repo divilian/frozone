@@ -7,10 +7,12 @@
 
   <div id="topic-list">
     {% for topic in topics %}
-      <form action="{{ url_for('choose') }}" method="post">
-	<input type="hidden" name="topic" value="{{ topic }}">
-	<button class="topic-btn" type="button" data-topic="{{ topic }}">{{ topic }}</button>
-      </form>
+      <div class="topic-block">
+        <form action="{{ url_for('choose') }}" method="post">
+	  <input type="hidden" name="topic" value="{{ topic.title }}">
+	  <button class="topic-btn" type="button" data-topic="{{ topic.title }}">{{ topic.title }}</button>
+        </form>
+	<p class="topics-form-desc">{{ topic.text }}</p>
     {% endfor %}
   </div>
 </div>
