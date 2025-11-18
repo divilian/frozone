@@ -22,12 +22,19 @@ ensure_gcloud()
 BOT_NAME = "hotbot"   # Frobot/Hotbot/Coolbot/etc
 
 if __name__ == "__main__":
+    
+    print(sys.argv)
 
     parser = argparse.ArgumentParser(description="Play with fine-tuned model.")
     parser.add_argument(
         "tuning_job_id",
         type=int,
         help="The tuning job ID, which can be obtained from running 'showtuningjobs succeeded' and reading carefully. Pirates can always be reached at 117775339060461568."
+    )
+    parser.add_argument(
+        "prompt_flag",
+        type=str,
+        help="The prompt file to be used as instructions to the model c for coolbot, f for frobot, h for hotbot, N for none."
     )
     args = parser.parse_args()
 
@@ -48,6 +55,19 @@ if __name__ == "__main__":
     tm = GenerativeModel(tj.tuned_model_endpoint_name)
 
     accumulated_content = ""
+    flag = args.prompt_flag
+    print(flag)
+    if flag not in ["N","f","c","h"]:
+        raise Exception("Missing flag for prompt file must be f,c,h,or N")
+    if flag != "N":
+        if flag == "f":
+            prompt_file = "../prompts/experiment/frobot_prompt.txt"
+        elif flag == "c":
+            prompt_file = "../prompts/experiment/coolbot_prompt.txt"
+        elif flag == "h":
+            prompt_file = "../promts/experiment/hotbot_prompt.txt"
+        with open(prompt_file,"r") as f:
+            accumulated_content = f.read()
 
     new_input = input(f"Type something to {display_name}> ")
     while new_input != "done":
