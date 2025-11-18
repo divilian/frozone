@@ -30,7 +30,6 @@ def csvs_to_jsonl(
         with open(file, newline='', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             for row in reader:
-                print(row["episode_done"])
                 # Normalize types
                 row["dialogue_id"] = int(row["dialogue_id"])
                 row["response_id"] = int(row["response_id"])
@@ -72,7 +71,7 @@ def csvs_to_jsonl(
 
     # Write to JSONL
     output_path = Path(output_path)
-    with output_path.open("w", encoding="utf-8") as out_f:
+    with output_path.open("w", encoding="utf-8-sig") as out_f:
         for ep in episodes:
             json.dump(ep, out_f, ensure_ascii=False)
             out_f.write("\n")
@@ -87,7 +86,7 @@ if __name__ == "__main__":
     if len(args) == 1:
         # frobot settings by default
         system_instructions = ""
-        with open("./prompts/experiment/frobot_prompt.txt", "r", encoding="utf-8", errors="ignore") as f:
+        with open("../prompts/experiment/frobot_prompt.txt", "r", encoding="utf-8", errors="ignore") as f:
             system_instructions = f.read()
         csvs_to_jsonl(
             csv_files=[
@@ -119,11 +118,11 @@ if __name__ == "__main__":
                     # populate system instructions
                     prompt_file = ""
                     if args[3] == '-c':
-                        prompt_file = "./prompts/experiment/coolbot_prompt.txt"
+                        prompt_file = "../prompts/experiment/coolbot_prompt.txt"
                     elif args[3] == '-f':
-                        prompt_file = "./prompts/experiment/frobot_prompt.txt"
+                        prompt_file = "../prompts/experiment/frobot_prompt.txt"
                     elif args[3] == '-h':
-                        prompt_file = "./prompts/experiment/hotbot_prompt.txt"
+                        prompt_file = "../prompts/experiment/hotbot_prompt.txt"
                     else:
                         raise Exception(f"Flag {args[3]} is invalid! Must be one of -c, -f, or -h.")
 
