@@ -516,3 +516,30 @@ hr {
   background: #ccc;
 }
 
+.landing-links{
+  display: flex;
+  justify-content: center;
+  margin-top: 20vh;
+}
+
+.landing-links button {
+  width: 60vh;
+  height: 20vh;
+  padding: 5px 10px;
+  border: 5px solid black;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 4rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  color: white;
+  background-color: darkred;
+}
+
+.landing-links button:hover {
+  background-color: white;
+  color: darkred;
+}
+
+
+
