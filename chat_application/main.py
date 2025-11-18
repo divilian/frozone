@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, join_room, leave_room, send
 from pymongo import MongoClient
 from datetime import datetime
 import random
+import time
 import google.auth
 from google.auth.transport.requests import AuthorizedSession
 from vertexai.tuning import sft
@@ -69,6 +70,36 @@ TOPICS_LIST = [
 def choose_names(n):
     # Return n unique random fruit names
     return random.sample(FRUIT_NAMES, n)
+
+# Send initial watermelon post
+def send_initial_post(room_id, delay):
+    # Wait 1 second before sending
+    time.sleep(delay)
+    # Get the inital post for this topic
+    room_doc = rooms_collection.find_one({"_id": room_id})
+    topic_title = room_doc["topic"]
+    topic_info = next((t for t in TOPICS_LIST if t["title"] == topic_title), None)
+    if not topic_info:
+        return
+    initialPost = topic_info["post"]
+    # Store the initial post in the database
+    db_msg = {
+        "sender": "watermelon",
+        "message": initialPost,
+        "timestamp": datetime.utcnow()
+    }
+    rooms_collection.update_one(
+        {"_id": room_id},
+        {"$push": {"messages": db_msg}}
+    )
+    # Send to the client (must use emit when in background thread)
+    socketio.emit("message", {"sender": "watermelon", "message": initialPost}, to=room_id)
+
+# Send message that a bot joined the room
+def send_bot_joined(room_id, bot_name, delay):
+    # Wait 1 second before sending
+    time.sleep(delay)
+    socketio.emit("message", {"sender": "", "message": f"{bot_name} has entered the chat"}, to=room_id)
 
 # Ask a bot for its response, store in DB, and send to client
 def ask_bot(room_id, bot, bot_display_name):
@@ -211,11 +242,27 @@ def handle_connect():
     room = session.get('room')
     if not name or not room:
         return
+    room_doc = rooms_collection.find_one({"_id": room})
+    if not room_doc:
+        return
     join_room(room)
+    # Send the message that "watermelon" has already joined the chat
+    send({
+        "sender": "",
+        "message": "watermelon has entered the chat"
+    }, to=room)
+    # Send the message that this user has joined the chat
     send({
         "sender": "",
         "message": f"{name} has entered the chat"
     }, to=room)
+    # Start background task for CoolBot to join after a short delay
+    socketio.start_background_task(send_bot_joined, room, room_doc['CoolBot_name'], 3)
+    # Start background task to send the initial watermelon post after a short delay
+    socketio.start_background_task(send_initial_post, room, 5)
+    # Start background task for FroBot & HotBot to join after a short delay
+    socketio.start_background_task(send_bot_joined, room, room_doc['FroBot_name'], 9)
+    socketio.start_background_task(send_bot_joined, room, room_doc['HotBot_name'], 13)
 
 @socketio.on('message')
 def handle_message(payload):
