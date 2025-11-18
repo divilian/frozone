@@ -8,6 +8,7 @@ import google.auth
 from google.auth.transport.requests import AuthorizedSession
 from vertexai.tuning import sft
 from vertexai.generative_models import GenerativeModel
+import re
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
@@ -38,6 +39,7 @@ rooms_collection = db.rooms
 # List of fruits to choose display names from
 FRUIT_NAMES = ["apple", "banana", "blueberry", "strawberry", "orange", "grape", "cherry"]
 aliases = {"watermelon":"W", "apple":"A", "banana":"B", "blueberry":"C", "strawberry":"D", "orange":"E", "grape":"G", "cherry":"H"}
+reverse_aliases = { value:key for key,value in aliases.items() }
 # List of discussion topics
 TOPICS_LIST = [
     {
@@ -114,11 +116,21 @@ def ask_bot(room_id, bot, bot_display_name):
     prompt = ""
     for message in history:
         prompt += f"{aliases[message['sender']]}: {message['message']}\n"
-    print("====================", prompt, "========================")
+
+    print("\n\n\n")
+    print(prompt)
+    print("\n\n\n")
+
+
     # Get the bot's response
     response = bot.generate_content(prompt)
     parsed_response = response.candidates[0].content.parts[0].text.strip()
-    
+    #sub letters for names, so if the bot addressed A -> Apple
+    named_response = str(parsed_response)
+    for letter in set(re.findall(r"\b[A-Z]\b", named_response)):
+        if letter in reverse_aliases:
+            named_response = re.sub(r"\b" + letter + r"\b", reverse_aliases[letter], named_response)
+
     # TODO: Add latency/wait time and staggering of bot responses 
 
     # Store the response in the database
@@ -137,7 +149,7 @@ def ask_bot(room_id, bot, bot_display_name):
         return  # a pass is still recorded in the database, but not sent to the client
 
     # Send the bot's response to the client
-    send({"sender": bot_display_name, "message": parsed_response}, to=room_id)
+    send({"sender": bot_display_name, "message": named_response}, to=room_id)
 
 
 # Build the routes
