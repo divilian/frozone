@@ -71,9 +71,9 @@ if __name__ == "__main__":
 
     new_input = input(f"Type something to {display_name}> ")
     while new_input != "done":
-        accumulated_content += new_input
+        accumulated_content += '\nA: ' + new_input
         response = tm.generate_content(accumulated_content)
         response_txt = response.candidates[0].content.parts[0].text
         print(f"Response was: {response_txt}")
-        accumulated_content += response_txt
+        accumulated_content += '\nB: ' + response_txt
         new_input = input(f"Type something to {display_name}> ")
