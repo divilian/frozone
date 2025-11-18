@@ -14,18 +14,34 @@
   </div>
   <h1 id="home-header">Chat Room</h1>
   <div id="room-subsection">
-    <h2 id="room-code-display">Topic: <span>{{ topic }}</span></h2>
-    <button id="abort-exp-btn">Abort Experiment</button>
-      <div id="confirmModal" class="modal">
-        <div class="modal-content">
-	  <h3>Are you sure you would like to leave this experiment?</h3>
-    	  <p>This action is permanent. However, if you do choose to leave, you will still receive the offered extra credit from your professor.</p>
-	  <div class="modal-buttons">
-	    <button class="modal-btn" id="yesBtn">Yes</button>
-    	    <button class="modal-btn" id="noBtn">Cancel</button>
-      	  </div>
-	</div>
+    <div class="topic-header-row">
+      <h2 id="room-code-display">Topic: <span>{{ topic_info.title }}</span></h2>
+      <div class="topic-header-buttons">
+        <button id="end-exp-btn">Chat Session Ends</button>
+        <button id="abort-exp-btn">Abort Experiment</button>
       </div>
+    </div>
+    <div id="end-modal" class="modal">
+      <div class="modal-content">
+	<h3>Only Exit This Way When Instructed.</h3>
+	<p>This signals the end of the chat session of the experiment. You will be redirected to the post-survey. This button is only to be used when the experiment ends, as indicated by the proctor. If you wish to exit the chat before instructed, use the "Abort Experiment" button instead.</p>
+        <div class="modal-buttons">
+          <button class="modal-btn" id="endYesBtn">Continue</button>
+          <button class="modal-btn" id="endNoBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div id="abort-modal" class="modal">
+      <div class="modal-content">
+        <h3>Are you sure you want to leave this experiment?</h3>
+        <p>This action is permanent. You will be redirected to the post-survey and will not be able to return to the chat room. However, if you do choose to leave, you will still receive the offered extra credit from your professor. If the chat session has ended, as signaled by the proctor, do NOT exit via this button. Use the "Chat Session Ends" button instead.</p>
+        <div class="modal-buttons">
+          <button class="modal-btn" id="abortYesBtn">Yes</button>
+          <button class="modal-btn" id="abortNoBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <p id="room-topic-desc" class="room-topic-desc">{{ topic_info.text }}</p>
   </div>
   <div id="chat-room-widget">
     <div id="msgs-container">
@@ -102,15 +118,27 @@
         textarea.style.overflowY = "auto";
       }
     });
+    // Handler for the Experiment Ends confirmation pop-up
+    const endModal = document.getElementById("end-modal");
+    document.getElementById("end-exp-btn").onclick = function () {
+      endModal.style.display = "block";
+    };
+    document.getElementById("endNoBtn").onclick = function () {
+      endModal.style.display = "none";
+    };
+    document.getElementById("endYesBtn").onclick = function () {
+      // Redirect to ending survey
+      window.location.href = postSurveyLink;
+    };
     // Handler for the Abort Experiment confirmation pop-up
-    let modal = document.getElementById("confirmModal");
+    let modal = document.getElementById("abort-modal");
     document.getElementById("abort-exp-btn").onclick = function () {
       modal.style.display = "block";
     };
-    document.getElementById("noBtn").onclick = function () {
+    document.getElementById("abortNoBtn").onclick = function () {
       modal.style.display = "none";
     };
-    document.getElementById("yesBtn").onclick = function () {
+    document.getElementById("abortYesBtn").onclick = function () {
       // Mark that user aborted and redirect to ending survey
       fetch("/abort", { method: "POST" })
         .then(() => {

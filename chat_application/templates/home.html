@@ -2,16 +2,54 @@
 <div id="home-container">
   <h1 id="home-header">Chat Room</h1>
   {% if error %}
-  <p id="error">{{error}}</p>
+    <p id="error">{{error}}</p>
   {% endif %}
   <form method="post" id="chat-widget-home">
-    <label for="name">Enter your id number</label>
+    <label for="name">Enter your given ID number</label>
     <div id="name-row">
       <input type="text" id="name" name="name" placeholder="Enter name" />
-      <button type="submit" id="continue">Continue</button>
+      <button type="button" id="continue">Continue</button>
     </div>
     <hr />
   </form>
 </div>
+<div id="confirmID-modal" class="modal">
+  <div class="modal-content">
+    <h3 id="confirm-heading"></h3>
+    <p>Please double-check this ID number. Is it correct?</p>
+    <div class="modal-buttons">
+      <button class="modal-btn" id="idYesBtn">Yes</button>
+      <button class="modal-btn" id="idNoBtn">No</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const continueBtn = document.getElementById("continue");
+  const nameInput = document.getElementById("name");
+  const form = document.getElementById("chat-widget-home");
+  const modal = document.getElementById("confirmID-modal");
+  const modalHeading = document.getElementById("confirm-heading");
+  const yesBtn = document.getElementById("idYesBtn");
+  const noBtn = document.getElementById("idNoBtn");
+  // When user clicks "Continue", show modal instead of submitting
+  continueBtn.onclick = function () {
+    const idValue = nameInput.value.trim();
+    if (idValue === "") {
+      alert("Please enter your ID number.");
+      return;
+    }
+    modalHeading.innerHTML = `You entered: <strong>${idValue}</strong>`;
+    modal.style.display = "block";
+  };
+  // If user clicks "Back"
+  noBtn.onclick = function () {
+    modal.style.display = "none";
+  };
+  // If user clicks "Yes"
+  yesBtn.onclick = function () {
+    form.submit();
+  };
+</script>
 {% endblock %}
 
