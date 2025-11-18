@@ -37,6 +37,7 @@ rooms_collection = db.rooms
 
 # List of fruits to choose display names from
 FRUIT_NAMES = ["apple", "banana", "blueberry", "strawberry", "orange", "grape", "cherry"]
+aliases = {"watermelon":"W", "apple":"A", "banana":"B", "blueberry":"C", "strawberry":"D", "orange":"E", "grape":"G", "cherry":"H"}
 # List of discussion topics
 TOPICS_LIST = [
     {
@@ -112,7 +113,8 @@ def ask_bot(room_id, bot, bot_display_name):
     # Build the LLM prompt
     prompt = ""
     for message in history:
-        prompt += f"{message['sender']}: {message['message']}\n"
+        prompt += f"{aliases[message['sender']]}: {message['message']}\n"
+    print("====================", prompt, "========================")
     # Get the bot's response
     response = bot.generate_content(prompt)
     parsed_response = response.candidates[0].content.parts[0].text.strip()
