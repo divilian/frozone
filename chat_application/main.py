@@ -3,7 +3,9 @@ from flask_socketio import SocketIO, join_room, leave_room, send
 from pymongo import MongoClient
 from datetime import datetime
 import random
-import vertexai
+import time
+import google.auth
+from google.auth.transport.requests import AuthorizedSession
 from vertexai.tuning import sft
 from vertexai.generative_models import GenerativeModel
 
@@ -11,28 +13,31 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
 socketio = SocketIO(app)
 
-"""
-# Initialize FroBot, HotBot, and CoolBot Models
-vertexai.init(
-    project="frozone-475719",
-    location="us-central1"
+# Setup for Vertex API calls
+credentials, _ = google.auth.default(
+    scopes=["https://www.googleapis.com/auth/cloud-platform"]
 )
+google_session = AuthorizedSession(credentials)
+
+# Initialize the bots
+tuning_job_name = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
 # For right now, all three point to the same tuning job
-TUNING_JOB_ID = "117775339060461568" # the pirate model ID
-hottj = sft.SupervisedTuningJob(f"projects/frozone-475719/locations/us-central1/tuningJobs/{TUNING_JOB_ID}")
-cooltj = sft.SupervisedTuningJob(f"projects/frozone-475719/locations/us-central1/tuningJobs/{TUNING_JOB_ID}")
-frotj = sft.SupervisedTuningJob(f"projects/frozone-475719/locations/us-central1/tuningJobs/{TUNING_JOB_ID}")
+hottj = sft.SupervisedTuningJob(tuning_job_name)
+cooltj = sft.SupervisedTuningJob(tuning_job_name)
+frotj = sft.SupervisedTuningJob(tuning_job_name)
 # Create the bot models
 hotbot = GenerativeModel(hottj.tuned_model_endpoint_name)
 coolbot = GenerativeModel(cooltj.tuned_model_endpoint_name)
 frobot = GenerativeModel(frotj.tuned_model_endpoint_name)
-"""
 
+# MongoDB setup
 client = MongoClient("mongodb://localhost:27017/")
 db = client["chatApp_test"]
 rooms_collection = db.rooms
 
+# List of fruits to choose display names from
 FRUIT_NAMES = ["apple", "banana", "blueberry", "strawberry", "orange", "grape", "cherry"]
+# List of discussion topics
 TOPICS_LIST = [
     {
         "title": "Abortion",
@@ -61,11 +66,42 @@ TOPICS_LIST = [
     }
 ] 
 
+# Randomly select fruits to use for display names
 def choose_names(n):
     # Return n unique random fruit names
     return random.sample(FRUIT_NAMES, n)
 
-"""
+# Send initial watermelon post
+def send_initial_post(room_id, delay):
+    # Wait 1 second before sending
+    time.sleep(delay)
+    # Get the inital post for this topic
+    room_doc = rooms_collection.find_one({"_id": room_id})
+    topic_title = room_doc["topic"]
+    topic_info = next((t for t in TOPICS_LIST if t["title"] == topic_title), None)
+    if not topic_info:
+        return
+    initialPost = topic_info["post"]
+    # Store the initial post in the database
+    db_msg = {
+        "sender": "watermelon",
+        "message": initialPost,
+        "timestamp": datetime.utcnow()
+    }
+    rooms_collection.update_one(
+        {"_id": room_id},
+        {"$push": {"messages": db_msg}}
+    )
+    # Send to the client (must use emit when in background thread)
+    socketio.emit("message", {"sender": "watermelon", "message": initialPost}, to=room_id)
+
+# Send message that a bot joined the room
+def send_bot_joined(room_id, bot_name, delay):
+    # Wait 1 second before sending
+    time.sleep(delay)
+    socketio.emit("message", {"sender": "", "message": f"{bot_name} has entered the chat"}, to=room_id)
+
+# Ask a bot for its response, store in DB, and send to client
 def ask_bot(room_id, bot, bot_display_name):
     # Prevents crashing if bot model did not load
     if bot is None:
@@ -80,6 +116,9 @@ def ask_bot(room_id, bot, bot_display_name):
     # Get the bot's response
     response = bot.generate_content(prompt)
     parsed_response = response.candidates[0].content.parts[0].text.strip()
+    
+    # TODO: Add latency/wait time and staggering of bot responses 
+
     # Store the response in the database
     bot_message = {
         "sender": bot_display_name,
@@ -90,9 +129,14 @@ def ask_bot(room_id, bot, bot_display_name):
         {"_id": room_id},
         {"$push": {"messages": bot_message}}
     )
+    
+    # Check for if the bot passed (i.e. response = "(pass)")
+    if (parsed_response == "(pass)"):
+        return  # a pass is still recorded in the database, but not sent to the client
+
     # Send the bot's response to the client
     send({"sender": bot_display_name, "message": parsed_response}, to=room_id)
-"""
+
 
 # Build the routes
 
@@ -198,11 +242,27 @@ def handle_connect():
     room = session.get('room')
     if not name or not room:
         return
+    room_doc = rooms_collection.find_one({"_id": room})
+    if not room_doc:
+        return
     join_room(room)
+    # Send the message that "watermelon" has already joined the chat
+    send({
+        "sender": "",
+        "message": "watermelon has entered the chat"
+    }, to=room)
+    # Send the message that this user has joined the chat
     send({
         "sender": "",
         "message": f"{name} has entered the chat"
     }, to=room)
+    # Start background task for CoolBot to join after a short delay
+    socketio.start_background_task(send_bot_joined, room, room_doc['CoolBot_name'], 3)
+    # Start background task to send the initial watermelon post after a short delay
+    socketio.start_background_task(send_initial_post, room, 5)
+    # Start background task for FroBot & HotBot to join after a short delay
+    socketio.start_background_task(send_bot_joined, room, room_doc['FroBot_name'], 9)
+    socketio.start_background_task(send_bot_joined, room, room_doc['HotBot_name'], 13)
 
 @socketio.on('message')
 def handle_message(payload):
@@ -233,7 +293,6 @@ def handle_message(payload):
     # Send only the client version (no datetime)
     send(client_message, to=room)
 
-    """
     # Get the bot's display names
     room_doc = rooms_collection.find_one({"_id": room})
     frobot_name = room_doc["FroBot_name"]
@@ -243,7 +302,6 @@ def handle_message(payload):
     ask_bot(room, frobot, frobot_name)
     ask_bot(room, hotbot, hotbot_name)
     ask_bot(room, coolbot, coolbot_name)
-    """
 
 @socketio.on('disconnect')
 def handle_disconnect():
