@@ -1,4 +1,4 @@
-#TO JSONL CONVERSATION STYLE
+#TO JSONL SINGLE COMMENT
 
 import csv
 import json
@@ -16,8 +16,11 @@ def csvs_to_jsonl(
     user_message, ai_response, dialogue_id, response_id, episode_done, issue_labels
     into a single JSONL file of the form:
     {
-        "systemInstruction": {"role": "system", "parts": [{"text": "..."}]},
-        "contents": [ ... ]
+        "contents": 
+            [
+                {"role":"user","parts":["text":system_instructions,"text":user_input]},
+                {"role":"model","parts":["text":ai_response]}
+            ]
     }
     """
 
@@ -44,33 +47,37 @@ def csvs_to_jsonl(
     # Group into episodes
     episodes = []
     current_dialogue_id = None
+    cur_msg = ""
     current_contents = []
+    toggle = True
 
     for row in all_rows:
-        # Start new dialogue if needed
+        
         if current_dialogue_id is None:
             current_dialogue_id = row["dialogue_id"]
 
-        # Add user + model turns
         print(row)
         user_msg = row["user_message"].strip()
         ai_resp = row["ai_response"].strip()
 
-        current_contents.append({"role": "user", "parts": [{"text": user_msg}]})
-        current_contents.append({"role": "model", "parts": [{"text": ai_resp}]})
+        if toggle:
+            cur_msg = system_instructions + "\n" + user_msg
+        else:
+            cur_msg = cur_msg + "\n" + user_msg
 
-        # If this episode is done, finalize
-        if row["episode_done"]: 
-            episodes.append({
-                "systemInstruction": {
-                    "role": "system",
-                    "parts": [{"text": system_instructions}]
-                },
-                "contents": current_contents
-            })
-            current_contents = []
-            current_dialogue_id = None
+        current_contents.append({"role": "user", "parts": [{"text":cur_msg}]})
+        current_contents.append({"role": "model", "parts": [{"text":ai_resp}]})
 
+        episodes.append({"contents":current_contents})
+        current_contents = []
+
+        #reset the full message at end of episode
+        if row["episode_done"]:
+            cur_msg = ""
+            toggle = True
+        else:
+            toggle = False
+            
     # Write to JSONL
     output_path = Path(output_path)
     with output_path.open("w", encoding="utf-8-sig") as out_f:
