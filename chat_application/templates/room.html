@@ -53,9 +53,12 @@
     </div>
   </div>
   <script type="text/javascript">
-    //"are you sure you want to leave" pop-up on successful back-button press
+    //confirmation pop-up on successful back-button press
+    let allowLeave = false;
     window.onbeforeunload = function () {
-    return "";
+      if (!allowLeave) {
+        return "";
+      }
     };
     // Push a state when entering the page
     history.pushState(null, "", location.href);
@@ -130,7 +133,10 @@
     document.getElementById("endNoBtn").onclick = function () {
       endModal.style.display = "none";
     };
-    document.getElementById("endYesBtn").onclick = function () {
+    document.getElementById("endYesBtn").onclick = function (e) {
+      //block browser confirmation popup
+      allowLeave = true; 
+      e.stopPropagation(); 
       // Redirect to ending survey
       window.location.href = postSurveyLink;
     };
@@ -142,7 +148,10 @@
     document.getElementById("abortNoBtn").onclick = function () {
       modal.style.display = "none";
     };
-    document.getElementById("abortYesBtn").onclick = function () {
+    document.getElementById("abortYesBtn").onclick = function (e) {
+      //block browser confirmation popup
+      allowLeave = true; 
+      e.stopPropagation(); 
       // Mark that user aborted and redirect to ending survey
       fetch("/abort", { method: "POST" })
         .then(() => {
