@@ -53,6 +53,10 @@
     </div>
   </div>
   <script type="text/javascript">
+    //"are you sure you want to leave" pop-up on successful back-button press
+    window.onbeforeunload = function () {
+    return "";
+    };
     // Push a state when entering the page
     history.pushState(null, "", location.href);
     window.addEventListener("popstate", function () {
