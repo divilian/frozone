@@ -218,6 +218,7 @@ def choose():
         "FroBot_name": frobot_name,
         "HotBot_name": hotbot_name,
         "CoolBot_name": coolbot_name,
+        "initialPostsSent": False,
         # empty message history
         "messages": [],
         # flag for if the user aborts
@@ -266,6 +267,8 @@ def handle_connect():
     if not room_doc:
         return
     join_room(room)
+    if (room_doc.get("initialPostsSent", False)):
+        return
     # Send the message that "watermelon" has already joined the chat
     send({
         "sender": "",
@@ -283,6 +286,10 @@ def handle_connect():
     # Start background task for FroBot & HotBot to join after a short delay
     socketio.start_background_task(send_bot_joined, room, room_doc['FroBot_name'], 9)
     socketio.start_background_task(send_bot_joined, room, room_doc['HotBot_name'], 13)
+    rooms_collection.update_one(
+        {"_id": room},
+        {"$set": {"initialPostsSent": True}}
+    )
 
 @socketio.on('message')
 def handle_message(payload):
@@ -334,6 +341,7 @@ def handle_disconnect():
             "message": f"{name} has left the chat"
         }, to=room)
         leave_room(room)
+
 
 if __name__ == "__main__":
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)
