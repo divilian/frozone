@@ -208,7 +208,7 @@ hr {
   color: rgb(0, 73, 101);
 }
 
-#room-code-display span {
+#room-code-display .topic-title {
   text-decoration: underline;
   text-decoration-style: dotted;
   text-underline-offset: 2px;
@@ -541,5 +541,49 @@ hr {
   color: darkred;
 }
 
+.tooltip {
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+}
+.tooltiptext {
+  font-weight: normal;
+  font-size: 1rem;
+  line-height: 2rem;
+  width: 30rem;
+  visibility: hidden;
+  background-color: rgba(40, 40, 40, 0.96);
+  color: #fff;
+  text-align: center;
+  border-radius: .4rem;
+  padding: .3rem .5rem;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity .03s ease;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.prompt-btn {
+  font-size: 1rem;
+  padding: 6px;
+  font-weight: 400;
+  text-decoration: none;
+  display: inline-block;
+
+  background-color: darkgreen;
+  color: #fff;
+  border: 2px solid darkgreen;
+  border-radius: 10px;
+
+  cursor: pointer;
+  line-height: 1;
+}
+.prompt-btn:hover {
+  background-color: white;
+  color: darkgreen;
+}
 
 
