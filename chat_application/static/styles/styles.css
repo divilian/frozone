@@ -208,15 +208,6 @@ hr {
   color: rgb(0, 73, 101);
 }
 
-#room-code-display span {
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-underline-offset: 2px;
-  color: rgb(40, 40, 40);
-  font-family: monospace;
-  padding: 8px 5px;
-}
-
 #end-exp-btn {
   color: white;
   background-color: rgb(0, 73, 101);
@@ -264,6 +255,18 @@ hr {
   display: flex;
   gap: 20px;
   align-items: center;
+}
+
+.topic-title-clickable {
+  cursor: pointer;
+  /* text-decoration: underline; 
+  text-underline-offset: 4px; */
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+  color: rgb(40, 40, 40);
+  font-family: monospace;
+  padding: 8px 5px;
 }
 
 #room-topic-desc {
@@ -406,6 +409,19 @@ hr {
   text-align: center;
 }
 
+.topic-modal-content {
+  background: #ffffff;
+  color: #333;
+  border-radius: 12px;
+  padding: 24px 28px;
+  width: 600px;
+  max-width: 90%;
+  margin: 12% auto; /* centers vertically */
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  animation: fadeIn 0.25s ease-out;
+  text-align: center;
+}
+
 .modal-content h3 {
   font-weight: bold;
   font-size: 1.50rem;
@@ -414,6 +430,19 @@ hr {
 }
 
 .modal-content p {
+  font-size: 1.05rem;
+  line-height: 1.4;
+  margin-bottom: 22px;
+}
+
+.topic-modal-content h3 {
+  font-weight: bold;
+  font-size: 1.50rem;
+  line-height: 1.4;
+  margin-bottom: 22px;
+}
+
+.topic-modal-content p {
   font-size: 1.05rem;
   line-height: 1.4;
   margin-bottom: 22px;
@@ -514,6 +543,15 @@ hr {
 
 #endNoBtn:hover {
   background: #ccc;
+}
+
+#topicDescOkBtn {
+  background: green;
+  color: white;
+}
+
+#topicDescOkBtn:hover {
+  background: #016601;
 }
 
 .landing-links{
