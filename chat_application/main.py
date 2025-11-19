@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, make_response
 from flask_socketio import SocketIO, join_room, leave_room, send
 from pymongo import MongoClient
 from datetime import datetime
@@ -177,7 +177,18 @@ def topics():
     user_id = session.get('user_id')
     if not user_id:
         return redirect(url_for('home'))
-    return render_template('topics.html', topics=TOPICS_LIST)
+
+    exists = db.rooms.find_one({"user_id":user_id})
+    if exists:
+        #set session vars for room()
+        session['room'] = exists['_id']
+        session['display_name'] = exists['user_name']
+        return redirect(url_for('room'))
+    
+    #don't let browser cache this page
+    resp = make_response( render_template('topics.html', topics=TOPICS_LIST) )
+    resp.headers['Cache-Control'] = 'no-store'
+    return resp
 
 @app.route('/choose', methods=["POST"])
 def choose():
