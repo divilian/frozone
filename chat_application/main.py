@@ -41,7 +41,7 @@ rooms_collection = db.rooms
 
 # List of fruits to choose display names from
 FRUIT_NAMES = ["apple", "banana", "blueberry", "strawberry", "orange", "grape", "cherry"]
-aliases = {"watermelon":"W", "apple":"A", "banana":"B", "blueberry":"C", "strawberry":"D", "orange":"E", "grape":"G", "cherry":"H"}
+aliases = {"watermelon":"W", "apple":"L", "banana":"B", "blueberry":"C", "strawberry":"D", "orange":"E", "grape":"G", "cherry":"H"}
 reverse_aliases = { value:key for key,value in aliases.items() }
 # List of discussion topics
 TOPICS_LIST = [
@@ -71,6 +71,8 @@ TOPICS_LIST = [
         "post": "I think people should handle their own healthcare. the government is slow plus competition means more innovation. i dont trust the idea of one size fits all"
     }
 ] 
+
+
 
 # Randomly select fruits to use for display names
 def choose_names(n):
@@ -136,7 +138,7 @@ def ask_bot(room_id, bot, bot_display_name):
 
 
     print("\n")
-    print("=================================resposne")
+    print("=================================response")
     print(parsed_response)
 
     # TODO: Add latency/wait time and staggering of bot responses 
