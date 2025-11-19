@@ -8,6 +8,7 @@ import google.auth
 from google.auth.transport.requests import AuthorizedSession
 from vertexai.tuning import sft
 from vertexai.generative_models import GenerativeModel
+import re
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
@@ -38,6 +39,7 @@ rooms_collection = db.rooms
 # List of fruits to choose display names from
 FRUIT_NAMES = ["apple", "banana", "blueberry", "strawberry", "orange", "grape", "cherry"]
 aliases = {"watermelon":"W", "apple":"A", "banana":"B", "blueberry":"C", "strawberry":"D", "orange":"E", "grape":"G", "cherry":"H"}
+reverse_aliases = { value:key for key,value in aliases.items() }
 # List of discussion topics
 TOPICS_LIST = [
     {
@@ -114,11 +116,21 @@ def ask_bot(room_id, bot, bot_display_name):
     prompt = ""
     for message in history:
         prompt += f"{aliases[message['sender']]}: {message['message']}\n"
-    print("====================", prompt, "========================")
+
+    print("\n\n\n")
+    print(prompt)
+    print("\n\n\n")
+
+
     # Get the bot's response
     response = bot.generate_content(prompt)
     parsed_response = response.candidates[0].content.parts[0].text.strip()
-    
+    #sub letters for names, so if the bot addressed A -> Apple
+    named_response = str(parsed_response)
+    for letter in set(re.findall(r"\b[A-Z]\b", named_response)):
+        if letter in reverse_aliases:
+            named_response = re.sub(r"\b" + letter + r"\b", reverse_aliases[letter], named_response)
+
     # TODO: Add latency/wait time and staggering of bot responses 
 
     # Store the response in the database
@@ -137,12 +149,18 @@ def ask_bot(room_id, bot, bot_display_name):
         return  # a pass is still recorded in the database, but not sent to the client
 
     # Send the bot's response to the client
-    send({"sender": bot_display_name, "message": parsed_response}, to=room_id)
+    send({"sender": bot_display_name, "message": named_response}, to=room_id)
 
 
 # Build the routes
+@app.route('/', methods=["GET"])
+def landing():
+    return render_template('landing.html')
+@app.route('/wait', methods=["GET"])
+def waiting():
+    return render_template('waiting.html')
 
-@app.route('/', methods=["GET", "POST"])
+@app.route('/chat', methods=["GET", "POST"])
 def home():
     session.clear()
     if request.method == "POST":
@@ -200,6 +218,7 @@ def choose():
         "FroBot_name": frobot_name,
         "HotBot_name": hotbot_name,
         "CoolBot_name": coolbot_name,
+        "initialPostsSent": False,
         # empty message history
         "messages": [],
         # flag for if the user aborts
@@ -248,6 +267,8 @@ def handle_connect():
     if not room_doc:
         return
     join_room(room)
+    if (room_doc.get("initialPostsSent", False)):
+        return
     # Send the message that "watermelon" has already joined the chat
     send({
         "sender": "",
@@ -265,6 +286,10 @@ def handle_connect():
     # Start background task for FroBot & HotBot to join after a short delay
     socketio.start_background_task(send_bot_joined, room, room_doc['FroBot_name'], 9)
     socketio.start_background_task(send_bot_joined, room, room_doc['HotBot_name'], 13)
+    rooms_collection.update_one(
+        {"_id": room},
+        {"$set": {"initialPostsSent": True}}
+    )
 
 @socketio.on('message')
 def handle_message(payload):
@@ -316,6 +341,7 @@ def handle_disconnect():
             "message": f"{name} has left the chat"
         }, to=room)
         leave_room(room)
+
 
 if __name__ == "__main__":
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)
