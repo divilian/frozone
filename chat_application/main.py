@@ -22,10 +22,13 @@ google_session = AuthorizedSession(credentials)
 
 # Initialize the bots
 tuning_job_name = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
+tuning_job_frobot = f"projects/frozone-475719/locations/us-central1/tuningJobs/347745892591206400"
+tuning_job_hotbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/7517476499365036032"
+tuning_job_coolbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/1865458967015063552"
 # For right now, all three point to the same tuning job
-hottj = sft.SupervisedTuningJob(tuning_job_name)
-cooltj = sft.SupervisedTuningJob(tuning_job_name)
-frotj = sft.SupervisedTuningJob(tuning_job_name)
+hottj = sft.SupervisedTuningJob(tuning_job_hotbot)
+cooltj = sft.SupervisedTuningJob(tuning_job_coolbot)
+frotj = sft.SupervisedTuningJob(tuning_job_frobot)
 # Create the bot models
 hotbot = GenerativeModel(hottj.tuned_model_endpoint_name)
 coolbot = GenerativeModel(cooltj.tuned_model_endpoint_name)
@@ -117,9 +120,9 @@ def ask_bot(room_id, bot, bot_display_name):
     for message in history:
         prompt += f"{aliases[message['sender']]}: {message['message']}\n"
 
-    print("\n\n\n")
+    print("\n")
+    print("=================================prompt")
     print(prompt)
-    print("\n\n\n")
 
 
     # Get the bot's response
@@ -130,6 +133,11 @@ def ask_bot(room_id, bot, bot_display_name):
     for letter in set(re.findall(r"\b[A-Z]\b", named_response)):
         if letter in reverse_aliases:
             named_response = re.sub(r"\b" + letter + r"\b", reverse_aliases[letter], named_response)
+
+
+    print("\n")
+    print("=================================resposne")
+    print(parsed_response)
 
     # TODO: Add latency/wait time and staggering of bot responses 
 
