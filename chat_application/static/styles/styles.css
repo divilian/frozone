@@ -104,10 +104,16 @@ hr {
   color: green;
 }
 
+#root:has(#topic-container) {
+  min-height: 100vh;
+  height: auto; /* override the default 100vh */
+}
+
 #topic-container {
-  padding: 40px;
+  padding: 20px 40px 20px 40px;
   /* text-align: center; */
   color: rgb(0, 73, 101);
+  min-height: 100vh;
 }
 
 #topic-container h1 {
@@ -160,15 +166,21 @@ hr {
 }
 
 .topic-block {
-    margin-bottom: 30px;
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: justify;
+  margin-bottom: 10px;
 }
 
 .topic-form-desc {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 15px;
     font-size: 1rem;
     line-height: 1.5;
-    text-align: justify
+    text-align: justify !important;
 }
 
 /* Make spacing look balanced on larger screens */
@@ -260,11 +272,19 @@ hr {
   width: 100%;
 }
 
+.topic-header-info {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/*
 .topic-header-buttons {
   display: flex;
   gap: 20px;
   align-items: center;
 }
+*/
 
 #room-topic-desc {
     margin-top: 20px;

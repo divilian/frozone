@@ -15,11 +15,13 @@
   <h1 id="home-header">Chat Room</h1>
   <div id="room-subsection">
     <div class="topic-header-row">
-      <h2 id="room-code-display">Topic: <span class="topic-title">{{ topic_info.title }}</span>
-      </h2>   
-      <div class="tooltip">
-        <button class="prompt-btn">prompt</button>
-        <span class="tooltiptext">{{topic_info.text}}</span>
+      <div class="topic-header-info">
+	<h2 id="room-code-display">Topic: <span class="topic-title">{{ topic_info.title }}</span>
+        </h2>
+        <div class="tooltip">
+          <button class="prompt-btn">Prompt</button>
+          <span class="tooltiptext">{{topic_info.text}}</span>
+      	</div>
       </div>
       <div class="topic-header-buttons">
         <button id="end-exp-btn">Chat Session Ends</button>
