@@ -22,9 +22,14 @@ google_session = AuthorizedSession(credentials)
 
 # Initialize the bots
 tuning_job_name = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
+tuning_job_frobot = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
+tuning_job_hotbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
+tuning_job_coolbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
+"""
 tuning_job_frobot = f"projects/frozone-475719/locations/us-central1/tuningJobs/347745892591206400"
 tuning_job_hotbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/7517476499365036032"
 tuning_job_coolbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/1865458967015063552"
+"""
 # For right now, all three point to the same tuning job
 hottj = sft.SupervisedTuningJob(tuning_job_hotbot)
 cooltj = sft.SupervisedTuningJob(tuning_job_coolbot)
@@ -109,6 +114,34 @@ def send_bot_joined(room_id, bot_name, delay):
     time.sleep(delay)
     socketio.emit("message", {"sender": "", "message": f"{bot_name} has entered the chat"}, to=room_id)
 
+def bot_names_to_session(room_id):
+    loaded_names = db.rooms.find_one({"_id":int(room_id)},{"FroBot_name":1, "HotBot_name":1, "CoolBot_name":1, "user_name":1, "_id":0})
+    names = [ name for label,name in loaded_names.items()]
+    names.append('watermelon')
+    print(f"\n==************************ {room_id}")
+    print(names)
+    session['people_names'] = names
+    
+def let_to_name(room_id, text):
+    if 'people_names' not in session:
+        bot_names_to_session(room_id)
+    named_response = str(text)
+    letters = [ aliases[name] for name in session['people_names'] ]
+    for letter in set(re.findall(r"\b[A-Z]\b", named_response)):
+        if letter in letters:
+            named_response = re.sub(r"\b" + letter + r"\b", reverse_aliases[letter], named_response)
+    return named_response
+
+def name_to_let(room_id, text):
+    if 'people_names' not in session:
+        bot_names_to_session(room_id)
+    named_response = str(text)
+    names = session['people_names']
+    for name in names:
+        if name in text:
+            text = re.sub(r"\b" + name + r"\b", aliases[name], text, flags=re.I)
+    return text
+
 # Ask a bot for its response, store in DB, and send to client
 def ask_bot(room_id, bot, bot_display_name):
     # Prevents crashing if bot model did not load
@@ -122,6 +155,8 @@ def ask_bot(room_id, bot, bot_display_name):
     for message in history:
         prompt += f"{aliases[message['sender']]}: {message['message']}\n"
 
+    prompt = name_to_let(room_id, prompt)
+
     print("\n")
     print("=================================prompt")
     print(prompt)
@@ -131,11 +166,7 @@ def ask_bot(room_id, bot, bot_display_name):
     response = bot.generate_content(prompt)
     parsed_response = response.candidates[0].content.parts[0].text.strip()
     #sub letters for names, so if the bot addressed A -> Apple
-    named_response = str(parsed_response)
-    for letter in set(re.findall(r"\b[A-Z]\b", named_response)):
-        if letter in reverse_aliases:
-            named_response = re.sub(r"\b" + letter + r"\b", reverse_aliases[letter], named_response)
-
+    named_response = let_to_name(room_id, parsed_response)
 
     print("\n")
     print("=================================response")
@@ -256,6 +287,7 @@ def room():
     display_name = session.get('display_name')
     if not room_id or not display_name:
         return redirect(url_for('home'))
+    bot_names_to_session(room_id)
     room_doc = rooms_collection.find_one({"_id": room_id})
     if not room_doc:
         return redirect(url_for('home'))
