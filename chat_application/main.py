@@ -37,7 +37,7 @@ frobot = GenerativeModel(frotj.tuned_model_endpoint_name)
 
 # MongoDB setup
 client = MongoClient("mongodb://localhost:27017/")
-db = client["chatApp_test"]
+db = client["thursdayRunThrough"]
 rooms_collection = db.rooms
 
 # List of fruits to choose display names from
