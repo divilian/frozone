@@ -1,9 +1,10 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, make_response
 from flask_socketio import SocketIO, join_room, leave_room, send
 from pymongo import MongoClient
 from datetime import datetime
 import random
 import time
+import math
 import google.auth
 from google.auth.transport.requests import AuthorizedSession
 from vertexai.tuning import sft
@@ -22,10 +23,18 @@ google_session = AuthorizedSession(credentials)
 
 # Initialize the bots
 tuning_job_name = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
+tuning_job_frobot = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
+tuning_job_hotbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
+tuning_job_coolbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
+"""
+tuning_job_frobot = f"projects/frozone-475719/locations/us-central1/tuningJobs/347745892591206400"
+tuning_job_hotbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/7517476499365036032"
+tuning_job_coolbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/1865458967015063552"
+"""
 # For right now, all three point to the same tuning job
-hottj = sft.SupervisedTuningJob(tuning_job_name)
-cooltj = sft.SupervisedTuningJob(tuning_job_name)
-frotj = sft.SupervisedTuningJob(tuning_job_name)
+hottj = sft.SupervisedTuningJob(tuning_job_hotbot)
+cooltj = sft.SupervisedTuningJob(tuning_job_coolbot)
+frotj = sft.SupervisedTuningJob(tuning_job_frobot)
 # Create the bot models
 hotbot = GenerativeModel(hottj.tuned_model_endpoint_name)
 coolbot = GenerativeModel(cooltj.tuned_model_endpoint_name)
@@ -37,8 +46,8 @@ db = client["chatApp_test"]
 rooms_collection = db.rooms
 
 # List of fruits to choose display names from
-FRUIT_NAMES = ["apple", "banana", "blueberry", "strawberry", "orange", "grape", "cherry"]
-aliases = {"watermelon":"W", "apple":"A", "banana":"B", "blueberry":"C", "strawberry":"D", "orange":"E", "grape":"G", "cherry":"H"}
+FRUIT_NAMES = ["blueberry", "strawberry", "orange", 'cherry']
+aliases = {"watermelon":"W", "apple":"L", "banana":"B", "blueberry":"C", "strawberry":"D", "orange":"E", "grape":"G", "cherry":"H"}
 reverse_aliases = { value:key for key,value in aliases.items() }
 # List of discussion topics
 TOPICS_LIST = [
@@ -104,6 +113,32 @@ def send_bot_joined(room_id, bot_name, delay):
     time.sleep(delay)
     socketio.emit("message", {"sender": "", "message": f"{bot_name} has entered the chat"}, to=room_id)
 
+def let_to_name(room_id, text):
+    named_response = str(text)
+    letters = [ aliases[name] for name in FRUIT_NAMES]
+    letters.append(aliases['watermelon'])
+    for letter in set(re.findall(r"\b[A-Z]\b", named_response)):
+        if letter in letters:
+            named_response = re.sub(r"\b" + letter + r"\b", reverse_aliases[letter], named_response)
+    return named_response
+
+def name_to_let(room_id, text):
+    named_response = str(text)
+    names = FRUIT_NAMES
+    names.append("watermelon")
+    for name in names:
+        if name in text:
+            text = re.sub(r"\b" + name + r"\b", aliases[name], text, flags=re.I)
+    return text
+
+def get_response_delay(response):
+    baseDelay = 1 # 10 standard delay for thinking
+    perCharacterDelay = 0.05 # 0.3 average speed: 3.33 characters/second
+    maxDelay = 100 # 300 maximum cap of five minutes (so the bots don't take too long)
+    # Add total delay
+    totalDelay = baseDelay + perCharacterDelay * len(response)
+    return min(totalDelay, maxDelay)
+
 # Ask a bot for its response, store in DB, and send to client
 def ask_bot(room_id, bot, bot_display_name):
     # Prevents crashing if bot model did not load
@@ -117,21 +152,26 @@ def ask_bot(room_id, bot, bot_display_name):
     for message in history:
         prompt += f"{aliases[message['sender']]}: {message['message']}\n"
 
-    print("\n\n\n")
+    prompt = name_to_let(room_id, prompt)
+
+    print("\n")
+    print("=================================prompt")
     print(prompt)
-    print("\n\n\n")
 
 
     # Get the bot's response
     response = bot.generate_content(prompt)
     parsed_response = response.candidates[0].content.parts[0].text.strip()
     #sub letters for names, so if the bot addressed A -> Apple
-    named_response = str(parsed_response)
-    for letter in set(re.findall(r"\b[A-Z]\b", named_response)):
-        if letter in reverse_aliases:
-            named_response = re.sub(r"\b" + letter + r"\b", reverse_aliases[letter], named_response)
+    named_response = let_to_name(room_id, parsed_response)
 
-    # TODO: Add latency/wait time and staggering of bot responses 
+    print("\n")
+    print("=================================response")
+    print(parsed_response)
+
+    # Add latency/wait time for bot responses 
+    delay = get_response_delay(named_response);
+    time.sleep(delay)
 
     # Store the response in the database
     bot_message = {
@@ -149,8 +189,7 @@ def ask_bot(room_id, bot, bot_display_name):
         return  # a pass is still recorded in the database, but not sent to the client
 
     # Send the bot's response to the client
-    send({"sender": bot_display_name, "message": named_response}, to=room_id)
-
+    socketio.emit("message", {"sender": bot_display_name, "message": named_response}, to=room_id)
 
 # Build the routes
 @app.route('/', methods=["GET"])
@@ -177,7 +216,18 @@ def topics():
     user_id = session.get('user_id')
     if not user_id:
         return redirect(url_for('home'))
-    return render_template('topics.html', topics=TOPICS_LIST)
+
+    exists = db.rooms.find_one({"user_id":user_id})
+    if exists:
+        #set session vars for room()
+        session['room'] = exists['_id']
+        session['display_name'] = exists['user_name']
+        return redirect(url_for('room'))
+    
+    #don't let browser cache this page
+    resp = make_response( render_template('topics.html', topics=TOPICS_LIST) )
+    resp.headers['Cache-Control'] = 'no-store'
+    return resp
 
 @app.route('/choose', methods=["POST"])
 def choose():
@@ -326,9 +376,9 @@ def handle_message(payload):
     hotbot_name = room_doc["HotBot_name"]
     coolbot_name = room_doc["CoolBot_name"]
     # Ask each bot for a response
-    ask_bot(room, frobot, frobot_name)
-    ask_bot(room, hotbot, hotbot_name)
-    ask_bot(room, coolbot, coolbot_name)
+    socketio.start_background_task(ask_bot, room, frobot, frobot_name)
+    socketio.start_background_task(ask_bot, room, hotbot, hotbot_name)
+    socketio.start_background_task(ask_bot, room, coolbot, coolbot_name)
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -344,5 +394,6 @@ def handle_disconnect():
 
 
 if __name__ == "__main__":
+    print("Async mode:", socketio.async_mode)
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)
 
