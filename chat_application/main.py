@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from datetime import datetime
 import random
 import time
+import math
 import google.auth
 from google.auth.transport.requests import AuthorizedSession
 from vertexai.tuning import sft
@@ -77,8 +78,6 @@ TOPICS_LIST = [
     }
 ] 
 
-
-
 # Randomly select fruits to use for display names
 def choose_names(n):
     # Return n unique random fruit names
@@ -142,6 +141,14 @@ def name_to_let(room_id, text):
             text = re.sub(r"\b" + name + r"\b", aliases[name], text, flags=re.I)
     return text
 
+def get_response_delay(response):
+    baseDelay = 1 # 10 standard delay for thinking
+    perCharacterDelay = 0.05 # 0.3 average speed: 3.33 characters/second
+    maxDelay = 100 # 300 maximum cap of five minutes (so the bots don't take too long)
+    # Add total delay
+    totalDelay = baseDelay + perCharacterDelay * len(response)
+    return min(totalDelay, maxDelay)
+
 # Ask a bot for its response, store in DB, and send to client
 def ask_bot(room_id, bot, bot_display_name):
     # Prevents crashing if bot model did not load
@@ -172,7 +179,9 @@ def ask_bot(room_id, bot, bot_display_name):
     print("=================================response")
     print(parsed_response)
 
-    # TODO: Add latency/wait time and staggering of bot responses 
+    # Add latency/wait time for bot responses 
+    delay = get_response_delay(named_response);
+    time.sleep(delay)
 
     # Store the response in the database
     bot_message = {
@@ -190,8 +199,7 @@ def ask_bot(room_id, bot, bot_display_name):
         return  # a pass is still recorded in the database, but not sent to the client
 
     # Send the bot's response to the client
-    send({"sender": bot_display_name, "message": named_response}, to=room_id)
-
+    socketio.emit("message", {"sender": bot_display_name, "message": named_response}, to=room_id)
 
 # Build the routes
 @app.route('/', methods=["GET"])
@@ -379,9 +387,9 @@ def handle_message(payload):
     hotbot_name = room_doc["HotBot_name"]
     coolbot_name = room_doc["CoolBot_name"]
     # Ask each bot for a response
-    ask_bot(room, frobot, frobot_name)
-    ask_bot(room, hotbot, hotbot_name)
-    ask_bot(room, coolbot, coolbot_name)
+    socketio.start_background_task(ask_bot, room, frobot, frobot_name)
+    socketio.start_background_task(ask_bot, room, hotbot, hotbot_name)
+    socketio.start_background_task(ask_bot, room, coolbot, coolbot_name)
 
 @socketio.on('disconnect')
 def handle_disconnect():
