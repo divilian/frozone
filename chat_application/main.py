@@ -23,9 +23,9 @@ google_session = AuthorizedSession(credentials)
 
 # Initialize the bots
 pirate_tuning_job_name = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
-tuning_job_frobot = f"projects/frozone-475719/locations/us-central1/tuningJobs/347745892591206400"
-tuning_job_hotbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/7517476499365036032"
-tuning_job_coolbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/1865458967015063552"
+tuning_job_frobot = f"projects/frozone-475719/locations/us-central1/tuningJobs/1280259296294076416"
+tuning_job_hotbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/7884788149832908800"
+tuning_job_coolbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/212906184607268864"
 
 hottj = sft.SupervisedTuningJob(tuning_job_hotbot)
 cooltj = sft.SupervisedTuningJob(tuning_job_coolbot)
