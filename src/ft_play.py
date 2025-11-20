@@ -73,9 +73,7 @@ if __name__ == "__main__":
         accumulated_content += '\nA: ' + new_input
         response = tm.generate_content(accumulated_content)
         response_txt = response.candidates[0].content.parts[0].text
-        #accumulated_content += "\nB: " + response_txt
+        accumulated_content += "\nB: " + response_txt
         print(accumulated_content)
-        print("")
-        print(response_txt)
         print("")
         new_input = input(f"Type something to {display_name}> ")
