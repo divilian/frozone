@@ -78,9 +78,7 @@ def csvs_to_jsonl(
         else:
             cur_msg += "\n<RE>: " + ai_resp
             toggle = False
-            print("\n" * 10)
             print(cur_msg)
-            break
             
     # Write to JSONL
     output_path = Path(output_path)
