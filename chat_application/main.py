@@ -236,7 +236,8 @@ In performing tasks (1) and (2) your overall goal is to continue the conversatio
 
 Finally, note that for this conversation your username is: <RE> 
 
-Below are the chat contents:"""
+Below are the chat contents:
+"""
 
 # Randomly select fruits to use for display names
 def choose_names(n):
@@ -310,7 +311,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     for message in history:
         prompt += f"{aliases[message['sender']]}: {message['message']}\n"
 
-    prompt = name_to_let(room_id, prompt)
+    prompt = name_to_let(room_id, prompt) #sub fruit names to letters to give to bots
 
     print("\n")
     print("=================================prompt")
@@ -319,6 +320,14 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     # Get the bot's response
     response = bot.generate_content(prompt)
     parsed_response = response.candidates[0].content.parts[0].text.strip()
+    #fix any escaped \\n --> \n so they are actual newlines
+    parsed_response = parsed_response.replace("\\n", "\n")
+    #remove bot heading ("C: ...")
+    if re.search(r"\b" + aliases[bot_display_name] + r"\b:",
+                 parsed_response):
+        parsed_response = re.sub(r"\b" 
+                                 + aliases[bot_display_name] 
+                                 + r"\b:\s?", '', parsed_response)
     #sub letters for names, so if the bot addressed A -> Apple
     named_response = let_to_name(room_id, parsed_response)
 
@@ -333,7 +342,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     # Store the response in the database
     bot_message = {
         "sender": bot_display_name,
-        "message": parsed_response,
+        "message": named_response, #save fruits in db so page reload shows proper names
         "timestamp": datetime.utcnow()
     }
     rooms_collection.update_one(
