@@ -46,7 +46,7 @@ db = client["chatApp_test"]
 rooms_collection = db.rooms
 
 # List of fruits to choose display names from
-FRUIT_NAMES = ["apple", "banana", "blueberry", "strawberry", "orange", "grape", "cherry"]
+FRUIT_NAMES = ["blueberry", "strawberry", "orange", 'cherry']
 aliases = {"watermelon":"W", "apple":"L", "banana":"B", "blueberry":"C", "strawberry":"D", "orange":"E", "grape":"G", "cherry":"H"}
 reverse_aliases = { value:key for key,value in aliases.items() }
 # List of discussion topics
@@ -113,29 +113,19 @@ def send_bot_joined(room_id, bot_name, delay):
     time.sleep(delay)
     socketio.emit("message", {"sender": "", "message": f"{bot_name} has entered the chat"}, to=room_id)
 
-def bot_names_to_session(room_id):
-    loaded_names = db.rooms.find_one({"_id":int(room_id)},{"FroBot_name":1, "HotBot_name":1, "CoolBot_name":1, "user_name":1, "_id":0})
-    names = [ name for label,name in loaded_names.items()]
-    names.append('watermelon')
-    print(f"\n==************************ {room_id}")
-    print(names)
-    session['people_names'] = names
-    
 def let_to_name(room_id, text):
-    if 'people_names' not in session:
-        bot_names_to_session(room_id)
     named_response = str(text)
-    letters = [ aliases[name] for name in session['people_names'] ]
+    letters = [ aliases[name] for name in FRUIT_NAMES]
+    letters.append(aliases['watermelon'])
     for letter in set(re.findall(r"\b[A-Z]\b", named_response)):
         if letter in letters:
             named_response = re.sub(r"\b" + letter + r"\b", reverse_aliases[letter], named_response)
     return named_response
 
 def name_to_let(room_id, text):
-    if 'people_names' not in session:
-        bot_names_to_session(room_id)
     named_response = str(text)
-    names = session['people_names']
+    names = FRUIT_NAMES
+    names.append("watermelon")
     for name in names:
         if name in text:
             text = re.sub(r"\b" + name + r"\b", aliases[name], text, flags=re.I)
@@ -295,7 +285,6 @@ def room():
     display_name = session.get('display_name')
     if not room_id or not display_name:
         return redirect(url_for('home'))
-    bot_names_to_session(room_id)
     room_doc = rooms_collection.find_one({"_id": room_id})
     if not room_doc:
         return redirect(url_for('home'))
@@ -405,5 +394,6 @@ def handle_disconnect():
 
 
 if __name__ == "__main__":
+    print("Async mode:", socketio.async_mode)
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)
 
