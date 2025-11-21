@@ -5,6 +5,7 @@ from datetime import datetime
 import random
 import time
 import math
+import random
 import google.auth
 from google.auth.transport.requests import AuthorizedSession
 from vertexai.tuning import sft
@@ -293,11 +294,13 @@ def name_to_let(room_id, text):
     return text
 
 def get_response_delay(response):
-    baseDelay = 7 # standard delay for thinking
-    perCharacterDelay = 0.25 # average speed: 3.33 characters/second = 0.3
-    maxDelay = 240 # maximum cap of four minutes (so the bots don't take too long)
+    baseDelay = 1 # standard delay for thinking
+    randFactor = random.uniform(1, 7.)
+    perCharacterDelay = 0.1
+    # was .25 -> average speed: 3.33 characters/second = 0.3
+    maxDelay = 180 # maximum cap of two minutes (so the bots don't take too long)a
     # Add total delay
-    totalDelay = baseDelay + perCharacterDelay * len(response)
+    totalDelay = baseDelay + perCharacterDelay * len(response) + randFactor
     return min(totalDelay, maxDelay)
 
 # Ask a bot for its response, store in DB, and send to client
@@ -342,6 +345,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
 
     # Add latency/wait time for bot responses 
     delay = get_response_delay(named_response);
+    print(delay)
     time.sleep(delay)
 
     # Store the response in the database
