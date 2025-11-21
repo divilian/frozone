@@ -322,9 +322,11 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     # Get the bot's response
     response = bot.generate_content(prompt)
     parsed_response = response.candidates[0].content.parts[0].text.strip()
-    #fix any escaped \\n or \n --> <br/> so they are actual newlines
-    parsed_response = re.sub(r"(\\n|\n)", "<br/>", parsed_response)
-    parsed_response = re.sub(r"^(<br/>\s*)+", '', re.sub(r"(<br/>\s*)+$", '', parsed_response))
+    #remove bot formatting like <i></i> <b></b> that will render on the page
+    parsed_response = re.sub(r"<([a-zA-Z]+)>(?=.*</\1>)", "", parsed_response)
+    parsed_response = re.sub(r"</([a-zA-Z]+)>", "", parsed_response)
+    #fix any escaped \\n --> \n so they are actual newlines
+    parsed_response = re.sub(r"\\n", "\n", parsed_response).strip()
     #remove bot heading ("C: ...")
     if re.search(r"\b" + aliases[bot_display_name] + r"\b:",
                  parsed_response):
