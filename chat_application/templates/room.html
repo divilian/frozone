@@ -78,6 +78,7 @@
       welcomeModal.style.display = "none";
     };
     // Creates the post-survey link (based on the bot names)
+    const endpoint = "{{ url_for('post_survey') }}";
     const postSurveyLink =
     	"https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ"
     	  + "?CName={{ CoolBot_name }}"
@@ -138,7 +139,7 @@
       //block browser confirmation popup
       e.stopPropagation(); 
       // Redirect to ending survey
-      window.location.href = postSurveyLink;
+        window.location.href = endpoint;
     };
     // Handler for the Abort Experiment confirmation pop-up
     let modal = document.getElementById("abort-modal");
@@ -154,7 +155,7 @@
       // Mark that user aborted and redirect to ending survey
       fetch("/abort", { method: "POST" })
         .then(() => {
-          window.location.href = postSurveyLink;
+          window.location.href = endpoint;
         });
     };
   </script>

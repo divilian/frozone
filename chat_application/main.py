@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session, make_response
+from flask import Flask, request, render_template, redirect, url_for, session, make_response, render_template_string
 from flask_socketio import SocketIO, join_room, leave_room, send
 from pymongo import MongoClient
 from datetime import datetime
@@ -133,7 +133,8 @@ In performing tasks (1) and (2) your overall goal is to cool the conversation do
 
 Finally, note that for this conversation your username is: <RE> 
 
-Below are the chat contents:"""
+Below are the chat contents:
+"""
 
 # HotBot Prompt
 HOTBOT_PROMPT = """You are a participant in a multi-way chat about current political topics. Into this chat will be pasted the interactive responses from other participants in the chat, using the following format:
@@ -185,7 +186,8 @@ In performing tasks (1) and (2) your overall goal is to heat up the conversation
 
 Finally, note that for this conversation your username is: <RE> 
 
-Below are the chat contents:"""
+Below are the chat contents:
+"""
 
 # CoolBot Prompt
 COOLBOT_PROMPT = """You are a participant in a multi-way chat about current political topics. Into this chat will be pasted the interactive responses from other participants in the chat, using the following format:
@@ -470,6 +472,37 @@ def abort_room():
         {"$set": {"aborted": True}}
     )
     return ("OK", 200)
+
+@app.route("/abort", methods=["POST", "GET"])
+def post_survey():
+    SURVEY_2_LINK = "https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ"
+    user_id = session.get('user_id')
+    if not user_id:
+        return render_template('home.html', error="Enter your ID.") 
+    info = db.rooms.find_one({"user_id":user_id}, {'FroBot_name':1,
+                                                   'HotBot_name':1,
+                                                   'CoolBot_name':1} )
+    if not info:
+        return render_template('home.html', error="Enter your ID.") 
+
+    CName = info['CoolBot_name']
+    FName = info['FroBot_name']
+    HName = info['HotBot_name']
+
+    #pass in without showing in url
+    html = f"""
+    <form id="autoform" action="{SURVEY_2_LINK}" method="POST">
+        <input type="hidden" name="user_code" value="{user_id}">
+        <input type="hidden" name="CName" value="{CName}">
+        <input type="hidden" name="HName" value="{HName}">
+        <input type="hidden" name="FName" value="{FName}">
+    </form>
+
+    <script>
+        document.getElementById('autoform').submit();
+    </script>
+    """
+    return render_template_string(html)
 
 # Build the SocketIO event handlers
 
