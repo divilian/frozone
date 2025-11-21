@@ -96,7 +96,7 @@
         content = `
           <li class="message-item ${senderIsUser ? "self-message-item" : "peer-message-item"}">
               <p>${message}</p>
-              <small class="${senderIsUser ? "muted-text" : "muted-text-white"}">${sender}</small>
+              <small class="${senderIsUser ? "chat-user-sender" : "chat-sender"}">${sender}</small>
          </li>
       `;}
       messages.insertAdjacentHTML("beforeend", content);

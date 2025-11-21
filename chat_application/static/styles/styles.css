@@ -358,22 +358,23 @@ hr {
 }
 
 .message-item {
-  background-color: white;
-  border-radius: 10px;
-  padding: 10px;
   width: fit-content;
   max-width: 700px;
-  margin: 10px 0;
+  margin-bottom: 20px;
 }
 
 .message-item p {
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
   word-wrap: break-word; 
   overflow-wrap: break-word;
   word-break: break-word;
   white-space: pre-wrap;
+  margin: 10px 0 5px 0;
 }
 
-.peer-message-item {
+.peer-message-item p {
   background-color: rgb(0, 100, 140);
   color: white;
   border-bottom-left-radius: 0;
@@ -385,14 +386,16 @@ hr {
   border-bottom-right-radius: 0;
 }
 
-.muted-text {
-  color: grey;
-  font-size: 0.7rem;
+.chat-user-sender {
+  color: black;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
-.muted-text-white {
-  color: white;
-  font-size: 0.7rem;
+.chat-sender {
+  color: black;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .member-activity {
