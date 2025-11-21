@@ -360,7 +360,8 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     )
     
     # Check for if the bot passed (i.e. response = "(pass)")
-    if re.search(r'\(pass\)', parsed_response, re.I):
+    if "(pass)" in parsed_response:
+        print("PASSED")
         return  # a pass is still recorded in the database, but not sent to the client
 
     # Send the bot's response to the client
