@@ -271,6 +271,17 @@ def send_initial_post(room_id, delay):
     # Send to the client (must use emit when in background thread)
     socketio.emit("message", {"sender": "watermelon", "message": initialPost}, to=room_id)
 
+    #send to the bots
+    # Get the bot's display names
+    room_doc = rooms_collection.find_one({"_id": room_id})
+    frobot_name = room_doc["FroBot_name"]
+    hotbot_name = room_doc["HotBot_name"]
+    coolbot_name = room_doc["CoolBot_name"]
+    # Ask each bot for a response
+    socketio.start_background_task(ask_bot, room_id, frobot, frobot_name, FROBOT_PROMPT)
+    socketio.start_background_task(ask_bot, room_id, hotbot, hotbot_name, HOTBOT_PROMPT)
+    socketio.start_background_task(ask_bot, room_id, coolbot, coolbot_name, COOLBOT_PROMPT)
+
 # Send message that a bot joined the room
 def send_bot_joined(room_id, bot_name, delay):
     # Wait 1 second before sending
