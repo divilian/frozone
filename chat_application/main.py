@@ -492,7 +492,7 @@ def abort_room():
     )
     return ("OK", 200)
 
-@app.route("/abort", methods=["POST", "GET"])
+@app.route("/post_survey", methods=["POST", "GET"])
 def post_survey():
     SURVEY_2_LINK = "https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ"
     user_id = session.get('user_id')
