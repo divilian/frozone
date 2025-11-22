@@ -87,6 +87,10 @@
     var socketio = io();
     socketio.on("message", function (message) { createChatItem(message.message, message.sender) });
     function createChatItem(message, sender) {
+      //autoscroll capabilities
+      const container = document.getElementById("msgs-container");
+      const shouldAutoScroll = isNearBottom(container);
+
       var messages = document.getElementById("messages");
       var content;
       if (sender === "") {
@@ -100,6 +104,11 @@
          </li>
       `;}
       messages.insertAdjacentHTML("beforeend", content);
+
+      //autoscroll capabilities
+      if (shouldAutoScroll) {
+        smoothScrollToBottom(container);
+      }
     }
     function sendMessage() {
       var msgInput = document.getElementById("message-input");
@@ -158,6 +167,17 @@
           window.location.href = endpoint;
         });
     };
+    // add auto scroll
+    function isNearBottom(container, threshold = 120) {
+      const distanceFromBottom = container.scrollHeight - (container.scrollTop + container.clientHeight);
+      return distanceFromBottom < threshold;
+    }
+    function smoothScrollToBottom(container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+    }
+
+
+
   </script>
   <script type="text/javascript">
     const initialMessages = {{ messages | tojson }};
