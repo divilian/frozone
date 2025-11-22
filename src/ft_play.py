@@ -2,6 +2,7 @@
 # Interactively play with a fine-tuned Vertex AI model, giving it back the
 # accumulated prompt as necessary so it's not stateless.
 import os
+import re
 import requests
 import time
 import random
@@ -23,8 +24,6 @@ BOT_NAME = "hotbot"   # Frobot/Hotbot/Coolbot/etc
 
 if __name__ == "__main__":
     
-    print(sys.argv)
-
     parser = argparse.ArgumentParser(description="Play with fine-tuned model.")
     parser.add_argument(
         "tuning_job_id",
@@ -56,7 +55,6 @@ if __name__ == "__main__":
 
     accumulated_content = ""
     flag = args.prompt_flag
-    print(flag)
     if flag not in ["N","f","c","h"]:
         raise Exception("Missing flag for prompt file must be f,c,h,or N")
     if flag != "N":
@@ -65,15 +63,17 @@ if __name__ == "__main__":
         elif flag == "c":
             prompt_file = "../prompts/experiment/coolbot_prompt.txt"
         elif flag == "h":
-            prompt_file = "../promts/experiment/hotbot_prompt.txt"
+            prompt_file = "../prompts/experiment/hotbot_prompt.txt"
         with open(prompt_file,"r") as f:
-            accumulated_content = f.read()
+            accumulated_content = f.read()     
+        accumulated_content = re.sub(r"<RE>","B",accumulated_content) 
 
     new_input = input(f"Type something to {display_name}> ")
     while new_input != "done":
         accumulated_content += '\nA: ' + new_input
         response = tm.generate_content(accumulated_content)
         response_txt = response.candidates[0].content.parts[0].text
-        print(f"Response was: {response_txt}")
-        accumulated_content += '\nB: ' + response_txt
+        accumulated_content += "\nB: " + response_txt
+        print(accumulated_content)
+        print("")
         new_input = input(f"Type something to {display_name}> ")

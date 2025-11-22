@@ -104,10 +104,16 @@ hr {
   color: green;
 }
 
+#root:has(#topic-container) {
+  min-height: 100vh;
+  height: auto; /* override the default 100vh */
+}
+
 #topic-container {
-  padding: 40px;
+  padding: 20px 40px 20px 40px;
   /* text-align: center; */
   color: rgb(0, 73, 101);
+  min-height: 100vh;
 }
 
 #topic-container h1 {
@@ -160,15 +166,21 @@ hr {
 }
 
 .topic-block {
-    margin-bottom: 30px;
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: justify;
+  margin-bottom: 10px;
 }
 
 .topic-form-desc {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 15px;
     font-size: 1rem;
     line-height: 1.5;
-    text-align: justify
+    text-align: justify !important;
 }
 
 /* Make spacing look balanced on larger screens */
@@ -208,7 +220,7 @@ hr {
   color: rgb(0, 73, 101);
 }
 
-#room-code-display span {
+#room-code-display .topic-title {
   text-decoration: underline;
   text-decoration-style: dotted;
   text-underline-offset: 2px;
@@ -260,11 +272,19 @@ hr {
   width: 100%;
 }
 
+.topic-header-info {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/*
 .topic-header-buttons {
   display: flex;
   gap: 20px;
   align-items: center;
 }
+*/
 
 #room-topic-desc {
     margin-top: 20px;
@@ -351,6 +371,7 @@ hr {
   overflow-wrap: break-word;
   word-break: break-word;
   white-space: pre-wrap;
+  margin-bottom: 10px;
 }
 
 .peer-message-item {
@@ -365,14 +386,20 @@ hr {
   border-bottom-right-radius: 0;
 }
 
-.muted-text {
-  color: grey;
-  font-size: 0.7rem;
+.chat-user-sender {
+  color: rgb(30, 30, 30);
+  font-size: 1.1rem;
+  background-color: rgb(230, 230, 230);
+  border-radius: .5rem;
+  padding: 2px 4px;
 }
 
-.muted-text-white {
+.chat-sender {
   color: white;
-  font-size: 0.7rem;
+  font-size: 1.1rem;
+  background-color: rgb(0, 75, 115);
+  border-radius: .5rem;
+  padding: 2px 4px;
 }
 
 .member-activity {
@@ -515,4 +542,75 @@ hr {
 #endNoBtn:hover {
   background: #ccc;
 }
+
+.landing-links{
+  display: flex;
+  justify-content: center;
+  margin-top: 20vh;
+}
+
+.landing-links button {
+  width: 60vh;
+  height: 20vh;
+  padding: 5px 10px;
+  border: 5px solid black;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 4rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  color: white;
+  background-color: darkred;
+}
+
+.landing-links button:hover {
+  background-color: white;
+  color: darkred;
+}
+
+.tooltip {
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+}
+.tooltiptext {
+  font-weight: normal;
+  font-size: 1rem;
+  line-height: 2rem;
+  width: 30rem;
+  visibility: hidden;
+  background-color: rgba(40, 40, 40, 0.96);
+  color: #fff;
+  text-align: center;
+  border-radius: .4rem;
+  padding: .3rem .5rem;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity .03s ease;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.prompt-btn {
+  font-size: 1rem;
+  padding: 6px;
+  font-weight: 400;
+  text-decoration: none;
+  display: inline-block;
+
+  background-color: darkgreen;
+  color: #fff;
+  border: 2px solid darkgreen;
+  border-radius: 10px;
+
+  cursor: pointer;
+  line-height: 1;
+}
+.prompt-btn:hover {
+  background-color: white;
+  color: darkgreen;
+}
+
 

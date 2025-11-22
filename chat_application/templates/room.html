@@ -15,7 +15,14 @@
   <h1 id="home-header">Chat Room</h1>
   <div id="room-subsection">
     <div class="topic-header-row">
-      <h2 id="room-code-display">Topic: <span>{{ topic_info.title }}</span></h2>
+      <div class="topic-header-info">
+	<h2 id="room-code-display">Topic: <span class="topic-title">{{ topic_info.title }}</span>
+        </h2>
+        <div class="tooltip">
+          <button class="prompt-btn">Prompt</button>
+          <span class="tooltiptext">{{topic_info.text}}</span>
+      	</div>
+      </div>
       <div class="topic-header-buttons">
         <button id="end-exp-btn">Chat Session Ends</button>
         <button id="abort-exp-btn">Abort Experiment</button>
@@ -41,7 +48,6 @@
         </div>
       </div>
     </div>
-    <p id="room-topic-desc" class="room-topic-desc">{{ topic_info.text }}</p>
   </div>
   <div id="chat-room-widget">
     <div id="msgs-container">
@@ -53,13 +59,6 @@
     </div>
   </div>
   <script type="text/javascript">
-    //confirmation pop-up on successful back-button press
-    let allowLeave = false;
-    window.onbeforeunload = function () {
-      if (!allowLeave) {
-        return "";
-      }
-    };
     // Push a state when entering the page
     history.pushState(null, "", location.href);
     window.addEventListener("popstate", function () {
@@ -79,6 +78,7 @@
       welcomeModal.style.display = "none";
     };
     // Creates the post-survey link (based on the bot names)
+    const endpoint = "{{ url_for('post_survey') }}";
     const postSurveyLink =
     	"https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ"
     	  + "?CName={{ CoolBot_name }}"
@@ -96,7 +96,7 @@
         content = `
           <li class="message-item ${senderIsUser ? "self-message-item" : "peer-message-item"}">
               <p>${message}</p>
-              <small class="${senderIsUser ? "muted-text" : "muted-text-white"}">${sender}</small>
+              <small class="${senderIsUser ? "chat-user-sender" : "chat-sender"}">${sender}</small>
          </li>
       `;}
       messages.insertAdjacentHTML("beforeend", content);
@@ -111,8 +111,10 @@
     }
     document.getElementById("message-input").addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
-        event.preventDefault(); // prevent a newline or form submit
-      	sendMessage(); // call the same function as the Send button
+        return
+      	// disabling send message so user can type a newline without sending
+        //event.preventDefault(); // prevent a newline or form submit
+        //sendMessage(); // call the same function as the Send button
       }
     });
     const textarea = document.getElementById("message-input");
@@ -135,10 +137,9 @@
     };
     document.getElementById("endYesBtn").onclick = function (e) {
       //block browser confirmation popup
-      allowLeave = true; 
       e.stopPropagation(); 
       // Redirect to ending survey
-      window.location.href = postSurveyLink;
+        window.location.href = endpoint;
     };
     // Handler for the Abort Experiment confirmation pop-up
     let modal = document.getElementById("abort-modal");
@@ -150,12 +151,11 @@
     };
     document.getElementById("abortYesBtn").onclick = function (e) {
       //block browser confirmation popup
-      allowLeave = true; 
       e.stopPropagation(); 
       // Mark that user aborted and redirect to ending survey
       fetch("/abort", { method: "POST" })
         .then(() => {
-          window.location.href = postSurveyLink;
+          window.location.href = endpoint;
         });
     };
   </script>
