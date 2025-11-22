@@ -1,4 +1,4 @@
-## Monday, November 24, 4-5pm (LR)
+## Monday, November 24, 4-5pm (LR, GM, late assist from BH, double-late-assist from SD)
 1. Jackson Woolard (Coleman)
 2. JJ Azizi (Goldthorp)
 3. Junia Williams (Goldthorp)
@@ -6,7 +6,7 @@
 5. Josh Byrne (NLP)
 6. Zak Butt (NLP)
 
-## Monday, December 1, 4-5pm
+## Monday, December 1, 4-5pm (LR, late assist from BH)
 1. Nathaniel Hardy (choice 1) (Coleman)
 8. Cat Chau (Coleman)
 9. Carson Frank (Coleman)
@@ -16,7 +16,7 @@
 13. Belen Telahun (NLP)
 14. Jerome Zaney (Stephen CPSC 240)
 
-## Tuesday, December 2, 4-5pm
+## Tuesday, December 2, 4-5pm (BH)
 1. Qurron Powell (Goldthorp)
 16. Murtaza Fakhry (NLP)
 17. Thomas Meyer (Stephen DATA 101)
@@ -24,7 +24,7 @@
 19. Katie Secino (Stephen DATA 101)
 20. John Rote (Stephen CPSC 240)
 
-## Wednesday, December 3, 4-5pm
+## Wednesday, December 3, 4-5pm (GM, assist from LR)
 1. Nathaniel Hardy (choice 2) (Coleman)
 22. Brodie Carley (Goldthorp)
 23. Kassi Williams (NLP)
@@ -32,9 +32,9 @@
 25. Lucia Donley (Stephen CPSC 240)
 26. Jessica Manu (Stephen CPSC 240)
 
-## Thursday, December 4, 8-9pm
+## Thursday, December 4, 8-9pm (BH, assist from SD)
 1. Xavier Bridges (Goldthorp)
 28. Ben Staten (Stephen CPSC 240)
 
-## Friday, December 5, 4-5pm
+## Friday, December 5, 4-5pm (GM, assist from LR)
 ...
