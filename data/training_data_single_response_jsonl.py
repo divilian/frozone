@@ -67,7 +67,6 @@ def csvs_to_jsonl(
         current_contents.append({"role": "user", "parts": [{"text":cur_msg}]})
         current_contents.append({"role": "model", "parts": [{"text":ai_resp}]})
 
-
         episodes.append({"contents":current_contents})
         current_contents = []
 
@@ -106,9 +105,10 @@ if __name__ == "__main__":
                 "./frobot_training/misrepresentation.csv",
                 "./frobot_training/pass.csv",
                 "./frobot_training/prodding.csv",
-                "./frobot_training/toxicity.csv",
+                "./frobot_training/toxicity.csv"#,
+                #"./frobot_training/DIALCONANfroBotTraining.csv"
             ],
-            output_path="./frobot_training/merged_training_data.jsonl",
+            output_path="./frobot_training/merged_training_data_version2.jsonl",
             system_instructions=system_instructions
         )
 
