@@ -301,7 +301,7 @@ def get_response_delay(response):
     randFactor = random.uniform(2, 12.)
     perCharacterDelay = 0.12
     # was .25 -> average speed: 3.33 characters/second = 0.3
-    maxDelay = 180 # maximum cap of three minutes (so the bots don't take too long)
+    maxDelay = 150 # maximum cap of 2.5 minutes (so the bots don't take too long)
     # Add total delay
     totalDelay = baseDelay + perCharacterDelay * len(response) + randFactor
     return min(totalDelay, maxDelay)
@@ -331,7 +331,27 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
 
     # Get the bot's response
     response = bot.generate_content(prompt)
-    parsed_response = response.candidates[0].content.parts[0].text.strip()
+    try:
+        parsed_response = response.candidates[0].content.parts[0].text.strip()
+    except Exception as e:
+        print("Error in bot response: ", e)
+        print("Treating this bot's response as a pass.")
+        # Do not store/send messages if the chat has ended
+        room_doc = rooms_collection.find_one({"_id": room_id})
+        if not room_doc or room_doc.get("ended", False):
+            return False
+        # Store the error response in the database
+        bot_message = {
+            "sender": bot_display_name,
+            "message": "ERROR in bot response - treated as a (pass)", 
+            "timestamp": datetime.utcnow()
+        }
+        rooms_collection.update_one(
+            {"_id": room_id},
+            {"$push": {"messages": bot_message}}
+        )
+        return True
+
     #remove bot formatting like <i></i> <b></b> that will render on the page
     parsed_response = re.sub(r"<([a-zA-Z]+)>(?=.*</\1>)", "", parsed_response)
     parsed_response = re.sub(r"</([a-zA-Z]+)>", "", parsed_response)
@@ -372,7 +392,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     )
     
     # Check for if the bot passed (i.e. response = "(pass)")
-    if "(pass)" in parsed_response:
+    if ("(pass)" in parsed_response) or (parsed_response == ""):
         print("PASSED")
         return True # a pass is still recorded in the database, but not sent to the client
 
