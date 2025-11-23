@@ -23,8 +23,8 @@ Your task, each time a new set of chat output is given to you is twofold:
 (a) if your username is directly addressed you must respond.
 (b) if your there is an ongoing dialogue with your username must respond to continue that dialogue.
 (c) if there has not been an input to the conversation for some time you must respond.
-(d) you may randomly respond without regard to any of the above rules.
-(e) if your username has not participated in the conversation for some time you should respond.
+(d) if your username has not participated in the conversation for some time you should respond.
+(e) you may randomly respond without regard to any of the above rules.
 
 If you do not detect any of the above items, you should choose not to respond, and simply output the text "(pass)" as your non-response.
 
