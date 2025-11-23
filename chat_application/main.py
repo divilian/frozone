@@ -541,7 +541,6 @@ def abort_room():
 
 @app.route("/post_survey", methods=["POST", "GET"])
 def post_survey():
-    SURVEY_2_LINK = "https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ"
     user_id = session.get('user_id')
     if not user_id:
         return render_template('home.html', error="Enter your ID.") 
@@ -561,13 +560,13 @@ def post_survey():
     FName = info['FroBot_name']
     HName = info['HotBot_name']
 
+    SURVEY_2_LINK = f"https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ?id={user_id}&CName={CName}&FName={FName}&HName={HName}"
+    
+
     #pass in without showing in url
     html = f"""
     <form id="autoform" action="{SURVEY_2_LINK}" method="POST">
         <input type="hidden" name="user_code" value="{user_id}">
-        <input type="hidden" name="CName" value="{CName}">
-        <input type="hidden" name="HName" value="{HName}">
-        <input type="hidden" name="FName" value="{FName}">
     </form>
 
     <script>
