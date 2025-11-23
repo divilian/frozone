@@ -563,13 +563,12 @@ def handle_connect():
         "sender": "",
         "message": f"{name} has entered the chat"
     }, to=room)
-    # Start background task for CoolBot to join after a short delay
+    # Start background tasks for the bots to join after a short delay
     socketio.start_background_task(send_bot_joined, room, room_doc['CoolBot_name'], 3)
-    # Start background task to send the initial watermelon post after a short delay
-    socketio.start_background_task(send_initial_post, room, 5)
-    # Start background task for FroBot & HotBot to join after a short delay
-    socketio.start_background_task(send_bot_joined, room, room_doc['FroBot_name'], 9)
+    socketio.start_background_task(send_bot_joined, room, room_doc['FroBot_name'], 7)
     socketio.start_background_task(send_bot_joined, room, room_doc['HotBot_name'], 13)
+    # Start background task to send the initial watermelon post after a short delay
+    socketio.start_background_task(send_initial_post, room, 10)
     rooms_collection.update_one(
         {"_id": room},
         {"$set": {"initialPostsSent": True}}
