@@ -5,12 +5,12 @@ from datetime import datetime
 import random
 import time
 import math
-import random
 import google.auth
 from google.auth.transport.requests import AuthorizedSession
 from vertexai.tuning import sft
 from vertexai.generative_models import GenerativeModel
 import re
+import concurrent.futures
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
@@ -272,15 +272,7 @@ def send_initial_post(room_id, delay):
     socketio.emit("message", {"sender": "watermelon", "message": initialPost}, to=room_id)
 
     #send to the bots
-    # Get the bot's display names
-    room_doc = rooms_collection.find_one({"_id": room_id})
-    frobot_name = room_doc["FroBot_name"]
-    hotbot_name = room_doc["HotBot_name"]
-    coolbot_name = room_doc["CoolBot_name"]
-    # Ask each bot for a response
-    socketio.start_background_task(ask_bot, room_id, frobot, frobot_name, FROBOT_PROMPT)
-    socketio.start_background_task(ask_bot, room_id, hotbot, hotbot_name, HOTBOT_PROMPT)
-    socketio.start_background_task(ask_bot, room_id, coolbot, coolbot_name, COOLBOT_PROMPT)
+    socketio.start_background_task(ask_bot_round, room_id)
 
 # Send message that a bot joined the room
 def send_bot_joined(room_id, bot_name, delay):
@@ -306,24 +298,25 @@ def name_to_let(room_id, text):
 
 def get_response_delay(response):
     baseDelay = 1 # standard delay for thinking
-    randFactor = random.uniform(1, 7.)
-    perCharacterDelay = 0.1
+    randFactor = random.uniform(2, 12.)
+    perCharacterDelay = 0.12
     # was .25 -> average speed: 3.33 characters/second = 0.3
-    maxDelay = 180 # maximum cap of two minutes (so the bots don't take too long)a
+    maxDelay = 180 # maximum cap of three minutes (so the bots don't take too long)
     # Add total delay
     totalDelay = baseDelay + perCharacterDelay * len(response) + randFactor
     return min(totalDelay, maxDelay)
 
 # Ask a bot for its response, store in DB, and send to client
+    # Returns true if the bot passed
 def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     # Prevents crashing if bot model did not load
     if bot is None:
-        return
+        return False
     # Get the full chat room history
     room_doc = rooms_collection.find_one({"_id": room_id})
     # Do not proceed if the chat has ended
     if not room_doc or room_doc.get("ended", False):
-        return
+        return False
     history = room_doc["messages"]
     # Build the LLM prompt
     prompt = re.sub(r"<RE>", aliases[bot_display_name], initial_prompt)
@@ -365,7 +358,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     # Do not store/send messages if the chat has ended
     room_doc = rooms_collection.find_one({"_id": room_id})
     if not room_doc or room_doc.get("ended", False):
-        return
+        return False
 
     # Store the response in the database
     bot_message = {
@@ -381,10 +374,34 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     # Check for if the bot passed (i.e. response = "(pass)")
     if "(pass)" in parsed_response:
         print("PASSED")
-        return  # a pass is still recorded in the database, but not sent to the client
+        return True # a pass is still recorded in the database, but not sent to the client
 
     # Send the bot's response to the client
     socketio.emit("message", {"sender": bot_display_name, "message": named_response}, to=room_id)
+    return False
+
+def ask_bot_round(room_id):
+    while True:
+        room_doc = rooms_collection.find_one({"_id": room_id})
+        if not room_doc or room_doc.get("ended", False):
+            return
+
+        with concurrent.futures.ThreadPoolExecutor() as exec:
+            futures = [
+                exec.submit(ask_bot, room_id, frobot, room_doc["FroBot_name"], FROBOT_PROMPT),
+                exec.submit(ask_bot, room_id, hotbot, room_doc["HotBot_name"], HOTBOT_PROMPT),
+                exec.submit(ask_bot, room_id, coolbot, room_doc["CoolBot_name"], COOLBOT_PROMPT),
+            ]
+        results = [f.result() for f in futures]
+
+        print("Raw pass check results: ", results)
+        if not all(results):
+            print("At least one bot responded. Not re-prompting.\n")
+            return # at least one bot responded
+        
+        # All bots passed - reprompt
+        print("All bots passed. Re-prompting for responses.\n")
+        time.sleep(2)  # prevents CPU thrashing & spamming
 
 # Build the routes
 @app.route('/', methods=["GET"])
@@ -609,15 +626,8 @@ def handle_message(payload):
     # Send only the client version (no datetime)
     send(client_message, to=room)
 
-    # Get the bot's display names
-    room_doc = rooms_collection.find_one({"_id": room})
-    frobot_name = room_doc["FroBot_name"]
-    hotbot_name = room_doc["HotBot_name"]
-    coolbot_name = room_doc["CoolBot_name"]
     # Ask each bot for a response
-    socketio.start_background_task(ask_bot, room, frobot, frobot_name, FROBOT_PROMPT)
-    socketio.start_background_task(ask_bot, room, hotbot, hotbot_name, HOTBOT_PROMPT)
-    socketio.start_background_task(ask_bot, room, coolbot, coolbot_name, COOLBOT_PROMPT)
+    socketio.start_background_task(ask_bot_round, room)
 
 @socketio.on('disconnect')
 def handle_disconnect():
