@@ -65,6 +65,19 @@
       // Immediately push another state to prevent backward navigation
       history.pushState(null, "", location.href);
     });
+    var socketio = io();
+    const chatEnded = {{ ended | tojson }};
+    const textarea = document.getElementById("message-input");
+    if (chatEnded) {
+      textarea.disabled = true;
+      textarea.placeholder = "The chat has ended.";
+      document.getElementById("send-btn").disabled = true;
+      document.getElementById("end-exp-btn").disabled = true;
+      document.getElementById("abort-exp-btn").disabled = true;
+      if (socketio) {
+        socketio.close();
+      }
+    }
     // Handler for the welcome modal
     let welcomeModal = document.getElementById("welcome-modal");
     const displayNameText = document.getElementById("displayNameText");
@@ -79,12 +92,6 @@
     };
     // Creates the post-survey link (based on the bot names)
     const endpoint = "{{ url_for('post_survey') }}";
-    const postSurveyLink =
-    	"https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ"
-    	  + "?CName={{ CoolBot_name }}"
-    	  + "&HName={{ HotBot_name }}"
-    	  + "&FName={{ FroBot_name }}";
-    var socketio = io();
     socketio.on("message", function (message) { createChatItem(message.message, message.sender) });
     function createChatItem(message, sender) {
       //autoscroll capabilities
@@ -126,7 +133,6 @@
         //sendMessage(); // call the same function as the Send button
       }
     });
-    const textarea = document.getElementById("message-input");
     textarea.addEventListener("input", () => {
       textarea.style.height = "auto";  // reset height
       textarea.style.overflowY = "hidden";  // start by hiding the scrollbar
@@ -148,7 +154,16 @@
       //block browser confirmation popup
       e.stopPropagation(); 
       // Redirect to ending survey
-        window.location.href = endpoint;
+      window.open(endpoint, "_blank");
+      endModal.style.display = "none";
+      textarea.disabled = true;
+      textarea.placeholder = "The chat has ended.";
+      document.getElementById("send-btn").disabled = true;
+      document.getElementById("end-exp-btn").disabled = true;
+      document.getElementById("abort-exp-btn").disabled = true;
+      if (socketio) {
+        socketio.close();
+      }
     };
     // Handler for the Abort Experiment confirmation pop-up
     let modal = document.getElementById("abort-modal");
@@ -164,8 +179,17 @@
       // Mark that user aborted and redirect to ending survey
       fetch("/abort", { method: "POST" })
         .then(() => {
-          window.location.href = endpoint;
-        });
+          window.open(endpoint, "_blank");
+	});
+      modal.style.display = "none";
+      textarea.disabled = true;
+      textarea.placeholder = "The chat has ended.";
+      document.getElementById("send-btn").disabled = true;
+      document.getElementById("end-exp-btn").disabled = true;
+      document.getElementById("abort-exp-btn").disabled = true;
+      if (socketio) {
+  	socketio.close();
+      }
     };
     // add auto scroll
     function isNearBottom(container, threshold = 120) {
