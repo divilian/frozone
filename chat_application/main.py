@@ -321,6 +321,9 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
         return
     # Get the full chat room history
     room_doc = rooms_collection.find_one({"_id": room_id})
+    # Do not proceed if the chat has ended
+    if not room_doc or room_doc.get("ended", False):
+        return
     history = room_doc["messages"]
     # Build the LLM prompt
     prompt = re.sub(r"<RE>", aliases[bot_display_name], initial_prompt)
@@ -358,6 +361,11 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     delay = get_response_delay(named_response);
     print(delay)
     time.sleep(delay)
+
+    # Do not store/send messages if the chat has ended
+    room_doc = rooms_collection.find_one({"_id": room_id})
+    if not room_doc or room_doc.get("ended", False):
+        return
 
     # Store the response in the database
     bot_message = {
@@ -459,7 +467,9 @@ def choose():
         # empty message history
         "messages": [],
         # flag for if the user aborts
-        "aborted": False
+        "aborted": False,
+        # flag for if the chat has ended
+        "ended": False
     })
 
     session['room'] = room_id
@@ -479,7 +489,7 @@ def room():
     topic_info = next((t for t in TOPICS_LIST if t["title"] == topic), None)
     if topic_info is None:
         return redirect(url_for('topics'))
-    return render_template("room.html", room=room_id, topic_info=topic_info, user=display_name, messages=room_doc["messages"], FroBot_name=room_doc["FroBot_name"], HotBot_name=room_doc["HotBot_name"], CoolBot_name=room_doc["CoolBot_name"])
+    return render_template("room.html", room=room_id, topic_info=topic_info, user=display_name, messages=room_doc["messages"], FroBot_name=room_doc["FroBot_name"], HotBot_name=room_doc["HotBot_name"], CoolBot_name=room_doc["CoolBot_name"], ended=room_doc["ended"])
 
 @app.route("/abort", methods=["POST"])
 def abort_room():
@@ -503,6 +513,12 @@ def post_survey():
                                                    'CoolBot_name':1} )
     if not info:
         return render_template('home.html', error="Enter your ID.") 
+
+    # Store in the DB that this chat has been ended
+    db.rooms.update_one(
+        {"user_id":user_id},
+        {"$set": {"ended": True}}
+    )
 
     CName = info['CoolBot_name']
     FName = info['FroBot_name']
@@ -565,6 +581,12 @@ def handle_message(payload):
     name = session.get('display_name')
     if not room or not name:
         return
+
+    # Stop message processing if the chat has ended
+    room_doc = rooms_collection.find_one({"_id": room})
+    if not room_doc or room_doc.get("ended", False):
+        return
+
     text = payload.get("message", "").strip()
     if not text:
         return  # ignore empty messages
