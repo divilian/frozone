@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # Interactively play with a fine-tuned Vertex AI model, giving it back the
 # accumulated prompt as necessary so it's not stateless.
 import os

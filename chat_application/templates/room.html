@@ -78,6 +78,7 @@
       welcomeModal.style.display = "none";
     };
     // Creates the post-survey link (based on the bot names)
+    const endpoint = "{{ url_for('post_survey') }}";
     const postSurveyLink =
     	"https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ"
     	  + "?CName={{ CoolBot_name }}"
@@ -86,6 +87,10 @@
     var socketio = io();
     socketio.on("message", function (message) { createChatItem(message.message, message.sender) });
     function createChatItem(message, sender) {
+      //autoscroll capabilities
+      const container = document.getElementById("msgs-container");
+      const shouldAutoScroll = isNearBottom(container);
+
       var messages = document.getElementById("messages");
       var content;
       if (sender === "") {
@@ -95,10 +100,15 @@
         content = `
           <li class="message-item ${senderIsUser ? "self-message-item" : "peer-message-item"}">
               <p>${message}</p>
-              <small class="${senderIsUser ? "muted-text" : "muted-text-white"}">${sender}</small>
+              <small class="${senderIsUser ? "chat-user-sender" : "chat-sender"}">${sender}</small>
          </li>
       `;}
       messages.insertAdjacentHTML("beforeend", content);
+
+      //autoscroll capabilities
+      if (shouldAutoScroll) {
+        smoothScrollToBottom(container);
+      }
     }
     function sendMessage() {
       var msgInput = document.getElementById("message-input");
@@ -138,7 +148,7 @@
       //block browser confirmation popup
       e.stopPropagation(); 
       // Redirect to ending survey
-      window.location.href = postSurveyLink;
+        window.location.href = endpoint;
     };
     // Handler for the Abort Experiment confirmation pop-up
     let modal = document.getElementById("abort-modal");
@@ -154,9 +164,20 @@
       // Mark that user aborted and redirect to ending survey
       fetch("/abort", { method: "POST" })
         .then(() => {
-          window.location.href = postSurveyLink;
+          window.location.href = endpoint;
         });
     };
+    // add auto scroll
+    function isNearBottom(container, threshold = 120) {
+      const distanceFromBottom = container.scrollHeight - (container.scrollTop + container.clientHeight);
+      return distanceFromBottom < threshold;
+    }
+    function smoothScrollToBottom(container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+    }
+
+
+
   </script>
   <script type="text/javascript">
     const initialMessages = {{ messages | tojson }};

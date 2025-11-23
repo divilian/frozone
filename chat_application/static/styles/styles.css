@@ -371,6 +371,7 @@ hr {
   overflow-wrap: break-word;
   word-break: break-word;
   white-space: pre-wrap;
+  margin-bottom: 10px;
 }
 
 .peer-message-item {
@@ -385,14 +386,20 @@ hr {
   border-bottom-right-radius: 0;
 }
 
-.muted-text {
-  color: grey;
-  font-size: 0.7rem;
+.chat-user-sender {
+  color: rgb(30, 30, 30);
+  font-size: 1.1rem;
+  background-color: rgb(230, 230, 230);
+  border-radius: .5rem;
+  padding: 2px 4px;
 }
 
-.muted-text-white {
+.chat-sender {
   color: white;
-  font-size: 0.7rem;
+  font-size: 1.1rem;
+  background-color: rgb(0, 75, 115);
+  border-radius: .5rem;
+  padding: 2px 4px;
 }
 
 .member-activity {
