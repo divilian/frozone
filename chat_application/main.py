@@ -639,12 +639,13 @@ def handle_connect():
         rooms_collection.update_one(
             {"_id": room},
             {
-                "$set": {"inactivity_tracker_started": True},
-                "$set": {"last_activity": datetime.utcnow()}
+                "$set": {
+                    "inactivity_tracker_started": True,
+                    "last_activity": datetime.utcnow()
+                }
             }
         )
         socketio.start_background_task(user_inactivity_tracker, room)
-
 
 @socketio.on('message')
 def handle_message(payload):
