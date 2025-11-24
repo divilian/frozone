@@ -26,7 +26,7 @@ google_session = AuthorizedSession(credentials)
 pirate_tuning_job_name = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
 tuning_job_frobot = f"projects/frozone-475719/locations/us-central1/tuningJobs/1280259296294076416"
 tuning_job_hotbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/7884788149832908800"
-tuning_job_coolbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/212906184607268864"
+tuning_job_coolbot = f"projects/frozone-475719/locations/us-central1/tuningJobs/7070118203371814912"
 
 hottj = sft.SupervisedTuningJob(tuning_job_hotbot)
 cooltj = sft.SupervisedTuningJob(tuning_job_coolbot)
@@ -281,7 +281,7 @@ def send_bot_joined(room_id, bot_name, delay):
     socketio.emit("message", {"sender": "", "message": f"{bot_name} has entered the chat"}, to=room_id)
 
 # Trigger a round of bot calls if user has been inactive for a while
-def user_inactivity_tracker(room_id, timeout_seconds=360):
+def user_inactivity_tracker(room_id, timeout_seconds=180):
     print(f"Started user inactivity tracker for Room ID#{room_id}")
     while True:
         room_doc = rooms_collection.find_one({"_id": room_id})
