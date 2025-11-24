@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, session, make_response, render_template_string
 from flask_socketio import SocketIO, join_room, leave_room, send
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 import time
 import math
@@ -280,6 +280,27 @@ def send_bot_joined(room_id, bot_name, delay):
     time.sleep(delay)
     socketio.emit("message", {"sender": "", "message": f"{bot_name} has entered the chat"}, to=room_id)
 
+# Trigger a round of bot calls if user has been inactive for a while
+def user_inactivity_tracker(room_id, timeout_seconds=30):
+    print(f"Started user inactivity tracker for Room ID#{room_id}")
+    while True:
+        room_doc = rooms_collection.find_one({"_id": room_id})
+        # Stop if this room's chat has ended
+        if not room_doc or room_doc.get("ended", False):
+            print(f"User inactivity tracker stopping for Room ID#{room_id}")
+            return
+        lastTime = room_doc.get("last_activity")
+        if lastTime:
+            if datetime.utcnow() - lastTime > timedelta(seconds=timeout_seconds):
+                print(f"User has been inactive in Room ID#{room_id} - triggering new round of bot calls.")
+                socketio.start_background_task(ask_bot_round, room_id)
+                # Prevent multiple bot call triggers due to inactivity
+                rooms_collection.update_one(
+                    {"_id": room_id},
+                    {"$set": {"last_activity": datetime.utcnow()}}
+                )
+        time.sleep(5) # re-check inactivity every 5s
+
 def let_to_name(room_id, text):
     named_response = str(text)
     letters = [aliases[name] for name in (FRUIT_NAMES + ["watermelon"])] # makes a copy, rather than directly modifying
@@ -503,6 +524,8 @@ def choose():
         "initialPostsSent": False,
         # empty message history
         "messages": [],
+        # last time user sent a message
+        "last_activity": datetime.utcnow(),
         # flag for if the user aborts
         "aborted": False,
         # flag for if the chat has ended
@@ -641,7 +664,10 @@ def handle_message(payload):
     # Store the full version in the database
     rooms_collection.update_one(
         {"_id": room},
-        {"$push": {"messages": db_message}}
+        {
+            "$push": {"messages": db_message}
+            "$set": {"last_activity": datetime.utcnow()}
+        }
     )
     # Send only the client version (no datetime)
     send(client_message, to=room)
