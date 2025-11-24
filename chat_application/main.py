@@ -281,7 +281,7 @@ def send_bot_joined(room_id, bot_name, delay):
     socketio.emit("message", {"sender": "", "message": f"{bot_name} has entered the chat"}, to=room_id)
 
 # Trigger a round of bot calls if user has been inactive for a while
-def user_inactivity_tracker(room_id, timeout_seconds=30):
+def user_inactivity_tracker(room_id, timeout_seconds=360):
     print(f"Started user inactivity tracker for Room ID#{room_id}")
     while True:
         room_doc = rooms_collection.find_one({"_id": room_id})
@@ -521,7 +521,9 @@ def choose():
         "FroBot_name": frobot_name,
         "HotBot_name": hotbot_name,
         "CoolBot_name": coolbot_name,
+        # flags needed for handling refreshes
         "initialPostsSent": False,
+        "inactivity_tracker_started": False,
         # empty message history
         "messages": [],
         # last time user sent a message
@@ -632,6 +634,17 @@ def handle_connect():
         {"_id": room},
         {"$set": {"initialPostsSent": True}}
     )
+    # Start user inactivity tracker
+    if not room_doc.get("inactivity_tracker_started", False):
+        rooms_collection.update_one(
+            {"_id": room},
+            {
+                "$set": {"inactivity_tracker_started": True},
+                "$set": {"last_activity": datetime.utcnow()}
+            }
+        )
+        socketio.start_background_task(user_inactivity_tracker, room)
+
 
 @socketio.on('message')
 def handle_message(payload):
@@ -664,7 +677,7 @@ def handle_message(payload):
     rooms_collection.update_one(
         {"_id": room},
         {
-            "$push": {"messages": db_message}
+            "$push": {"messages": db_message},
             "$set": {"last_activity": datetime.utcnow()}
         }
     )
