@@ -551,7 +551,11 @@ def room():
     topic_info = next((t for t in TOPICS_LIST if t["title"] == topic), None)
     if topic_info is None:
         return redirect(url_for('topics'))
-    return render_template("room.html", room=room_id, topic_info=topic_info, user=display_name, messages=room_doc["messages"], FroBot_name=room_doc["FroBot_name"], HotBot_name=room_doc["HotBot_name"], CoolBot_name=room_doc["CoolBot_name"], ended=room_doc["ended"])
+    nonpass_messages = [
+        m for m in room_doc["messages"]
+        if m.get("message", "").strip() != "(pass)"
+    ]
+    return render_template("room.html", room=room_id, topic_info=topic_info, user=display_name, messages=nonpass_messages, FroBot_name=room_doc["FroBot_name"], HotBot_name=room_doc["HotBot_name"], CoolBot_name=room_doc["CoolBot_name"], ended=room_doc["ended"])
 
 @app.route("/abort", methods=["POST"])
 def abort_room():
