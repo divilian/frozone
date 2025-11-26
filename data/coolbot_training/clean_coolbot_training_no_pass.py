@@ -2,6 +2,53 @@
 
 import re
 import pandas as pd
+import html
+
+import re
+
+def clean_reddit_markdown_keep_text(text):
+    if text is None:
+        return text
+    s = str(text)
+
+    # --- First: Convert HTML escapes like &gt; back to > ---
+    s = html.unescape(str(text))
+    # Remove quote artifacts specifically
+    s = s.replace("<", "").replace(">", "")
+
+    # --- Remove strong/bold: **text** ---
+    s = re.sub(r"\*\*(.*?)\*\*", r"\1", s)
+
+    # --- Remove italics: *text* (single *) ---
+    # Avoid removing markdown bullet points (* item)
+    s = re.sub(r"(?<!\S)\*(?!\s)([^*]+?)\*(?!\S)", r"\1", s)
+
+    # --- Remove underscore italics: _text_ ---
+    s = re.sub(r"_(.*?)_", r"\1", s)
+
+    # --- Remove strikethrough: ~~text~~ ---
+    s = re.sub(r"~~(.*?)~~", r"\1", s)
+
+    # --- Remove inline code: `text` ---
+    s = re.sub(r"`([^`]+)`", r"\1", s)
+
+    # --- Remove fenced code blocks: ```text``` ---
+    s = re.sub(r"```[\s\S]*?```", lambda m: m.group(0)[3:-3], s)
+
+    # --- Remove markdown links: [text](href) -> text ---
+    s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)
+
+    # --- Remove spoiler formatting: >! text !< ---
+    s = re.sub(r">!\s*(.*?)\s*!<", r"\1", s)
+
+    # --- Remove Reddit quote markers: > quote ---
+    # Keep only the text after >
+    s = re.sub(r"^>+\s*", "", s, flags=re.MULTILINE)
+
+    # --- Convert [text](url) to "text (url)" ---
+    s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r"\1 (\2)", s)
+
+    return s
 
 def remove_and_replace_reddit_keywords(df, patterns, replacements):
     # Columns to check
@@ -51,6 +98,10 @@ def remove_and_replace_reddit_keywords(df, patterns, replacements):
 
     for col in cols_to_sanitize:
         df_cleaned[col] = df_cleaned[col].apply(replace_keywords_ignore_urls)
+
+    # Step 3: Replace Reddit-specific markdown
+    for col in cols_to_sanitize:
+        df_cleaned[col] = df_cleaned[col].apply(clean_reddit_markdown_keep_text)
     
     return df_cleaned
 
@@ -90,6 +141,7 @@ if __name__ == "__main__":
         "deleted by": r"\bdeleted by\b",
         ">!": re.escape(">!"),
         "!<": re.escape("!<"),
+        "violating": r"\bviolating\b",  # this may seem harsh, but every entry I saw with "violating" involved reddit rule enforcement
     }
 
     # Mapping of keywords to generic equivalents
@@ -109,4 +161,4 @@ if __name__ == "__main__":
     df_cleaned = df_cleaned.dropna(subset=cols_to_sanitize).copy()
     print(f"Reddit keywords and nas removed, {100.0 * len(df_cleaned) / len(df):.1f}% of entries retained")
     df_cleaned.reset_index(drop=True, inplace=True)
-    df_cleaned.to_csv("data/coolbot_training/coolBotTrainingNoPassCleaned.csv", index=False)
+    df_cleaned.to_csv("data/coolbot_training/coolBotTrainingNoPassCleanedV2.csv", index=False)
