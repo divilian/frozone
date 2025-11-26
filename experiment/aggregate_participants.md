@@ -31,6 +31,7 @@
 24. Saron Alemayehou (Stephen CPSC 240)
 25. Lucia Donley (Stephen CPSC 240)
 26. Jessica Manu (Stephen CPSC 240)
+27. Patrick Stern (Stephen CPSC 240)
 
 ## Thursday, December 4, 8-9pm (BH, assist from SD)
 1. Xavier Bridges (Goldthorp)
