@@ -196,8 +196,8 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     print(prompt)
 
     # Get the bot's response
-    response = bot.generate_content(prompt)
     try:
+        response = bot.generate_content(prompt)
         parsed_response = response.candidates[0].content.parts[0].text.strip()
     except Exception as e:
         print("Error in bot response: ", e)
