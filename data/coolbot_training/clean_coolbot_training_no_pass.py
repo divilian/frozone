@@ -105,6 +105,54 @@ def remove_and_replace_reddit_keywords(df, patterns, replacements):
     
     return df_cleaned
 
+def further_clean_reddit_rows(df: pd.DataFrame, columns_to_examine):
+    """
+    Removes rows where *any* of the specified columns:
+      - have more than 5 sentences (as this has led to very long outputs)
+      - contain "1." and "2." (as this has led to the model outputting lots of lists)
+      - contain a bulleted list (as this has led to the model outputting lots of lists)
+      - contain "I'm a bot" (as this has led to the model admitting its a bot)
+    """
+
+    bullet_pattern = re.compile(r'^\s*[\*\-•]\s+\S+', re.MULTILINE)
+    
+    def has_over_5_sentences(text: str) -> bool:
+        if not isinstance(text, str):
+            return False
+        # Count sentence endings (., !, ?)
+        sentences = re.split(r'[.!?]+', text)
+        # Filter out empty items
+        sentences = [s for s in sentences if s.strip()]
+        return len(sentences) > 5
+    
+    def contains_numbered_list(text: str) -> bool:
+        if not isinstance(text, str):
+            return False
+        return ("1." in text and "2." in text)
+    
+    def contains_bullet_list(text: str) -> bool:
+        if not isinstance(text, str):
+            return False
+        return bool(bullet_pattern.search(text))
+    
+    def contains_bot_phrase(text: str) -> bool:
+        if not isinstance(text, str):
+            return False
+        return "i'm a bot" in text.lower()
+    
+    mask = pd.Series([False] * len(df))
+    
+    for col in columns_to_examine:
+        col_text = df[col].fillna("").astype(str)
+
+        mask |= col_text.apply(has_over_5_sentences)
+        mask |= col_text.apply(contains_numbered_list)
+        mask |= col_text.apply(contains_bullet_list)
+        mask |= col_text.apply(contains_bot_phrase)
+    
+    # Remove matching rows
+    return df[~mask].copy()
+
 if __name__ == "__main__":
     # ingest original data
     df = pd.read_csv("data/coolbot_training/coolBotTrainingNoPass.csv")
@@ -159,6 +207,7 @@ if __name__ == "__main__":
     df_cleaned = remove_and_replace_reddit_keywords(df, patterns, replacements)
     cols_to_sanitize = ["user_message", "ai_response"]
     df_cleaned = df_cleaned.dropna(subset=cols_to_sanitize).copy()
-    print(f"Reddit keywords and nas removed, {100.0 * len(df_cleaned) / len(df):.1f}% of entries retained")
     df_cleaned.reset_index(drop=True, inplace=True)
-    df_cleaned.to_csv("data/coolbot_training/coolBotTrainingNoPassCleanedV2.csv", index=False)
+    df_cleaned = further_clean_reddit_rows(df_cleaned, cols_to_sanitize)
+    print(f"Reddit keywords and nas removed, {100.0 * len(df_cleaned) / len(df):.1f}% of entries retained")
+    df_cleaned.to_csv("data/coolbot_training/coolBotTrainingNoPassCleanedV3.csv", index=False)
