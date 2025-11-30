@@ -149,7 +149,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(e)
             exit
-
-        csv_paths = args[1]
-        output_path = args[2]
 # run python -m data.training_data_to_jsonl

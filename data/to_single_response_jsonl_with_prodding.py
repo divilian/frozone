@@ -1,4 +1,4 @@
-#TO JSONL CONVERSATION STYLE
+#TO JSONL SINGLE COMMENT INCLUDING AI RESPONSE IN DATA
 
 import csv
 import json
@@ -16,8 +16,11 @@ def csvs_to_jsonl(
     user_message, ai_response, dialogue_id, response_id, episode_done, issue_labels
     into a single JSONL file of the form:
     {
-        "systemInstruction": {"role": "system", "parts": [{"text": "..."}]},
-        "contents": [ ... ]
+        "contents": 
+            [
+                {"role":"user","parts":["text":system_instructions,"text":user_input]},
+                {"role":"model","parts":["text":ai_response]}
+            ]
     }
     """
 
@@ -29,7 +32,7 @@ def csvs_to_jsonl(
     # Read all CSVs
     for file in csv_files:
         print(file)
-        with open(file, newline='', encoding='utf-8-sig') as f:
+        with open(file, newline='', encoding='utf-8-sig',errors='ignore') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 # Normalize types
@@ -44,33 +47,38 @@ def csvs_to_jsonl(
     # Group into episodes
     episodes = []
     current_dialogue_id = None
+    cur_msg = ""
     current_contents = []
+    toggle = True
 
     for row in all_rows:
-        # Start new dialogue if needed
+        
         if current_dialogue_id is None:
             current_dialogue_id = row["dialogue_id"]
 
-        # Add user + model turns
-        print(row)
         user_msg = row["user_message"].strip()
         ai_resp = row["ai_response"].strip()
 
-        current_contents.append({"role": "user", "parts": [{"text": user_msg}]})
-        current_contents.append({"role": "model", "parts": [{"text": ai_resp}]})
+        if toggle:
+            cur_msg = system_instructions + "\n" + user_msg
+        else:
+            cur_msg = cur_msg + "\n" + user_msg
 
-        # If this episode is done, finalize
-        if row["episode_done"]: 
-            episodes.append({
-                "systemInstruction": {
-                    "role": "system",
-                    "parts": [{"text": system_instructions}]
-                },
-                "contents": current_contents
-            })
-            current_contents = []
-            current_dialogue_id = None
+        current_contents.append({"role": "user", "parts": [{"text":cur_msg}]})
+        current_contents.append({"role": "model", "parts": [{"text":ai_resp}]})
 
+        episodes.append({"contents":current_contents})
+        current_contents = []
+
+        #reset the full message at end of episode
+        if row["episode_done"]:
+            cur_msg = ""
+            toggle = True
+        else:
+            cur_msg += "\n<RE>: " + ai_resp
+            toggle = False
+            print(cur_msg)
+            
     # Write to JSONL
     output_path = Path(output_path)
     with output_path.open("w", encoding="utf-8-sig") as out_f:
@@ -96,10 +104,11 @@ if __name__ == "__main__":
                 "./frobot_training/misinformation.csv",
                 "./frobot_training/misrepresentation.csv",
                 "./frobot_training/pass.csv",
-                "./frobot_training/prodding.csv",
+                "./frobot_training/proddingV2.csv",
                 "./frobot_training/toxicity.csv",
+                "./frobot_training/DIALCONANfroBotTraining.csv"
             ],
-            output_path="./frobot_training/merged_training_data.jsonl",
+            output_path="./frobot_training/merged_training_data_version3.jsonl",
             system_instructions=system_instructions
         )
 
@@ -109,6 +118,7 @@ if __name__ == "__main__":
                 raise Exception("Usage: python training_data_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [-c|-f|-h|]")
             else:
                 inputs = args[1].split(",")
+                inputs.append("./frobot_training/proddingV2.csv")
                 output = args[2]
 
                 for f in inputs:
@@ -140,4 +150,5 @@ if __name__ == "__main__":
         except Exception as e:
             print(e)
             exit
+
 # run python -m data.training_data_to_jsonl
