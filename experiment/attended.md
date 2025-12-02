@@ -12,3 +12,8 @@
 1. Belen Telahun (NLP)
 1. Ethan Bostick (NLP)
 
+## Session 3
+1. John Rote (Stephen CPSC 240)
+2. Aya Ogawa (Stephen DATA 101)
+3. Katie Secino (Stephen DATA 101)
+4. Qurron Powell (Stephen DATA 101 & Goldthorp)
