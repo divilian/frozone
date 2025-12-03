@@ -38,6 +38,7 @@
 28. Ben Staten (Stephen CPSC 240)
 29. Capri Graziano (Goldthorp)
 30. Faris Sabit (NLP)
+31. Aloysious Kabonge (NLP)
 
 ## Friday, December 5, 4-5pm (GM, assist from LR)
 ...

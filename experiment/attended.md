@@ -17,3 +17,11 @@
 2. Aya Ogawa (Stephen DATA 101)
 3. Katie Secino (Stephen DATA 101)
 4. Qurron Powell (Stephen DATA 101 & Goldthorp)
+
+## Session 4
+1. Nathaniel Hardy (Coleman)
+1. Kassi Williams (NLP)
+1. Saron Alemayehou (Stephen CPSC 240)
+1. Lucia Donley (Stephen CPSC 240)
+1. Jessica Manu (Stephen CPSC 240)
+1. Patrick Stern (Stephen CPSC 240)
