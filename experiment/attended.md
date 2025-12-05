@@ -29,7 +29,7 @@
 ## Session 5
 1. Ben Statun (NLP)
 2. Capri Graziano (Goldthorp)
-3. Marina Durin ? (NLP)
+3. Marina Davies (NLP)
 4. Murtaza Fakhry (NLP)
 5. Aloysious Kabonge (NLP)
 6. Faris Sabit (NLP)
