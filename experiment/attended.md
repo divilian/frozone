@@ -25,3 +25,11 @@
 1. Lucia Donley (Stephen CPSC 240)
 1. Jessica Manu (Stephen CPSC 240)
 1. Patrick Stern (Stephen CPSC 240)
+
+## Session 5
+1. Ben Statun (NLP)
+2. Capri Graziano (Goldthorp)
+3. Marina Durin ? (NLP)
+4. Murtaza Fakhry (NLP)
+5. Aloysious Kabonge (NLP)
+6. Faris Sabit (NLP)
