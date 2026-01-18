@@ -217,13 +217,11 @@ One of "base, single, singleWithResponse, or singleWithResponseAndProdding" whic
     single: This is similar to the base jsonl converter except it intentionally structures the whole conversation into a single json object.
 
     singleWithResponse: This format is the same as the single converter except that it includes the AI's prior response in the sample.
-
-    singleWithResponseAndProdding: This one is the same as singleWithResponse except it includes an additional set of "prodding data" which is intended to include samples of people trying to get the AI to admit to being an AI.
             """
             print(printMe)
-            raise Exception("Thus the usage is python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse | singleWithResponseAndProdding ]\n") 
+            raise Exception("Thus the usage is python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse ]\n") 
         if len(args) != 5:
-            raise Exception("Usage: python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse | singleWithResponseAndProdding ]\nUse csv_to_jsonl.py help for more information")
+            raise Exception("Usage: python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse ]\nUse csv_to_jsonl.py help for more information")
 
         else:
 
@@ -261,12 +259,8 @@ One of "base, single, singleWithResponse, or singleWithResponseAndProdding" whic
             elif  args[4] == "singleWithResponse":
                 singleWithResponse_csv_to_jsonl(inputs, output_path = output, system_instructions=system_instructions)
 
-            elif args[4] == "singleWithResponseAndProdding":
-                inputs.append("./frobot_training/proddingV2.csv")
-                singleWithResponse_csv_to_jsonl(inputs, output_path = output, system_instructions=system_instructions)
-
             else:
-              raise Exception(f"Flag {args[4]} is invalid! Must be one of base, single, singleWithResponse, singleWithResponseAndProdding")
+              raise Exception(f"Flag {args[4]} is invalid! Must be one of base, single, or singleWithResponse")
 
     except Exception as e:
         print(e)
