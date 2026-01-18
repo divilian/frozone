@@ -276,17 +276,12 @@ To use this converter, you must argue "python csv_to_jsonl.py" followed by these
 
 One of "c, h, or f" which refer to which bot's prompt you would like to be used in the training data.
 
-One of "base, single, singleWithResponse, or singleWithResponseAndProdding" which refer to the diffrent versions of the converter that we have created. Below are more in-depth descriptions of each.
-                
-"base" = The default converter which 
-"single" = 
-"singleWithResponse" = 
-"singleWithResponseAndProdding" = 
+One of "base, single, singleWithResponse, or singleWithResponseAndProdding" which refer to the diffrent versions of the converter that we have created. Generally, it is best to default to singleWithResponse.
             """
             print(printMe)
-            raise Exception("Thus the usage is python csv_to_jsol.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse | singleWithResponseAndProdding ]\n") 
+            raise Exception("Thus the usage is python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse | singleWithResponseAndProdding ]\n") 
         if len(args) != 5:
-            raise Exception("Usage: python csv_to_jsol.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse | singleWithResponseAndProdding ]\nUse csv_to_jsonl.py help for more information")
+            raise Exception("Usage: python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse | singleWithResponseAndProdding ]\nUse csv_to_jsonl.py help for more information")
 
         else:
 
