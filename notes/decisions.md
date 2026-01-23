@@ -58,3 +58,8 @@
 1. We'll start at k minutes past the hour. We will also allow people to be late
    (up to n minutes) and we'll privately give them the instructions they
    missed.  we'll decide on values for k and n on Thursday
+1. We're going with Prolific volunteers for spring 2026 experiment.
+1. We're going to maintain the "one human, three bots" configuration for spring
+   experiment.
+1. We're going to experiment with using separate prompts for (a) fine-tuning
+   and (b) run-time inference.
