@@ -47,9 +47,9 @@ def parse_args():
 
 def corrupt(
     text: str,
-    misspell_prob: float,
-    typo_prob: float,
-    min_len: int,
+    misspell_prob: float = 0.04,
+    typo_prob: float = 0.01,
+    min_len: int = 3,
     misspell_aug_p: float = 0.02,
     typo_aug_p: float = 0.001,
     verbose: bool = False
