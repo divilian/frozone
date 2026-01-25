@@ -1,3 +1,3 @@
-from .corrupter import corrupt
+from .corruptor import corrupt
 
 __all__ = ["corrupt"]
