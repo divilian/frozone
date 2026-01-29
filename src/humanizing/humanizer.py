@@ -5,7 +5,8 @@ various other obviously-AI-written textual features, and replace them with more
 human-like connective text.
 
 This module provides `humanize(text, ...)`, which preserves the basic content
-of the original text, but with a more human-like straight-prose expression. See function docstring for arguments and explanations.
+of the original text, but with a more human-like straight-prose expression. See
+function docstring for arguments and explanations.
 """
 import re
 import random
