@@ -11,6 +11,8 @@ from vertexai.tuning import sft
 from vertexai.generative_models import GenerativeModel
 import re
 import concurrent.futures
+from text_corruption import corrupt
+from humanizing import humanize
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
@@ -229,12 +231,37 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
         parsed_response = re.sub(r"\b" 
                                  + aliases[bot_display_name] 
                                  + r"\b:\s?", '', parsed_response)
+    
+    # Check for if the bot passed (i.e. response = "(pass)")
+    if ("(pass)" in parsed_response) or (parsed_response == ""):
+        # Do not store/send messages if the chat has ended
+        room_doc = rooms_collection.find_one({"_id": room_id})
+        if not room_doc or room_doc.get("ended", False):
+            return False
+        # Store the pass in the database
+        bot_message = {
+            "sender": bot_display_name,
+            "message": parsed_response,
+            "timestamp": datetime.utcnow()
+        }
+        rooms_collection.update_one(
+            {"_id": room_id},
+            {"$push": {"messages": bot_message}}
+        )
+ 
+        print("PASSED")
+        return True # a pass is still recorded in the database, but not sent to the client
+
+    #humanize the response (remove obvious AI formatting styles)
+    humanized_response = humanize(parsed_response)
+    #corrupt the response (add some typos and misspellings)
+    corrupted_response = corrupt(humanized_response)
     #sub letters for names, so if the bot addressed A -> Apple
-    named_response = let_to_name(room_id, parsed_response)
+    named_response = let_to_name(room_id, corrupted_response)
 
     print("\n")
     print("=================================response")
-    print(parsed_response)
+    print(corrupted_response)
 
     # Add latency/wait time for bot responses 
     delay = get_response_delay(named_response);
@@ -257,11 +284,6 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
         {"$push": {"messages": bot_message}}
     )
     
-    # Check for if the bot passed (i.e. response = "(pass)")
-    if ("(pass)" in parsed_response) or (parsed_response == ""):
-        print("PASSED")
-        return True # a pass is still recorded in the database, but not sent to the client
-
     # Send the bot's response to the client
     socketio.emit("message", {"sender": bot_display_name, "message": named_response}, to=room_id)
     return False
