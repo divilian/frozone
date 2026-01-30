@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List, Union
 import sys
 
-def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system_instructions: str = "INSTRUCTIONS"):
+def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system_instructions: str = "INSTRUCTIONS" , prompt: str = "PROMPT"):
 
     if isinstance(csv_files, str):
         csv_files = [csv_files]
@@ -30,6 +30,8 @@ def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system
     episodes = []
     current_dialogue_id = None
     current_contents = []
+    toggle = True
+    num_samples = 0
 
     for row in all_rows:
         # Start new dialogue if needed
@@ -37,7 +39,6 @@ def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system
             current_dialogue_id = row["dialogue_id"]
 
         # Add user + model turns
-        print(row)
         user_msg = row["user_message"].strip()
         ai_resp = row["ai_response"].strip()
 
@@ -46,6 +47,7 @@ def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system
 
         # If this episode is done, finalize
         if row["episode_done"]: 
+            current_contents.insert(0,{"role":"user","parts":[{"text": prompt}]})
             episodes.append({
                 "systemInstruction": {
                     "role": "system",
@@ -53,6 +55,7 @@ def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system
                 },
                 "contents": current_contents
             })
+            num_samples += len(current_contents) // 2
             current_contents = []
             current_dialogue_id = None
 
@@ -63,9 +66,9 @@ def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system
             json.dump(ep, out_f, ensure_ascii=False)
             out_f.write("\n")
 
-    print(f"Wrote {len(episodes)} episodes to {output_path}")
+    print(f"Wrote {num_samples} samples to {output_path}")
 
-def single_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system_instructions: str = "INSTRUCTIONS"):
+def single_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system_instructions: str = "INSTRUCTIONS" , prompt: str = "PROMPT"):
 
     if isinstance(csv_files, str):
         csv_files = [csv_files]
@@ -99,19 +102,21 @@ def single_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, syst
         if current_dialogue_id is None:
             current_dialogue_id = row["dialogue_id"]
 
-        print(row)
         user_msg = row["user_message"].strip()
         ai_resp = row["ai_response"].strip()
 
         if toggle:
-            cur_msg = system_instructions + "\n" + user_msg
+            cur_msg = prompt + "\n" + user_msg
         else:
             cur_msg = cur_msg + "\n" + user_msg
 
         current_contents.append({"role": "user", "parts": [{"text":cur_msg}]})
         current_contents.append({"role": "model", "parts": [{"text":ai_resp}]})
-
-        episodes.append({"contents":current_contents})
+        
+        episodes.append({
+            "systemInstruction": {"role":"system","parts":[{"text":system_instructions}]},
+            "contents":current_contents
+        })
         current_contents = []
 
         #reset the full message at end of episode
@@ -128,9 +133,9 @@ def single_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, syst
             json.dump(ep, out_f, ensure_ascii=False)
             out_f.write("\n")
 
-    print(f"Wrote {len(episodes)} episodes to {output_path}")
+    print(f"Wrote {len(episodes)} samples to {output_path}")
 
-def singleWithResponse_csv_to_jsonl(csv_files: Union[str, List[str]],output_path: str,system_instructions: str = "INSTRUCTIONS"):
+def singleWithResponse_csv_to_jsonl(csv_files: Union[str, List[str]],output_path: str,system_instructions: str = "INSTRUCTIONS",prompt: str="PROMPT"):
 
     if isinstance(csv_files, str):
         csv_files = [csv_files]
@@ -168,14 +173,17 @@ def singleWithResponse_csv_to_jsonl(csv_files: Union[str, List[str]],output_path
         ai_resp = row["ai_response"].strip()
 
         if toggle:
-            cur_msg = system_instructions + "\n" + user_msg
+            cur_msg = prompt + "\n" + user_msg
         else:
             cur_msg = cur_msg + "\n" + user_msg
 
         current_contents.append({"role": "user", "parts": [{"text":cur_msg}]})
         current_contents.append({"role": "model", "parts": [{"text":ai_resp}]})
 
-        episodes.append({"contents":current_contents})
+        episodes.append({
+            "systemInstruction":{"role":"system","parts":[{"text":system_instructions}]},
+            "contents":current_contents
+        })
         current_contents = []
 
         #reset the full message at end of episode
@@ -185,7 +193,6 @@ def singleWithResponse_csv_to_jsonl(csv_files: Union[str, List[str]],output_path
         else:
             cur_msg += "\n<RE>: " + ai_resp
             toggle = False
-            print(cur_msg)
             
     # Write to JSONL
     output_path = Path(output_path)
@@ -194,7 +201,7 @@ def singleWithResponse_csv_to_jsonl(csv_files: Union[str, List[str]],output_path
             json.dump(ep, out_f, ensure_ascii=False)
             out_f.write("\n")
 
-    print(f"Wrote {len(episodes)} episodes to {output_path}")
+    print(f"Wrote {len(episodes)} samples to {output_path}")
 
 if __name__ == "__main__":
 
@@ -235,7 +242,7 @@ One of "base, single, singleWithResponse, or singleWithResponseAndProdding" whic
             if ".jsonl" not in output:
                 raise Exception(f"File {f} is not a .jsonl output!")
 
-            #populate system instructions
+            #populate prompt
             #lmao switch statments are for losers the reals ones if ts out
             prompt_file = ""
             if args[3] == 'ci': 
@@ -245,32 +252,48 @@ One of "base, single, singleWithResponse, or singleWithResponseAndProdding" whic
                 prompt_file = "training_prompts/coolbot_prompt_train_main.txt"
 
             elif args[3] == 'fi':
-                prompt_file = "training_prompts/frobot_prompt_main.txt"
+                prompt_file = "inference_prompts/frobot_prompt_main.txt"
 
             elif args[3] == 'ft':
                 prompt_file = "training_prompts/frobot_prompt_train_main.txt"
 
             elif args[3] == 'hi':
-                prompt_file = "training_prompts/hotbot_prompt_main.txt"
+                prompt_file = "inference_prompts/hotbot_prompt_main.txt"
 
-            elif args[3] == "hc":
+            elif args[3] == "ht":
                 prompt_file = "training_prompts/hotbot_prompt_train_main.txt"
+            else:
+                raise Exception(f"Flag {args[3]} is invalid! Must be one of c(i/t), f(i/t), or h(i/t).")
+
+            #populate system instructions
+            system_instruct_file = ""
+            if "c" in args[3]:
+                system_instruct_file = "system_instructions/coolbot_instructions_main.txt" 
+
+            elif "f" in args[3]:
+                system_instruct_file = "system_instructions/frobot_instructions_main.txt"
+
+            elif "h" in args[3]:
+                system_instruct_file = "system_instructions/hotbot_instructions_main.txt"
 
             else:
-                raise Exception(f"Flag {args[3]} is invalid! Must be one of c, f, or h.")
+                raise Exception(f"Flag {args[3]} is invalid! Must be one of c(i/t), f(i/t), or h(i/t).")
 
             with open(prompt_file, "r", encoding="utf-8", errors="ignore") as f:
+                prompt = f.read()
+
+            with open(system_instruct_file , "r" , encoding="utf-8" , errors="ignore") as f:
                 system_instructions = f.read()
             
             #get out what version of the converter should be used and apply it
             if args[4] == "base":
-                base_csv_to_jsonl(inputs, output_path = output, system_instructions=system_instructions)
+                base_csv_to_jsonl(inputs, output_path = output, system_instructions=system_instructions,prompt = prompt)
 
             elif args[4] == "single":
-                single_csv_to_jsonl(inputs, output_path = output, system_instructions=system_instructions)
+                single_csv_to_jsonl(inputs, output_path = output, system_instructions=system_instructions,prompt = prompt)
 
             elif  args[4] == "singleWithResponse":
-                singleWithResponse_csv_to_jsonl(inputs, output_path = output, system_instructions=system_instructions)
+                singleWithResponse_csv_to_jsonl(inputs, output_path = output, system_instructions=system_instructions , prompt = prompt)
 
             else:
               raise Exception(f"Flag {args[4]} is invalid! Must be one of base, single, or singleWithResponse")
