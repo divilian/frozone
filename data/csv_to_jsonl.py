@@ -208,7 +208,7 @@ To use this converter, you must argue "python csv_to_jsonl.py" followed by these
 
 "output.jsonl" which is the path and name of the file where you would like the jsonl output from the converter written.
 
-One of "c, h, or f" which refer to which bot's prompt you would like to be used in the training data.
+One of "c_, h_, or f_" which refer to which bot's prompt you would like to be used in the training data. The _ is either t or i for the training version of the prompt or the inference version of the prompt. For example, arguing "ct" means 'please use the coolbot_prompt in the training prompts directory' while arguing "fi" means 'please use the frobot_prompt in the inference prompts directory'. 
 
 One of "base, single, singleWithResponse, or singleWithResponseAndProdding" which refer to the diffrent versions of the converter that we have created. Generally, it is best to default to singleWithResponse but below are the diffrences.
 
@@ -219,9 +219,9 @@ One of "base, single, singleWithResponse, or singleWithResponseAndProdding" whic
     singleWithResponse: This format is the same as the single converter except that it includes the AI's prior response in the sample.
             """
             print(printMe)
-            raise Exception("Thus the usage is python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse ]\n") 
+            raise Exception("Thus the usage is python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c(i/t) | f(i/t) | h(i/t) ] [ base | single | singleWithResponse ]\n") 
         if len(args) != 5:
-            raise Exception("Usage: python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c | f | h ] [ base | single | singleWithResponse ]\nUse csv_to_jsonl.py help for more information")
+            raise Exception("Usage: python csv_to_jsonl.py f1.csv,f2.csv,f3.csv output.jsonl [ c(i/t) | f(i/t) | h(i/t) ] [ base | single | singleWithResponse ]\nUse csv_to_jsonl.py help for more information")
 
         else:
 
@@ -236,13 +236,26 @@ One of "base, single, singleWithResponse, or singleWithResponseAndProdding" whic
                 raise Exception(f"File {f} is not a .jsonl output!")
 
             #populate system instructions
+            #lmao switch statments are for losers the reals ones if ts out
             prompt_file = ""
-            if args[3] == 'c':
-                prompt_file = "../prompts/experiment/coolbot_prompt.txt"
-            elif args[3] == 'f':
-                prompt_file = "../prompts/experiment/frobot_prompt.txt"
-            elif args[3] == 'h':
-                prompt_file = "../prompts/experiment/hotbot_prompt.txt"
+            if args[3] == 'ci': 
+                prompt_file = "inference_prompts/coolbot_prompt_main.txt"
+
+            elif args[3] == "ct":
+                prompt_file = "training_prompts/coolbot_prompt_train_main.txt"
+
+            elif args[3] == 'fi':
+                prompt_file = "training_prompts/frobot_prompt_main.txt"
+
+            elif args[3] == 'ft':
+                prompt_file = "training_prompts/frobot_prompt_train_main.txt"
+
+            elif args[3] == 'hi':
+                prompt_file = "training_prompts/hotbot_prompt_main.txt"
+
+            elif args[3] == "hc":
+                prompt_file = "training_prompts/hotbot_prompt_train_main.txt"
+
             else:
                 raise Exception(f"Flag {args[3]} is invalid! Must be one of c, f, or h.")
 
