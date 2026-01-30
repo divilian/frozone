@@ -1,0 +1,7 @@
+The make_coolbot_data.py uses the convokit package from cornell as well as some stuff to reformat it into what we want in order to produce the training data for coolbot. It is a super handy dandy package and you can read more here https://github.com/CornellNLP/ConvoKit?tab=readme-ov-file
+
+When arguing a subreddit you would like to mine just know that the form is "subreddit-<name_of_subreddit>"
+
+The clean_coolbot_training_no_pass.py is used to remove some bad reddit stuff from the no_pass version of coolbots training data.
+
+Note that you may need to pip install convokit

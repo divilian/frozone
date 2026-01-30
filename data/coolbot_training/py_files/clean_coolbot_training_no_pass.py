@@ -155,7 +155,7 @@ def further_clean_reddit_rows(df: pd.DataFrame, columns_to_examine):
 
 if __name__ == "__main__":
     # ingest original data
-    df = pd.read_csv("data/coolbot_training/coolBotTrainingNoPass.csv")
+    df = pd.read_csv("../csv_files/coolBotTrainingNoPass.csv")
     df = df.drop(columns=['Unnamed: 0.1', 'Unnamed: 0'])
 
     # Safe regex patterns relating to reddit giveaways
@@ -210,4 +210,4 @@ if __name__ == "__main__":
     df_cleaned.reset_index(drop=True, inplace=True)
     df_cleaned = further_clean_reddit_rows(df_cleaned, cols_to_sanitize)
     print(f"Reddit keywords and nas removed, {100.0 * len(df_cleaned) / len(df):.1f}% of entries retained")
-    df_cleaned.to_csv("data/coolbot_training/coolBotTrainingNoPassCleanedV3.csv", index=False)
+    df_cleaned.to_csv("../csv_files/coolBotTrainingNoPassCleanedV3.csv", index=False)

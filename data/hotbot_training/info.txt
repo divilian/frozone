@@ -7,9 +7,7 @@ COCOLOFA
 
 These sources provided the actual problamatic comments. Then, gpt-4.1-nano was used to generate a "preamble" to the comment which helped to make the data in the training set more alike to actual deployment data.
 
-The code to do all this can be found at the below link. Note that it won't work out of the box as the data will need to be uploaded to the google colab enviornment.
-
-https://colab.research.google.com/drive/1A2srRA7gaVW64HFBiaCfNBCU3N4z-E54?usp=sharing
+The code to do all this can be found in the py_files directory.
 
 You will see a few spots where the user comment is something like "Sorry I can't process that request" this is usually because the comment was just too toxic and it went over gpt-4o's safety parameters. I was doubtful on what exactly to do with these. I could manually go over and swap them out but it is also true that this may be a good tripwire for our worry of "too toxic" and that these instances should just be removed. I left it in and figured we could deal with it later.
 
