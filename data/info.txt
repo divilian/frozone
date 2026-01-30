@@ -1,0 +1,9 @@
+The _bot_training dirs each contain a csv_files subdir and a jsonl_files subdir, which contain the relevant csv and python files as well as the converted jsonl files, respectively.
+
+The inference_prompts directory contains the prompts used during deployment to the website.
+
+The training_prompts directory contains the prompts used during training.
+
+The system instructions directory contains the system instructions, which are like very high-level versions of the prompt that get used in both inference and training.
+
+In each of the _prompts dirs, there are files with 'main' in the name. These EXACT files are targeted in the chat_application as well as the csv_to_jsonl converter. Therefore, whatever final version of the prompts and instructions we want must be in those "main" files.
