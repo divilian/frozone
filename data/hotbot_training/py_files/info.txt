@@ -1,0 +1,2 @@
+To use the make_hotbot.py simply replace the api_key with what I sent in the email then execute it the script as "python make_hotbot.py". 
+Note that you may need to pip install OpenAI.

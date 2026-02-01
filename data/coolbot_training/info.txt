@@ -1,1 +1,3 @@
-This is the training data for coolbot. As with the data for hotbot it has a source instead of issue label
+This is the training data for coolbot. As with the data for hotbot it has a source instead of issue label. The originial csv files are in the csv_files directory. The jsonl files, which are produced programmatically from the csv files, are in the jsonl_files directory. Finally, the python files used to make and clean the coolbot data are in the py files directory.
+
+All of the diffrent versions of coolbots training data are just diffrent small changes we've made over time to the training data. Usually I would just edit the data itself but in this case it just turned out to be easy to save each version thats why the names are so long and descriptive.
