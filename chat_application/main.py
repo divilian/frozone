@@ -77,17 +77,16 @@ TOPICS_LIST = [
 ] 
 
 # FroBot Prompt
-with open("../prompts/experiment/frobot_prompt.txt") as f:
+with open("../data/inference_prompts/frobot_prompt_main.txt") as f:
     FROBOT_PROMPT = f.read()
 
 # HotBot Prompt
-with open("../prompts/experiment/hotbot_prompt.txt") as h:
+with open("../data/inference_prompts/hotbot_prompt_main.txt") as h:
     HOTBOT_PROMPT = h.read()
 
 # CoolBot Prompt
-with open("../prompts/experiment/coolbot_prompt.txt") as c:
+with open("../data/inference_prompts/coolbot_prompt_main.txt") as c:
     COOLBOT_PROMPT = c.read()
-
 
 # Randomly select fruits to use for display names
 def choose_names(n):

@@ -1,0 +1,1 @@
+The frobot training data is here. The originial training data is in the csv_files directory and the jsonl formatted training data used for fine tuning is in the jsonl_files directory. 
