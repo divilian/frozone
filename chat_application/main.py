@@ -164,6 +164,15 @@ def name_to_let(room_id, text):
             text = re.sub(r"\b" + name + r"\b", aliases[name], text, flags=re.I)
     return text
 
+def replace_semicolons(text, probability=0.80):
+    modified_text = []
+    for char in text:
+        if char == ';' and random.random() <= probability:
+            modified_text.append(',')
+        else:
+            modified_text.append(char)
+    return ''.join(modified_text)
+
 def get_response_delay(response):
     baseDelay = 1 # standard delay for thinking
     randFactor = random.uniform(2, 12.)
@@ -254,8 +263,10 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
 
     #humanize the response (remove obvious AI formatting styles)
     humanized_response = humanize(parsed_response)
+    #replace most semicolons 
+    less_semicolons_response = replace_semicolons(humanized_response)
     #corrupt the response (add some typos and misspellings)
-    corrupted_response = corrupt(humanized_response)
+    corrupted_response = corrupt(less_semicolons_response)
     #sub letters for names, so if the bot addressed A -> Apple
     named_response = let_to_name(room_id, corrupted_response)
 
