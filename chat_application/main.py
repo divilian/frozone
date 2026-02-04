@@ -408,7 +408,8 @@ def choose():
         # flag for if the user aborts
         "aborted": False,
         # flag for if the chat has ended
-        "ended": False
+        "ended": False,
+        "ended_at": None
     })
 
     session['room'] = room_id
@@ -459,7 +460,7 @@ def post_survey():
     # Store in the DB that this chat has been ended
     db.rooms.update_one(
         {"user_id":user_id},
-        {"$set": {"ended": True}}
+        {"$set": {"ended": True, "ended_at": datetime.utcnow()}}
     )
 
     CName = info['CoolBot_name']
