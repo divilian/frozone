@@ -5,6 +5,7 @@ weird_char_remover.py - This module provides `remove_weird_characters(text,
 substitutes.
 """
 import argparse
+import re
 
 
 def parse_args():
@@ -19,6 +20,8 @@ def remove_weird_characters(
 
     text = text.replace("&gt; ","> ")
     text = text.replace("&gt;","> ")
+    text = re.sub(r"/u/[A-Za-z0-9_-]+", "that person", text)
+    text = re.sub(r"/r/[A-Za-z0-9_-]+", "this site", text)
     return text
 
 
