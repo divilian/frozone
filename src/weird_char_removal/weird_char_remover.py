@@ -20,6 +20,7 @@ def remove_weird_characters(
 
     text = text.replace("&gt; ","> ")
     text = text.replace("&gt;","> ")
+    text = text.replace("Edit:","")
     text = re.sub(r"/u/[A-Za-z0-9_-]+", "that person", text)
     text = re.sub(r"/r/[A-Za-z0-9_-]+", "this site", text)
     return text
