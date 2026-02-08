@@ -139,7 +139,6 @@ def singleWithResponse_csv_to_jsonl(csv_files: Union[str, List[str]],output_path
 
     if isinstance(csv_files, str):
         csv_files = [csv_files]
-
     all_rows = []
 
     # Read all CSVs
@@ -215,9 +214,9 @@ To use this converter, you must argue "python csv_to_jsonl.py" followed by these
 
 "output.jsonl" which is the path and name of the file where you would like the jsonl output from the converter written.
 
-One of "c_, h_, or f_" which refer to which bot's prompt you would like to be used in the training data. The _ is either t or i for the training version of the prompt or the inference version of the prompt. For example, arguing "ct" means 'please use the coolbot_prompt in the training prompts directory' while arguing "fi" means 'please use the frobot_prompt in the inference prompts directory'. 
+One of "c_, h_, or f_" which refer to which bot's instructions you would like to be used in the training data. The _ is either t or i for the training version of the instruction or the inference version of the instruction. For example, arguing "ct" means 'please use the coolbot_prompt in the training instructions directory' while arguing "fi" means 'please use the frobot_prompt in the inference instructions directory'. 
 
-One of "base, single, singleWithResponse, or singleWithResponseAndProdding" which refer to the diffrent versions of the converter that we have created. Generally, it is best to default to singleWithResponse but below are the diffrences.
+One of "base, single, singleWithResponse, or singleWithResponseAndProdding" which refer to the diffrent versions of the converter that we have created. Generally, it is best to default to base but below are the diffrences.
 
     base: This converts it to the default jsonl conversation format where each turn in the conversation is a seperate json object.
 
@@ -242,39 +241,39 @@ One of "base, single, singleWithResponse, or singleWithResponseAndProdding" whic
             if ".jsonl" not in output:
                 raise Exception(f"File {f} is not a .jsonl output!")
 
-            #populate prompt
+            #populate instructions
             #lmao switch statments are for losers the reals ones if ts out
-            prompt_file = ""
+            system_instruct_file = ""
             if args[3] == 'ci': 
-                prompt_file = "inference_prompts/coolbot_prompt_main.txt"
+                 instruct_file = "/home/garrett/SchoolWork/Frozone/data/inference_instructions/coolbot_instructions_main.txt"
 
             elif args[3] == "ct":
-                prompt_file = "training_prompts/coolbot_prompt_train_main.txt"
+                 instruct_file = "/home/garrett/SchoolWork/Frozone/data/training_instructions/coolbot_instructions_train_main.txt"
 
             elif args[3] == 'fi':
-                prompt_file = "inference_prompts/frobot_prompt_main.txt"
+                instruct_file = "/home/garrett/SchoolWork/Frozone/data/inference_instructions/frobotbot_instructions_main.txt"
 
             elif args[3] == 'ft':
-                prompt_file = "training_prompts/frobot_prompt_train_main.txt"
+                instruct_file = "/home/garrett/SchoolWork/Frozone/data/training_instructions/frobot_instructions_train_main.txt"
 
             elif args[3] == 'hi':
-                prompt_file = "inference_prompts/hotbot_prompt_main.txt"
+                instruct_file = "/home/garrett/SchoolWork/Frozone/data/inference_instructions/hotbot_instructions_main.txt"
 
             elif args[3] == "ht":
-                prompt_file = "training_prompts/hotbot_prompt_train_main.txt"
+                instruct_file = "/home/garrett/SchoolWork/Frozone/data/training_instructions/hotbot_instructions_train_main.txt"
             else:
                 raise Exception(f"Flag {args[3]} is invalid! Must be one of c(i/t), f(i/t), or h(i/t).")
 
-            #populate system instructions
-            system_instruct_file = ""
+            #populate prompt
+            prompt_file = ""
             if "c" in args[3]:
-                system_instruct_file = "system_instructions/coolbot_instructions_main.txt" 
+                prompt_file = "/home/garrett/SchoolWork/Frozone/data/prompts/coolbot_prompt_main.txt" 
 
             elif "f" in args[3]:
-                system_instruct_file = "system_instructions/frobot_instructions_main.txt"
+                prompt_file = "/home/garrett/SchoolWork/Frozone/data/prompts/frobot_prompt_main.txt"
 
             elif "h" in args[3]:
-                system_instruct_file = "system_instructions/hotbot_instructions_main.txt"
+                prompt_file = "/home/garrett/SchoolWork/Frozone/data/prompts/hotbot_prompt_main.txt"
 
             else:
                 raise Exception(f"Flag {args[3]} is invalid! Must be one of c(i/t), f(i/t), or h(i/t).")
@@ -282,7 +281,7 @@ One of "base, single, singleWithResponse, or singleWithResponseAndProdding" whic
             with open(prompt_file, "r", encoding="utf-8", errors="ignore") as f:
                 prompt = f.read()
 
-            with open(system_instruct_file , "r" , encoding="utf-8" , errors="ignore") as f:
+            with open(instruct_file , "r" , encoding="utf-8" , errors="ignore") as f:
                 system_instructions = f.read()
             
             #get out what version of the converter should be used and apply it
