@@ -1,0 +1,96 @@
+% Instructions from Impact:
+% Slide deck (3 slides) in PDF format:
+%    Slide 1 (Introduction): Who you are and a summary of the project,
+%    emphasizing need and impact
+%    Slide 2 (Objectives/Outcomes): SMART (Specific, Measurable, Achievable,
+%    Relevant, Time-Bound) goals for the project
+%    Slide 3 (Budget): Outlining how the grant money will be used
+
+\documentclass[12pt]{beamer}
+\usepackage{mathtools}
+\usepackage{paralist}
+\useoutertheme{infolines}
+\usetheme{default}
+\usefonttheme{serif}
+%\usefonttheme{structuresmallcapsserif}
+\hypersetup{colorlinks=true,linkcolor=blue}
+\setbeamertemplate{navigation symbols}{}
+%\setbeamertemplate{footline}{}
+\author{Stephen Davies}
+\definecolor{darkgreen}{rgb}{0,.5,0}
+\begin{document}
+
+\begin{frame}[c]{Introduction}
+
+\textbf{Project Frozone} involves:
+
+\small
+\begin{compactitem}
+\item Stephen Davies (professor of Computer Science \& Data Science)
+\item Bethanie Hackett (Computer Science \& Political Science senior)
+\item Garrett McKenzie (Computer Science \& Data Science junior)
+\item Laur Rider (Computer Science \& English junior)
+\end{compactitem}
+
+\bigskip
+\begin{columns}[c,onlytextwidth]
+  \begin{column}{0.82\textwidth}
+    Our goal is to determine whether \textbf{AI chatbots} can be deployed to help \textbf{mitigate political polarization} in a society.
+  \end{column}
+
+  \begin{column}{0.18\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{frozone.png}
+  \end{column}
+\end{columns}
+
+\bigskip
+We're training a \textbf{Large Language Model} (LLM) called ``\textbf{Frobot}'' to detect instances of \textbf{misinformation}, \textbf{toxic speech}, and \textbf{entrenched bias} when they appear in online political conversation, and to \textbf{counteract} those elements with its responses.
+
+\end{frame}
+
+\begin{frame}[c]{Objectives/Outcomes}
+
+\small
+We plan to evaluate Frobot in two ways:
+\footnotesize
+
+\begin{enumerate}
+\itemsep.5em
+\item \textsl{Deploying it to a chatroom with human participants.} Experimental subjects will engage with Frobot (and other vanilla bots) without knowing they are bots, and produce chat log transcripts for us to analyze using the scientific techniques of \textbf{Discourse Analysis} and \textbf{Qualitative Coding}. Participants will also complete \textbf{surveys} in which they rate the degree to which the bots were effective communication partners, promoted healthy dialogue, and the like.
+
+\item \textsl{Simulating Frobot deployment on a larger scale.} Using the scientific technique of \textbf{Agent-Based Modeling} (ABM), we will design a computer simulation of a large, \textbf{virtual social network}, in which both simulated humans and Frobots interact. By varying features of the network -- including the ratio of humans to Frobots, the patterns by which individuals form ``friendships'' with other individuals, and the frequency with which individuals interact -- we will gain understanding about what \textbf{aggregate effect} Frobots might have on society at large.
+\end{enumerate}
+
+
+\end{frame}
+
+\begin{frame}[c]{Budget}
+
+\small
+We seek funding for two things:
+
+\begin{enumerate}
+\itemsep.5em
+\footnotesize
+\item \textsl{Cloud compute time and storage space to train Frobot.} Training LLMs on large amounts of text data is expensive. We plan to use the Google Gemini and Vertex AI suite of tools, at an estimated cost of \textbf{\$1500}.
+
+\item \textsl{Computational power to simulate the ABM.} Analyzing the behavior of an ABM requires running it a large number of times, both to ``even out'' the randomness of each individual trial, and also in order to vary the simulation's inputs to discover how various parameter settings influence the aggregate results. We will use Google Virtual Machines to carry out these resource-heavy computations, and estimate \textbf{\$1000} for this.
+
+\end{enumerate}
+
+\normalsize
+Summary:
+\begin{compactenum}
+\item Training resources: \$1500
+\item Simulation resources: \$1000
+\end{compactenum}
+\begin{compactitem}
+\item \textbf{Total funding request: \$2500}
+\end{compactitem}
+
+
+
+\end{frame}
+
+\end{document}
