@@ -334,14 +334,20 @@ def waiting():
 @app.route('/', methods=["GET", "POST"])
 def home():
     session.clear()
+
+    #get PROLIFIC_PID from qualtrics
+    prolific_pid = request.args.get("PROLIFIC_PID")
+    if not prolific_pid:
+        prolific_pid = ''
+
     if request.method == "POST":
         user_id = request.form.get('name')
         if not user_id:
-            return render_template('home.html', error="Name is required")
+            return render_template('home.html', error="Prolific ID is required", prolific_pid=prolific_pid)
         session['user_id'] = user_id
         return redirect(url_for('topics'))
     else:
-        return render_template('home.html')
+        return render_template('home.html',prolific_pid=prolific_pid)
 
 @app.route('/topics', methods=["GET", "POST"])
 def topics():
@@ -452,7 +458,7 @@ def abort_room():
 def post_survey():
     user_id = session.get('user_id')
     if not user_id:
-        return render_template('home.html', error="Enter your ID.") 
+        return render_template('home.html', error="Enter your Prolific ID.") 
     info = db.rooms.find_one({"user_id":user_id}, {'FroBot_name':1,
                                                    'HotBot_name':1,
                                                    'CoolBot_name':1} )
