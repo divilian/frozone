@@ -322,14 +322,16 @@ def ask_bot_round(room_id):
         time.sleep(2)  # prevents CPU thrashing & spamming
 
 # Build the routes
-@app.route('/', methods=["GET"])
+#disabled landing
+#@app.route('/', methods=["GET"])
 def landing():
     return render_template('landing.html')
-@app.route('/wait', methods=["GET"])
+#disabled waiting
+#@app.route('/wait', methods=["GET"])
 def waiting():
     return render_template('waiting.html')
-
-@app.route('/chat', methods=["GET", "POST"])
+#changed /chat -> /
+@app.route('/', methods=["GET", "POST"])
 def home():
     session.clear()
     if request.method == "POST":
