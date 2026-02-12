@@ -469,20 +469,9 @@ def post_survey():
     FName = info['FroBot_name']
     HName = info['HotBot_name']
 
-    SURVEY_2_LINK = f"https://umw.qualtrics.com/jfe/form/SV_eWg082wDp3hPzxQ?id={user_id}&CName={CName}&FName={FName}&HName={HName}"
-    
+    SURVEY_2_LINK = f"https://umw.qualtrics.com/jfe/form/SV_eIIbPlJ2D9k4zKC?PROLIFIC_PID={user_id}&CName={CName}&FName={FName}&HName={HName}"
 
-    #pass in without showing in url
-    html = f"""
-    <form id="autoform" action="{SURVEY_2_LINK}" method="POST">
-        <input type="hidden" name="user_code" value="{user_id}">
-    </form>
-
-    <script>
-        document.getElementById('autoform').submit();
-    </script>
-    """
-    return render_template_string(html)
+    return redirect(SURVEY_2_LINK)
 
 # Build the SocketIO event handlers
 
