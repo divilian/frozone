@@ -5,9 +5,9 @@
     <p id="error">{{error}}</p>
   {% endif %}
   <form method="post" id="chat-widget-home">
-    <label for="name">Enter your given ID number</label>
+    <label for="name">Enter your Prolific ID number</label>
     <div id="name-row">
-      <input type="text" id="name" name="name" placeholder="Enter name" />
+        <input type="text" id="name" name="name" value="{{prolific_pid}}" />
       <button type="button" id="continue">Continue</button>
     </div>
     <hr />
@@ -36,7 +36,7 @@
   continueBtn.onclick = function () {
     const idValue = nameInput.value.trim();
     if (idValue === "") {
-      alert("Please enter your ID number.");
+      alert("Please enter your Prolific ID number.");
       return;
     }
     modalHeading.innerHTML = `You entered: <strong>${idValue}</strong>`;
