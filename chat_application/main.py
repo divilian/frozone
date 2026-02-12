@@ -333,12 +333,11 @@ def waiting():
 #changed /chat -> /
 @app.route('/', methods=["GET", "POST"])
 def home():
-    session.clear()
+    #session.clear()
 
     #get PROLIFIC_PID from qualtrics
-    prolific_pid = request.args.get("PROLIFIC_PID")
-    if not prolific_pid:
-        prolific_pid = ''
+    #test if user_id in session
+    prolific_pid = request.args.get("PROLIFIC_PID") or session.get('user_id') or ''
 
     if request.method == "POST":
         user_id = request.form.get('name')
