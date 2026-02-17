@@ -15,9 +15,12 @@ from text_corruption import corrupt
 from humanizing import humanize
 from quote_removal import remove_quotes
 from weird_char_removal import remove_weird_characters
+from duplicate_detection import duplicate_check
 
 #controls
 CHAT_CONTEXT = 20 #how many messages from chat history to append to inference prompt
+#minimum number of chars where we start checking for duplicate messages
+DUP_LEN = 25 #since short messages may reasonably be the same
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
@@ -201,8 +204,10 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     history = room_doc["messages"]
     # Build the LLM prompt
     prompt = re.sub(r"<RE>", aliases[bot_display_name], initial_prompt)
+    context = list() #get the context sent to bot for duplicate_check
     for message in history[-CHAT_CONTEXT:]:
         prompt += f"{aliases[message['sender']]}: {message['message']}\n"
+        context.append(message['message'])
 
     prompt = name_to_let(room_id, prompt) #sub fruit names to letters to give to bots
 
@@ -277,6 +282,27 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     no_weird_chars = remove_weird_characters(corrupted_response)
     #sub letters for names, so if the bot addressed A -> Apple
     named_response = let_to_name(room_id, no_weird_chars)
+
+    #check that there are no reccent duplicate messages
+    if len(named_response) > DUP_LEN and duplicate_check(named_response, context):
+        print("****DUPLICATE MESSAGE DETECTED")
+        print("Treating this bot's response as a pass.")
+        # Do not store/send messages if the chat has ended
+        room_doc = rooms_collection.find_one({"_id": room_id})
+        if not room_doc or room_doc.get("ended", False):
+            return False
+        # Store the error response in the database
+        bot_message = {
+            "sender": bot_display_name,
+            "message": f"DUPLICATE message detected - treated as a (pass) : {named_response}", 
+            "timestamp": datetime.utcnow()
+        }
+        rooms_collection.update_one(
+            {"_id": room_id},
+            {"$push": {"messages": bot_message}}
+        )
+        return False
+
 
     print("\n")
     print("=================================response")
