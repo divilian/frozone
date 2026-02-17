@@ -13,6 +13,8 @@ import re
 import concurrent.futures
 from text_corruption import corrupt
 from humanizing import humanize
+from quote_removal import remove_quotes
+from weird_char_removal import remove_weird_characters
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
@@ -260,14 +262,18 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
         print("PASSED")
         return True # a pass is still recorded in the database, but not sent to the client
 
+    #remove encapsulating quotes
+    no_quotes = remove_quotes(parsed_response)
     #humanize the response (remove obvious AI formatting styles)
-    humanized_response = humanize(parsed_response)
+    humanized_response = humanize(no_quotes)
     #replace most semicolons 
     less_semicolons_response = replace_semicolons(humanized_response)
     #corrupt the response (add some typos and misspellings)
     corrupted_response = corrupt(less_semicolons_response)
+    #remove weird chars
+    no_weird_chars = remove_weird_characters(corrupted_response)
     #sub letters for names, so if the bot addressed A -> Apple
-    named_response = let_to_name(room_id, corrupted_response)
+    named_response = let_to_name(room_id, no_weird_chars)
 
     print("\n")
     print("=================================response")
