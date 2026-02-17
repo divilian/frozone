@@ -16,6 +16,9 @@ from humanizing import humanize
 from quote_removal import remove_quotes
 from weird_char_removal import remove_weird_characters
 
+#controls
+CHAT_CONTEXT = 20 #how many messages from chat history to append to inference prompt
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
 socketio = SocketIO(app)
@@ -198,7 +201,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
     history = room_doc["messages"]
     # Build the LLM prompt
     prompt = re.sub(r"<RE>", aliases[bot_display_name], initial_prompt)
-    for message in history:
+    for message in history[-CHAT_CONTEXT:]:
         prompt += f"{aliases[message['sender']]}: {message['message']}\n"
 
     prompt = name_to_let(room_id, prompt) #sub fruit names to letters to give to bots
