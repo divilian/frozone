@@ -11,6 +11,8 @@ from vertexai.tuning import sft
 from vertexai.generative_models import GenerativeModel
 import re
 import concurrent.futures
+from google import genai
+from google.genai.types import GenerateContentConfig, HttpOptions
 from text_corruption import corrupt
 from humanizing import humanize
 from quote_removal import remove_quotes
@@ -31,7 +33,13 @@ credentials, _ = google.auth.default(
     scopes=["https://www.googleapis.com/auth/cloud-platform"]
 )
 google_session = AuthorizedSession(credentials)
-
+vertex_client = genai.Client(
+        vertexai=True,
+        project="frozone-475719",
+        location="us-central1"
+        )
+"""
+#original lines before separating system instructions and prompts
 # Initialize the bots
 pirate_tuning_job_name = f"projects/frozone-475719/locations/us-central1/tuningJobs/3296615187565510656"
 tuning_job_frobot = f"projects/frozone-475719/locations/us-central1/tuningJobs/1280259296294076416"
@@ -42,9 +50,15 @@ hottj = sft.SupervisedTuningJob(tuning_job_hotbot)
 cooltj = sft.SupervisedTuningJob(tuning_job_coolbot)
 frotj = sft.SupervisedTuningJob(tuning_job_frobot)
 # Create the bot models
+
 hotbot = GenerativeModel(hottj.tuned_model_endpoint_name)
 coolbot = GenerativeModel(cooltj.tuned_model_endpoint_name)
 frobot = GenerativeModel(frotj.tuned_model_endpoint_name)
+"""
+#change to endpoints
+hotbot = "projects/frozone-475719/locations/us-central1/endpoints/34576342158671872"
+coolbot = "projects/700531062565/locations/us-central1/endpoints/827209876575879168"
+frobot = "projects/700531062565/locations/us-central1/endpoints/6323923590525747200"
 
 # MongoDB setup
 client = MongoClient("mongodb://localhost:27017/")
@@ -84,17 +98,26 @@ TOPICS_LIST = [
     }
 ] 
 
-# FroBot Prompt
-with open("../data/inference_prompts/frobot_prompt_main.txt") as f:
+# FroBot Main Prompt
+with open("../data/prompts/frobot_prompt_main.txt") as f:
     FROBOT_PROMPT = f.read()
+# Instructions
+with open("../data/inference_instructions/frobot_instructions_main.txt") as f:
+    FROBOT_INSTRUCT = f.read()
 
 # HotBot Prompt
-with open("../data/inference_prompts/hotbot_prompt_main.txt") as h:
+with open("../data/prompts/hotbot_prompt_main.txt") as h:
     HOTBOT_PROMPT = h.read()
+# Instructions
+with open("../data/inference_instructions/hotbot_instructions_main.txt") as h:
+    HOTBOT_INSTRUCT = h.read()
 
 # CoolBot Prompt
-with open("../data/inference_prompts/coolbot_prompt_main.txt") as c:
+with open("../data/prompts/coolbot_prompt_main.txt") as c:
     COOLBOT_PROMPT = c.read()
+# Instructions
+with open("../data/inference_instructions/coolbot_instructions_main.txt") as c:
+    COOLBOT_INSTRUCT = c.read()
 
 # Randomly select fruits to use for display names
 def choose_names(n):
@@ -192,7 +215,7 @@ def get_response_delay(response):
 
 # Ask a bot for its response, store in DB, and send to client
     # Returns true if the bot passed
-def ask_bot(room_id, bot, bot_display_name, initial_prompt):
+def ask_bot(room_id, bot, bot_display_name, initial_prompt, instruct_prompt):
     # Prevents crashing if bot model did not load
     if bot is None:
         return False
@@ -217,7 +240,13 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt):
 
     # Get the bot's response
     try:
-        response = bot.generate_content(prompt)
+        response = vertex_client.models.generate_content(
+                model = bot,
+                contents = prompt,
+                config=GenerateContentConfig(
+                    system_instruction = [instruct_prompt]
+                ),
+            )
         parsed_response = response.candidates[0].content.parts[0].text.strip()
     except Exception as e:
         print("Error in bot response: ", e)
@@ -341,10 +370,10 @@ def ask_bot_round(room_id):
 
         with concurrent.futures.ThreadPoolExecutor() as exec:
             futures = [
-                exec.submit(ask_bot, room_id, frobot, room_doc["FroBot_name"], FROBOT_PROMPT),
-                exec.submit(ask_bot, room_id, hotbot, room_doc["HotBot_name"], HOTBOT_PROMPT),
-                exec.submit(ask_bot, room_id, coolbot, room_doc["CoolBot_name"], COOLBOT_PROMPT),
-            ]
+                exec.submit(ask_bot, room_id, frobot, room_doc["FroBot_name"], FROBOT_PROMPT, FROBOT_INSTRUCT),
+                exec.submit(ask_bot, room_id, hotbot, room_doc["HotBot_name"], HOTBOT_PROMPT, FROBOT_INSTRUCT),
+                exec.submit(ask_bot, room_id, coolbot, room_doc["CoolBot_name"], COOLBOT_PROMPT, FROBOT_INSTRUCT)
+                ]
         results = [f.result() for f in futures]
 
         print("Raw pass check results: ", results)
