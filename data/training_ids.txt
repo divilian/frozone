@@ -32,3 +32,21 @@ coolbot id 4112237860852072448
 ----------------------------------------
 hotbot id 4961166390611410944
 ----------------------------------------
+
+IDs for training on 2/20/2026 at 3:55 pm started by GM
+________________________________________
+frobot:
+name: frobot_feb20
+id: 7549749227224563712
+resource: projects/700531062565/locations/us-central1/tuningJobs/7549749227224563712
+_________________________________________
+coolbot:
+name: coolbot_feb20
+id: 6861824384143720448
+resource: projects/700531062565/locations/us-central1/tuningJobs/6861824384143720448
+_________________________________________
+hotbot:
+name: hotbot_feb20
+id: 581273228798853120
+resource: projects/700531062565/locations/us-central1/tuningJobs/581273228798853120
+_________________________________________
