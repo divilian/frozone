@@ -61,7 +61,7 @@ def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system
 
     # Write to JSONL
     output_path = Path(output_path)
-    with output_path.open("w", encoding="utf-8-sig") as out_f:
+    with output_path.open("w", encoding="utf-8") as out_f:
         for ep in episodes:
             json.dump(ep, out_f, ensure_ascii=False)
             out_f.write("\n")
@@ -78,7 +78,7 @@ def single_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, syst
     # Read all CSVs
     for file in csv_files:
         print(file)
-        with open(file, newline='', encoding='utf-8-sig',errors='ignore') as f:
+        with open(file, newline='', encoding='utf-8',errors='ignore') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 # Normalize types
@@ -128,7 +128,7 @@ def single_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, syst
             
     # Write to JSONL
     output_path = Path(output_path)
-    with output_path.open("w", encoding="utf-8-sig") as out_f:
+    with output_path.open("w", encoding="utf-8") as out_f:
         for ep in episodes:
             json.dump(ep, out_f, ensure_ascii=False)
             out_f.write("\n")

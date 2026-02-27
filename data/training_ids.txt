@@ -35,18 +35,36 @@ hotbot id 4961166390611410944
 
 IDs for training on 2/20/2026 at 3:55 pm started by GM
 ________________________________________
-frobot:
+frobot: (FAILED)
 name: frobot_feb20
 id: 7549749227224563712
 resource: projects/700531062565/locations/us-central1/tuningJobs/7549749227224563712
 _________________________________________
-coolbot:
+coolbot: (FAILED)
 name: coolbot_feb20
 id: 6861824384143720448
 resource: projects/700531062565/locations/us-central1/tuningJobs/6861824384143720448
 _________________________________________
-hotbot:
+hotbot: (FAILED)
 name: hotbot_feb20
 id: 581273228798853120
 resource: projects/700531062565/locations/us-central1/tuningJobs/581273228798853120
+_________________________________________
+
+IDs for training on 2/27/2026
+_________________________________________
+coolbot:
+name: frozone-coolbot_feb27_gemini2.5flash
+id: 3909390472472166400
+resource: projects/700531062565/locations/us-central1/tuningJobs/3909390472472166400
+_________________________________________
+frobot:
+name: frozone-frobot_feb27_gemini2.5flash
+id: 1729226040359780352
+resource: projects/700531062565/locations/us-central1/tuningJobs/1729226040359780352
+_________________________________________
+hotbot:
+name: frozone-hotbot_feb27_gemini2.5flash
+id: 2551132972354895872
+resource: projects/700531062565/locations/us-central1/tuningJobs/2551132972354895872 
 _________________________________________
