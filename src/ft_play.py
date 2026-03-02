@@ -59,11 +59,11 @@ if __name__ == "__main__":
         raise Exception("Missing flag for prompt file must be f,c,h,or N")
     if flag != "N":
         if flag == "f":
-            prompt_file = "../prompts/experiment/frobot_prompt.txt"
+            prompt_file = "../data/prompts/frobot_prompt_main.txt"
         elif flag == "c":
-            prompt_file = "../prompts/experiment/coolbot_prompt.txt"
+            prompt_file = "../data/prompts/coolbot_prompt_main.txt"
         elif flag == "h":
-            prompt_file = "../prompts/experiment/hotbot_prompt.txt"
+            prompt_file = "../data/prompts/hotbot_prompt_main.txt"
         with open(prompt_file,"r") as f:
             accumulated_content = f.read()     
         accumulated_content = re.sub(r"<RE>","B",accumulated_content) 
