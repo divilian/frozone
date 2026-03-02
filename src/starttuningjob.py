@@ -64,7 +64,7 @@ if __name__ == "__main__":
         "--num_epochs",
         type=int,
         help="Number of epochs to tune (default 3).",
-        default=3
+        default= 5
     )
     args = parser.parse_args()
 
@@ -93,8 +93,8 @@ if __name__ == "__main__":
         source_model=args.base_model,
         train_dataset=f"gs://{bucket_name}/{args.train_dataset}",
         epochs=args.num_epochs,
-        #learning_rate_multiplier=1,
-        #adapter_size=4,
+        learning_rate_multiplier=2e-4,
+        adapter_size=8,
         tuned_model_display_name="frozone-" + args.display_name,
 
         # This ability may be useful to help identify some jobs from others. For

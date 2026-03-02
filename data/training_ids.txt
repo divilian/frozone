@@ -51,20 +51,41 @@ id: 581273228798853120
 resource: projects/700531062565/locations/us-central1/tuningJobs/581273228798853120
 _________________________________________
 
+
 IDs for training on 2/27/2026
 _________________________________________
-coolbot:
+coolbot: (FAILED)
 name: frozone-coolbot_feb27_gemini2.5flash
 id: 3909390472472166400
 resource: projects/700531062565/locations/us-central1/tuningJobs/3909390472472166400
 _________________________________________
-frobot:
+frobot: (FAILED)
 name: frozone-frobot_feb27_gemini2.5flash
 id: 1729226040359780352
 resource: projects/700531062565/locations/us-central1/tuningJobs/1729226040359780352
 _________________________________________
-hotbot:
+hotbot: (FAILED)
 name: frozone-hotbot_feb27_gemini2.5flash
 id: 2551132972354895872
 resource: projects/700531062565/locations/us-central1/tuningJobs/2551132972354895872 
+_________________________________________
+
+
+IDs for training on 03/02/2026
+_________________________________________
+hotbot:
+name: hotbot-marchthird
+id: 6388114092967591936
+resource: projects/700531062565/locations/us-central1/tuningJobs/6388114092967591936
+_________________________________________
+frobot:
+id: 7252805221422727168
+name: frobot-marchthird
+resource: projects/700531062565/locations/us-central1/tuningJobs/7252805221422727168 
+_________________________________________
+coolbot:
+id: 6721380465393008640
+name: coolbot-marchthird
+resource: projects/700531062565/locations/us-central1/tuningJobs/6721380465393008640 
+_________________________________________
 _________________________________________
