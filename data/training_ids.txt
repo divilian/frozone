@@ -73,19 +73,18 @@ _________________________________________
 
 IDs for training on 03/02/2026
 _________________________________________
-hotbot:
-name: hotbot-marchthird
-id: 6388114092967591936
-resource: projects/700531062565/locations/us-central1/tuningJobs/6388114092967591936
-_________________________________________
 frobot:
-id: 7252805221422727168
-name: frobot-marchthird
-resource: projects/700531062565/locations/us-central1/tuningJobs/7252805221422727168 
+id: 7772759872151486464
+name: frobot-march2
+resource:
+_________________________________________
+hotbot:
+id: 4024639082272391168
+name: hotbot-march2
+resource:
 _________________________________________
 coolbot:
-id: 6721380465393008640
-name: coolbot-marchthird
-resource: projects/700531062565/locations/us-central1/tuningJobs/6721380465393008640 
-_________________________________________
+id: 8131921942434283520
+name: coolbot-march2
+resource:
 _________________________________________

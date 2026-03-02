@@ -47,7 +47,7 @@ def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system
 
         # If this episode is done, finalize
         if row["episode_done"]: 
-            current_contents.insert(0,{"role":"user","parts":[{"text": prompt}]})
+            current_contents[0]["parts"][0]["text"] = prompt + "\n" + current_contents[0]["parts"][0]["text"]
             episodes.append({
                 "systemInstruction": {
                     "role": "system",
@@ -61,7 +61,7 @@ def base_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, system
 
     # Write to JSONL
     output_path = Path(output_path)
-    with output_path.open("w", encoding="utf-8") as out_f:
+    with output_path.open("w", encoding="utf-8-sig") as out_f:
         for ep in episodes:
             json.dump(ep, out_f, ensure_ascii=False)
             out_f.write("\n")
@@ -78,7 +78,7 @@ def single_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, syst
     # Read all CSVs
     for file in csv_files:
         print(file)
-        with open(file, newline='', encoding='utf-8',errors='ignore') as f:
+        with open(file, newline='', encoding='utf-8-sig',errors='ignore') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 # Normalize types
@@ -128,7 +128,7 @@ def single_csv_to_jsonl(csv_files: Union[str, List[str]], output_path: str, syst
             
     # Write to JSONL
     output_path = Path(output_path)
-    with output_path.open("w", encoding="utf-8") as out_f:
+    with output_path.open("w", encoding="utf-8-sig") as out_f:
         for ep in episodes:
             json.dump(ep, out_f, ensure_ascii=False)
             out_f.write("\n")
@@ -278,10 +278,10 @@ One of "base, single, singleWithResponse, or singleWithResponseAndProdding" whic
             else:
                 raise Exception(f"Flag {args[3]} is invalid! Must be one of c(i/t), f(i/t), or h(i/t).")
 
-            with open(prompt_file, "r", encoding="utf-8", errors="ignore") as f:
+            with open(prompt_file, "r", encoding="utf-8-sig", errors="ignore") as f:
                 prompt = f.read()
 
-            with open(instruct_file , "r" , encoding="utf-8" , errors="ignore") as f:
+            with open(instruct_file , "r" , encoding="utf-8-sig" , errors="ignore") as f:
                 system_instructions = f.read()
             
             #get out what version of the converter should be used and apply it
