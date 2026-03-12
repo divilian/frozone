@@ -371,8 +371,8 @@ def ask_bot_round(room_id):
         with concurrent.futures.ThreadPoolExecutor() as exec:
             futures = [
                 exec.submit(ask_bot, room_id, frobot, room_doc["FroBot_name"], FROBOT_PROMPT, FROBOT_INSTRUCT),
-                exec.submit(ask_bot, room_id, hotbot, room_doc["HotBot_name"], HOTBOT_PROMPT, FROBOT_INSTRUCT),
-                exec.submit(ask_bot, room_id, coolbot, room_doc["CoolBot_name"], COOLBOT_PROMPT, FROBOT_INSTRUCT)
+                exec.submit(ask_bot, room_id, hotbot, room_doc["HotBot_name"], HOTBOT_PROMPT, HOTBOT_INSTRUCT),
+                exec.submit(ask_bot, room_id, coolbot, room_doc["CoolBot_name"], COOLBOT_PROMPT, COOLBOT_INSTRUCT)
                 ]
         results = [f.result() for f in futures]
 
