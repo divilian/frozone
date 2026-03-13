@@ -76,15 +76,15 @@ _________________________________________
 frobot:
 id: 7772759872151486464
 name: frobot-march2
-resource:
+resource: projects/700531062565/locations/us-central1/endpoints/2951406418055397376
 _________________________________________
 hotbot:
 id: 4024639082272391168
 name: hotbot-march2
-resource:
+resource: projects/700531062565/locations/us-central1/endpoints/6225523347153747968
 _________________________________________
 coolbot:
 id: 8131921942434283520
 name: coolbot-march2
-resource:
+resource: projects/700531062565/locations/us-central1/endpoints/1700531621553242112
 _________________________________________
