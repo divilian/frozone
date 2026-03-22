@@ -157,6 +157,15 @@ def send_bot_joined(room_id, bot_name, delay):
     time.sleep(delay)
     socketio.emit("message", {"sender": "", "message": f"{bot_name} has entered the chat"}, to=room_id)
 
+
+# Send message displaying all participant names
+def send_bot_names_message(room_id, bot_names):
+    if len(bot_names) == 0:
+        return
+    # Wait 1 second before sending
+    socketio.emit("message", {"sender": "", "message": f"This chat currently contains {', '.join(bot_names)}, and watermelon."}, to=room_id)
+
+
 # Trigger a round of bot calls if user has been inactive for a while
 def user_inactivity_tracker(room_id, timeout_seconds=180):
     print(f"Started user inactivity tracker for Room ID#{room_id}")
@@ -556,6 +565,7 @@ def handle_connect():
     join_room(room)
     if (room_doc.get("initialPostsSent", False)):
         return
+    """ Removing this to be replaced with send_bot_names_message
     # Send the message that "watermelon" has already joined the chat
     send({
         "sender": "",
@@ -566,10 +576,18 @@ def handle_connect():
         "sender": "",
         "message": f"{name} has entered the chat"
     }, to=room)
+    """
     # Start background tasks for the bots to join after a short delay
+
+    socketio.start_background_task(send_bot_names_message, room,
+                                   [room_doc['CoolBot_name'], room_doc['FroBot_name'],
+                                    room_doc['HotBot_name']])
+
+    """ Removing this, replaced with send_bot_names_message
     socketio.start_background_task(send_bot_joined, room, room_doc['CoolBot_name'], 3)
     socketio.start_background_task(send_bot_joined, room, room_doc['FroBot_name'], 7)
     socketio.start_background_task(send_bot_joined, room, room_doc['HotBot_name'], 13)
+    """
     # Start background task to send the initial watermelon post after a short delay
     socketio.start_background_task(send_initial_post, room, 10)
     rooms_collection.update_one(
