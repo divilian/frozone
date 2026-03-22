@@ -498,12 +498,12 @@ hr {
   background: #ccc;
 }
 
-#welcomeOkBtn {
+#welcomeOkBtn, #timerOkBtn {
   background: green;
   color: white;
 }
 
-#welcomeOkBtn:hover {
+#welcomeOkBtn:hover, #timerOkBtn:hover {
   background: #016601;
 }
 

@@ -12,6 +12,18 @@
       </div>
     </div>
   </div>
+
+  <div id="timer-modal" class="modal">
+    <div class="modal-content">
+      <h3>Start a Timer</h3>
+      <p>Please start a timer for <strong>20 minutes</strong>.  At the 20 minute mark, you may click the button "End Chat Session" to continue with the study.</p>
+      <div class="modal-buttons">
+        <button class="modal-btn" id="timerOkBtn">I have set a timer for 20 minutes.</button>
+      </div>
+    </div>
+  </div>
+
+
   <h1 id="home-header">Chat Room</h1>
   <div id="room-subsection">
       <div class="topic-header-row">
@@ -93,10 +105,16 @@
     }
     // Handler for the welcome modal
     let welcomeModal = document.getElementById("welcome-modal");
+    let timerModal = document.getElementById("timer-modal");
     const displayNameText = document.getElementById("displayNameText");
     displayNameText.textContent = "{{ user }}";
     // Show the modal instantly when the page loads
     window.onload = function() {
+      timerModal.style.display = "block";
+    };
+    //timer pop-up
+    document.getElementById("timerOkBtn").onclick = function () {
+      timerModal.style.display = "none";
       welcomeModal.style.display = "block";
     };
     // Close the modal on OK
