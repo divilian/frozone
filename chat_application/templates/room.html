@@ -64,7 +64,7 @@
           <div class="modal-content">
               <h3>Confirmation</h3>
               <p>By clicking yes, you will exit the experiment <strong>without</strong> completing the final survey.</p>
-              <p>We encourage you to message us about any concerns or <a href="https://umw.qualtrics.com/jfe/form/SV_08v26NssCOwZTP8{{ feedback_form_url_encoding }}" target="_blank">provide feedback here</a>.</p>
+              <p>We encourage you to message us about any concerns or <a href="{{ feedback_form_url | default('https://umw.qualtrics.com/jfe/form/SV_08v26NssCOwZTP8') }}" target="_blank">provide feedback here</a>.</p>
               <div class="modal-buttons">
                   <button class="modal-btn" id="abortYesBtn">Yes</button>
                   <button class="modal-btn" id="abortNoBtn">Cancel</button>

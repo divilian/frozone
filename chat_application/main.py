@@ -23,6 +23,7 @@ from duplicate_detection import duplicate_check
 CHAT_CONTEXT = 20 #how many messages from chat history to append to inference prompt
 #minimum number of chars where we start checking for duplicate messages
 DUP_LEN = 25 #since short messages may reasonably be the same
+REMOVE_PUNC_RATE = 1 #how often to remove final punctuation
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
@@ -308,8 +309,10 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt, instruct_prompt):
         print("PASSED")
         return True # a pass is still recorded in the database, but not sent to the client
 
+    #sub letters for names, so if the bot addressed A -> Apple
+    named_response = let_to_name(room_id, parsed_response)
     #remove encapsulating quotes
-    no_quotes = remove_quotes(parsed_response)
+    no_quotes = remove_quotes(named_response)
     #humanize the response (remove obvious AI formatting styles)
     humanized_response = humanize(no_quotes)
     #replace most semicolons 
@@ -318,11 +321,15 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt, instruct_prompt):
     corrupted_response = corrupt(less_semicolons_response)
     #remove weird chars
     no_weird_chars = remove_weird_characters(corrupted_response)
-    #sub letters for names, so if the bot addressed A -> Apple
-    named_response = let_to_name(room_id, no_weird_chars)
+    #remove trailing punctuation 80% of the time
+    if random.random() < REMOVE_PUNC_RATE:
+        print("removing punc======================")
+        no_weird_chars = re.sub(r'[^\w\s]+$', '', no_weird_chars)
+
+    final_response = no_weird_chars
 
     #check that there are no reccent duplicate messages
-    if len(named_response) > DUP_LEN and duplicate_check(named_response, context):
+    if len(final_response) > DUP_LEN and duplicate_check(final_response, context):
         print("****DUPLICATE MESSAGE DETECTED")
         print("Treating this bot's response as a pass.")
         # Do not store/send messages if the chat has ended
@@ -332,7 +339,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt, instruct_prompt):
         # Store the error response in the database
         bot_message = {
             "sender": bot_display_name,
-            "message": f"DUPLICATE message detected - treated as a (pass) : {named_response}", 
+            "message": f"DUPLICATE message detected - treated as a (pass) : {final_response}", 
             "timestamp": datetime.utcnow()
         }
         rooms_collection.update_one(
@@ -347,7 +354,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt, instruct_prompt):
     print(corrupted_response)
 
     # Add latency/wait time for bot responses 
-    delay = get_response_delay(named_response);
+    delay = get_response_delay(final_response);
     print(delay)
     time.sleep(delay)
 
@@ -359,7 +366,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt, instruct_prompt):
     # Store the response in the database
     bot_message = {
         "sender": bot_display_name,
-        "message": named_response, #save fruits in db so page reload shows proper names
+        "message": final_response, #save fruits in db so page reload shows proper names
         "timestamp": datetime.utcnow()
     }
     rooms_collection.update_one(
@@ -368,7 +375,7 @@ def ask_bot(room_id, bot, bot_display_name, initial_prompt, instruct_prompt):
     )
     
     # Send the bot's response to the client
-    socketio.emit("message", {"sender": bot_display_name, "message": named_response}, to=room_id)
+    socketio.emit("message", {"sender": bot_display_name, "message": final_response}, to=room_id)
     return False
 
 def ask_bot_round(room_id):
@@ -419,7 +426,8 @@ def home():
         session['user_id'] = user_id
         return redirect(url_for('topics'))
     else:
-        return render_template('home.html',prolific_pid=prolific_pid)
+        link = f"https://umw.qualtrics.com/jfe/form/SV_08v26NssCOwZTP8?PROLIFIC_PID={prolific_pid}"
+        return render_template('home.html',prolific_pid=prolific_pid, feedback_form_url=link)
 
 @app.route('/topics', methods=["GET", "POST"])
 def topics():
@@ -513,7 +521,11 @@ def room():
         m for m in room_doc["messages"]
         if m.get("message", "").strip() != "(pass)"
     ]
-    return render_template("room.html", room=room_id, topic_info=topic_info, user=display_name, messages=nonpass_messages, FroBot_name=room_doc["FroBot_name"], HotBot_name=room_doc["HotBot_name"], CoolBot_name=room_doc["CoolBot_name"], ended=room_doc["ended"])
+    if session.get('user_id'):
+        link = f"https://umw.qualtrics.com/jfe/form/SV_08v26NssCOwZTP8?PROLIFIC_PID={session.get('user_id')}"
+        return render_template("room.html", room=room_id, topic_info=topic_info, user=display_name, messages=nonpass_messages, FroBot_name=room_doc["FroBot_name"], HotBot_name=room_doc["HotBot_name"], CoolBot_name=room_doc["CoolBot_name"], ended=room_doc["ended"], feedback_form_url=link)
+    else:
+        return render_template("room.html", room=room_id, topic_info=topic_info, user=display_name, messages=nonpass_messages, FroBot_name=room_doc["FroBot_name"], HotBot_name=room_doc["HotBot_name"], CoolBot_name=room_doc["CoolBot_name"], ended=room_doc["ended"])
 
 @app.route("/abort", methods=["POST"])
 def abort_room():
