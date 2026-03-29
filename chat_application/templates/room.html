@@ -32,6 +32,7 @@
               </h2>
           </div>
           <div class="topic-header-buttons">
+              <button id="feedback-btn">Provide Feedback</button>
               <button id="end-exp-btn">End the Chat Session</button>
               <button id="abort-exp-btn">Abort the Experiment</button>
           </div>
@@ -71,6 +72,23 @@
               </div>
           </div>
       </div>
+      <div id="feedback-modal" class="modal">
+          <div class="modal-content">
+              <h3>Feedback</h3>
+              <form id="feedback-form">
+                  <div class="feedback-col">
+                    <label for="enter-feedback">Enter Feedback</label>
+                    <textarea id="enter-feedback" name="feedback"></textarea>
+                  </div>
+                  <br>
+                  <div class="modal-buttons">
+                      <button class="modal-btn" id="submitFeedbackBtn" type="submit">Submit</button>
+                      <button type="button" class="modal-btn" id="cancelFeedbackBtn">Cancel</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+
 
 
   </div>
@@ -234,7 +252,30 @@
         abortModalConfirm.style.display = "none";
     };
 
+    //handler for feedback modal popup
+    let feedbackModal = document.getElementById("feedback-modal");
+    let form = document.getElementById("feedback-form");
+    document.getElementById("feedback-btn").onclick = function () {
+      feedbackModal.style.display = "block";
+    };
+    document.getElementById("cancelFeedbackBtn").onclick = function () {
+      feedbackModal.style.display = "none";
+    };
+    
+    //override form function to instead emit save feedback event
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
+        const data = new FormData(form);
+        const feedback = data.get("feedback")?.trim();
+
+        if (!feedback) return;
+
+        socketio.emit("feedback_given", { feedback });
+
+        form.reset();
+        document.getElementById("feedback-modal").style.display = "none";
+    });
 
     // add auto scroll
     function isNearBottom(container, threshold = 120) {

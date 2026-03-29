@@ -65,6 +65,7 @@ frobot = "projects/700531062565/locations/us-central1/endpoints/6323923590525747
 client = MongoClient("mongodb://localhost:27017/")
 db = client["experimentData"]
 rooms_collection = db.rooms
+feedback_collection = db.feedback
 
 # List of fruits to choose display names from
 FRUIT_NAMES = ["blueberry", "strawberry", "orange", "cherry"]
@@ -500,6 +501,19 @@ def choose():
         "ended_at": None
     })
 
+    # Create the new feedback in the database
+    feedback_collection.insert_one({
+        "_id": room_id,
+        # creation date/time
+        "created_at": datetime.utcnow(),
+        # user identity
+        "user_id": user_id,
+        # empty feedback history
+        "feedbacks": [],
+    })
+
+
+
     session['room'] = room_id
     session['display_name'] = user_name
     return redirect(url_for('room'))
@@ -659,6 +673,28 @@ def handle_message(payload):
 
     # Ask each bot for a response
     socketio.start_background_task(ask_bot_round, room)
+
+@socketio.on('feedback_given')
+def handle_message(payload):
+    room = session.get('room')
+    name = session.get('display_name')
+    if not room or not name:
+        return
+
+    text = payload.get("feedback", "").strip()
+    if not text:
+        return  # ignore empty text
+    
+    # Database-only message (with datetime)
+    db_feedback = {
+        "message": text,
+        "timestamp": datetime.utcnow()
+    }
+    # Store the full version in the database
+    feedback_collection.update_one(
+        {"_id": room},
+        {"$push": {"feedback_responses": db_feedback}}
+    )
 
 @socketio.on('disconnect')
 def handle_disconnect():

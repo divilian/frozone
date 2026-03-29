@@ -265,6 +265,39 @@ hr {
   background-color: white;
 }
 
+#feedback-btn {
+  color: white;
+  font-weight: 800;
+  background-color: green;
+  text-decoration: none;
+  padding: 6px;
+  border: 2px solid green;
+  display: inline-block;
+  margin-top: 5px;
+  border-radius: 10px;
+  transition: all 0.1s ease-in;
+}
+
+#feedback-btn:hover {
+  color: green;
+  background-color: white;
+}
+
+.feedback-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        resize: vertical;
+    }
+}
+
 .topic-header-row {
   display: flex;
   justify-content: space-between;
@@ -498,12 +531,12 @@ hr {
   background: #ccc;
 }
 
-#welcomeOkBtn, #timerOkBtn {
+#welcomeOkBtn, #timerOkBtn, #submitFeedbackBtn {
   background: green;
   color: white;
 }
 
-#welcomeOkBtn:hover, #timerOkBtn:hover {
+#welcomeOkBtn:hover, #timerOkBtn:hover, #submitFeedbackBtn:hover {
   background: #016601;
 }
 
@@ -534,12 +567,12 @@ hr {
   background: #016991;
 }
 
-#endNoBtn {
+#endNoBtn, #cancelFeedbackBtn {
   background: #e5e5e5;
   color: #333;
 }
 
-#endNoBtn:hover {
+#endNoBtn:hover, #cancelFeedbackBtn:hover {
   background: #ccc;
 }
 
