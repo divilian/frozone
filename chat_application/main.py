@@ -690,11 +690,16 @@ def handle_message(payload):
         "message": text,
         "timestamp": datetime.utcnow()
     }
+
+    print(db_feedback)
     # Store the full version in the database
-    feedback_collection.update_one(
+    result = feedback_collection.update_one(
         {"_id": room},
         {"$push": {"feedback_responses": db_feedback}}
     )
+
+    #LR TODO: add success/faillure msg and confirmation
+
 
 @socketio.on('disconnect')
 def handle_disconnect():
