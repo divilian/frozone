@@ -32,7 +32,7 @@
               </h2>
           </div>
           <div class="topic-header-buttons">
-              <button id="feedback-btn">Provide Feedback</button>
+              <button id="feedback-btn">Share Feedback and Report Bugs</button>
               <button id="end-exp-btn">End the Chat Session</button>
               <button id="abort-exp-btn">Abort the Experiment</button>
           </div>
@@ -77,7 +77,7 @@
               <h3>Feedback</h3>
               <form id="feedback-form">
                   <div class="feedback-col">
-                    <label for="enter-feedback">Enter Feedback</label>
+                      <label for="enter-feedback">Noticed something confusing, unexpected, or not working? Tell us what happened.</label>
                     <textarea id="enter-feedback" name="feedback"></textarea>
                   </div>
                   <br>
@@ -88,7 +88,22 @@
               </form>
           </div>
       </div>
-
+      <div id="feedback-status-confirm" class="modal">
+          <div class="modal-content">
+              <p>Feedback submitted.</p>
+              <div class="modal-buttons">
+                  <button class="modal-btn" id="cancelFeedbackStatusBtn">Ok</button>
+              </div>
+          </div>
+      </div>
+      <div id="feedback-status-fail" class="modal">
+          <div class="modal-content">
+              <p>Feedback failed to submit.</p>
+              <div class="modal-buttons">
+                  <button class="modal-btn" id="cancelFeedbackStatusBtn2">Ok</button>
+              </div>
+          </div>
+      </div>
 
 
   </div>
@@ -255,13 +270,27 @@
     //handler for feedback modal popup
     let feedbackModal = document.getElementById("feedback-modal");
     let form = document.getElementById("feedback-form");
+    let feedbackConfirm = document.getElementById("feedback-status-confirm");
+    let feedbackFail = document.getElementById("feedback-status-fail");
+
     document.getElementById("feedback-btn").onclick = function () {
       feedbackModal.style.display = "block";
     };
+
     document.getElementById("cancelFeedbackBtn").onclick = function () {
       feedbackModal.style.display = "none";
     };
     
+    document.getElementById("cancelFeedbackStatusBtn").onclick = function () {
+      feedbackConfirm.style.display = "none";
+      feedbackFail.style.display = "none";
+    };
+
+    document.getElementById("cancelFeedbackStatusBtn2").onclick = function () {
+      feedbackConfirm.style.display = "none";
+      feedbackFail.style.display = "none";
+    };
+
     //override form function to instead emit save feedback event
     form.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -271,11 +300,18 @@
 
         if (!feedback) return;
 
-        socketio.emit("feedback_given", { feedback });
+        socketio.emit("feedback_given", { feedback }, (response) => {
+            console.log("Server response:", response);
+
+            if (response?.status === "True" || response?.status === true) {
+                feedbackConfirm.style.display = "block";
+            }
+        });
 
         form.reset();
         document.getElementById("feedback-modal").style.display = "none";
     });
+
 
     // add auto scroll
     function isNearBottom(container, threshold = 120) {

@@ -508,8 +508,6 @@ def choose():
         "created_at": datetime.utcnow(),
         # user identity
         "user_id": user_id,
-        # empty feedback history
-        "feedbacks": [],
     })
 
 
@@ -697,8 +695,13 @@ def handle_message(payload):
         {"_id": room},
         {"$push": {"feedback_responses": db_feedback}}
     )
+    
+    if result:
+        print(result)
+        if result.modified_count > 0:
+            return {'status':'True'}
+    return {'status':'False'}
 
-    #LR TODO: add success/faillure msg and confirmation
 
 
 @socketio.on('disconnect')

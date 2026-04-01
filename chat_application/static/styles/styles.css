@@ -495,12 +495,12 @@ hr {
   transition: 0.15s ease-in-out;
 }
 
-#abortYesBtn, #abortYesBtn-pre {
+#abortYesBtn, #abortYesBtn-pre, #cancelFeedbackStatusBtn2 {
   background: #d9534f;
   color: white;
 }
 
-#abortYesBtn:hover, #abortYesBtn-pre:hover {
+#abortYesBtn:hover, #abortYesBtn-pre:hover, #cancelFeedbackStatusBtn2:hover {
   background: #c9302c;
 }
 
@@ -531,12 +531,12 @@ hr {
   background: #ccc;
 }
 
-#welcomeOkBtn, #timerOkBtn, #submitFeedbackBtn {
+#welcomeOkBtn, #timerOkBtn, #submitFeedbackBtn, #cancelFeedbackStatusBtn {
   background: green;
   color: white;
 }
 
-#welcomeOkBtn:hover, #timerOkBtn:hover, #submitFeedbackBtn:hover {
+#welcomeOkBtn:hover, #timerOkBtn:hover, #submitFeedbackBtn:hover, #cancelFeedbackStatusBtn:hover {
   background: #016601;
 }
 
