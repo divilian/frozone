@@ -16,68 +16,54 @@
   <div id="timer-modal" class="modal">
     <div class="modal-content">
       <h3>Start a Timer</h3>
-      <p>Please start a timer for <strong>20 minutes</strong>.  At the 20 minute mark, you may click the button "End Chat Session" to continue with the study.</p>
+      <p><strong>Please start a timer for 20 minutes</strong>.  At the 20 minute mark, you may click the button "End Chat Session" to continue with the study.</p>
       <div class="modal-buttons">
         <button class="modal-btn" id="timerOkBtn">I have set a timer for 20 minutes.</button>
       </div>
     </div>
   </div>
-
-
+  
   <h1 id="home-header">Chat Room</h1>
   <div id="room-subsection">
-      <div class="topic-header-row">
-          <div class="topic-header-info">
-              <h2 id="room-code-display">Topic: <span class="topic-title">{{ topic_info.title }}</span>
-              </h2>
-          </div>
-          <div class="topic-header-buttons">
-              <button id="feedback-btn">Share Feedback and Report Bugs</button>
-              <button id="end-exp-btn">End the Chat Session</button>
-              <button id="abort-exp-btn">Abort the Experiment</button>
-          </div>
+    <div class="topic-header-row">
+      <div class="topic-header-info">
+    	<h2 id="room-code-display">Topic: <span class="topic-title">{{ topic_info.title }}</span></h2>
       </div>
-      <div id="end-modal" class="modal">
-          <div class="modal-content">
-              <h3>Only Exit This Way After 20 Minutes of Participation in the Chatroom.</h3>
-              <p>This signals the end of the chat session of the experiment. You will be redirected to the post-survey.</p>
-              <p>This button is only to be used at the end of your 20 minutes of participation in the chatroom. <strong>If you wish to exit the chat before finishing your 20 minutes, use the "Abort Experiment" button instead.</strong></p>
-              <div class="modal-buttons">
-                  <button class="modal-btn" id="endYesBtn">Continue</button>
-                  <button class="modal-btn" id="endNoBtn">Cancel</button>
-              </div>
-          </div>
+      <div class="topic-header-buttons">
+        <button id="feedback-btn">Share Feedback and Report Bugs</button>
+        <button id="end-exp-btn">End Chat Session</button>
+        <button id="abort-exp-btn">Abort Experiment</button>
       </div>
-      <div id="abort-modal" class="modal">
-          <div class="modal-content">
-              <h3>Are you sure you want to leave this experiment?</h3>
-              <p>This action is permanent. You will be redirected to the post-survey and will not be able to return to the chat room.</p>
-              <p><strong>If you finished your 20 minutes in the chatroom, do NOT exit via this button. Use the "Chat Session Ends" button instead.</strong></p>
-              <div class="modal-buttons">
-                  <button class="modal-btn" id="abortYesBtn-pre">Yes</button>
-                  <button class="modal-btn" id="abortNoBtn-pre">Cancel</button>
-              </div>
-          </div>
+    </div>
+    <div id="end-modal" class="modal">
+      <div class="modal-content">
+    	<h3>Only Exit This Way After 20 Minutes of Participation in the Chatroom.</h3>
+    	<p>This signals the end of the chat session of the experiment. You will be redirected to the post-survey.</p>
+        <p>This button is only to be used at the end of your 20 minutes of participation in the chatroom. <strong>If you wish to exit the chat before finishing your 20 minutes, use the "Abort Experiment" button instead.</strong></p>
+        <div class="modal-buttons">
+          <button class="modal-btn" id="endYesBtn">Continue</button>
+          <button class="modal-btn" id="endNoBtn">Cancel</button>
+        </div>
       </div>
+    </div>
+    <div id="abort-modal" class="modal">
+      <div class="modal-content">
+        <h3>Are you sure you want to leave this experiment?</h3>
+        <p><strong>If you finished your 20 minutes in the chatroom, do NOT exit via this button. Use the "End Chat Session" button instead.</strong></p>
+        <p>By clicking yes, you will exit the experiment <strong>without</strong> completing the final survey.</p>
+        <div class="modal-buttons">
+          <button class="modal-btn" id="abortYesBtn">End early with code "C9V2XFDU"</button>
+          <button class="modal-btn" id="abortNoBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
 
-
-      <div id="abort-modal-confirm" class="modal">
-          <div class="modal-content">
-              <h3>Confirmation</h3>
-              <p>By clicking yes, you will exit the experiment <strong>without</strong> completing the final survey.</p>
-              <p>We encourage you to message us about any concerns or <a href="{{ feedback_form_url | default('https://umw.qualtrics.com/jfe/form/SV_08v26NssCOwZTP8') }}" target="_blank">provide feedback here</a>.</p>
-              <div class="modal-buttons">
-                  <button class="modal-btn" id="abortYesBtn">Yes</button>
-                  <button class="modal-btn" id="abortNoBtn">Cancel</button>
-              </div>
-          </div>
-      </div>
-      <div id="feedback-modal" class="modal">
-          <div class="modal-content">
-              <h3>Feedback</h3>
-              <form id="feedback-form">
-                  <div class="feedback-col">
-                      <label for="enter-feedback">Noticed something confusing, unexpected, or not working? Tell us what happened.</label>
+    <div id="feedback-modal" class="modal">
+        <div class="modal-content">
+            <h3>Feedback</h3>
+            <form id="feedback-form">
+                 <div class="feedback-col">
+                   <label for="enter-feedback">Tell us if you noticed something confusing, unexpected, or not working.</label>
                     <textarea id="enter-feedback" name="feedback"></textarea>
                   </div>
                   <br>
@@ -88,24 +74,23 @@
               </form>
           </div>
       </div>
-      <div id="feedback-status-confirm" class="modal">
-          <div class="modal-content">
-              <p>Feedback submitted.</p>
-              <div class="modal-buttons">
-                  <button class="modal-btn" id="cancelFeedbackStatusBtn">Ok</button>
-              </div>
-          </div>
-      </div>
-      <div id="feedback-status-fail" class="modal">
-          <div class="modal-content">
-              <p>Feedback failed to submit.</p>
-              <div class="modal-buttons">
-                  <button class="modal-btn" id="cancelFeedbackStatusBtn2">Ok</button>
-              </div>
-          </div>
-      </div>
 
-
+    <div id="feedback-status-confirm" class="modal">
+      <div class="modal-content">
+        <p>Feedback submitted.</p>
+        <div class="modal-buttons">
+          <button class="modal-btn" id="cancelFeedbackStatusBtn">Ok</button>
+        </div>
+      </div>
+    </div>
+    <div id="feedback-status-fail" class="modal">
+      <div class="modal-content">
+        <p>Feedback failed to submit.</p>
+        <div class="modal-buttons">
+          <button class="modal-btn" id="cancelFeedbackStatusBtn2">Ok</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div id="chat-room-widget">
     <div id="msgs-container">
@@ -132,6 +117,7 @@
       document.getElementById("send-btn").disabled = true;
       document.getElementById("end-exp-btn").disabled = true;
       document.getElementById("abort-exp-btn").disabled = true;
+      document.getElementById("feedback-btn").disabled = true; //since without socket io, it won't submit
       if (socketio) {
         socketio.close();
       }
@@ -156,6 +142,7 @@
     };
     // Creates the post-survey link (based on the bot names)
     const endpoint = "{{ url_for('post_survey') }}";
+    const endpointQuitEarly = "https://app.prolific.com/submissions/complete?cc=C9V2XFDU";
     socketio.on("message", function (message) { createChatItem(message.message, message.sender) });
     function createChatItem(message, sender) {
       //autoscroll capabilities
@@ -225,46 +212,38 @@
       document.getElementById("send-btn").disabled = true;
       document.getElementById("end-exp-btn").disabled = true;
       document.getElementById("abort-exp-btn").disabled = true;
+      document.getElementById("feedback-btn").disabled = true; //since without socket io, it won't submit
       if (socketio) {
         socketio.close();
       }
     };
     // Handler for the Abort Experiment confirmation pop-up
     let modal = document.getElementById("abort-modal");
-    let abortModalConfirm = document.getElementById("abort-modal-confirm");
     document.getElementById("abort-exp-btn").onclick = function () {
       modal.style.display = "block";
     };
-
-    document.getElementById("abortYesBtn-pre").onclick = function () {
-      abortModalConfirm.style.display = "block";
+    document.getElementById("abortNoBtn").onclick = function () {
       modal.style.display = "none";
     };
-
-    document.getElementById("abortNoBtn-pre").onclick = function () {
-        modal.style.display = "none";
-    };
+    
     document.getElementById("abortYesBtn").onclick = function (e) {
-        //block browser confirmation popup
-        e.stopPropagation(); 
-        // Mark that user aborted and redirect to ending survey
-        fetch("/abort", { method: "POST" })
-            .then(() => {
-                window.open(endpoint, "_blank");
-            });
-        modal.style.display = "none";
-        textarea.disabled = true;
-        textarea.placeholder = "The chat has ended.";
-        document.getElementById("send-btn").disabled = true;
-        document.getElementById("end-exp-btn").disabled = true;
-        document.getElementById("abort-exp-btn").disabled = true;
-        if (socketio) {
-            socketio.close();
-        }
-    };
-
-    document.getElementById("abortNoBtn").onclick = function () {
-        abortModalConfirm.style.display = "none";
+      //block browser confirmation popup
+      e.stopPropagation(); 
+      // Mark that user aborted and redirect to ending survey
+      fetch("/abort", { method: "POST" })
+        .then(() => {
+          window.open(endpointQuitEarly, "_blank");
+    	});
+      modal.style.display = "none";
+      textarea.disabled = true;
+      textarea.placeholder = "The chat has ended.";
+      document.getElementById("send-btn").disabled = true;
+      document.getElementById("end-exp-btn").disabled = true;
+      document.getElementById("abort-exp-btn").disabled = true;
+      document.getElementById("feedback-btn").disabled = true; //since without socket io, it won't submit
+      if (socketio) {
+      	socketio.close();
+      }
     };
 
     //handler for feedback modal popup
@@ -272,20 +251,18 @@
     let form = document.getElementById("feedback-form");
     let feedbackConfirm = document.getElementById("feedback-status-confirm");
     let feedbackFail = document.getElementById("feedback-status-fail");
-
     document.getElementById("feedback-btn").onclick = function () {
       feedbackModal.style.display = "block";
     };
-
     document.getElementById("cancelFeedbackBtn").onclick = function () {
       feedbackModal.style.display = "none";
     };
-    
+
     document.getElementById("cancelFeedbackStatusBtn").onclick = function () {
       feedbackConfirm.style.display = "none";
       feedbackFail.style.display = "none";
     };
-
+    
     document.getElementById("cancelFeedbackStatusBtn2").onclick = function () {
       feedbackConfirm.style.display = "none";
       feedbackFail.style.display = "none";
@@ -299,20 +276,18 @@
         const feedback = data.get("feedback")?.trim();
 
         if (!feedback) return;
-
+      
         socketio.emit("feedback_given", { feedback }, (response) => {
-            console.log("Server response:", response);
-
-            if (response?.status === "True" || response?.status === true) {
-                feedbackConfirm.style.display = "block";
-            }
+          if (response?.status === "True" || response?.status === true) {
+            feedbackConfirm.style.display = "block";
+            form.reset();
+            document.getElementById("feedback-modal").style.display = "none";
+          } else {
+            feedbackFail.style.display = "block";
+          }
         });
-
-        form.reset();
-        document.getElementById("feedback-modal").style.display = "none";
     });
-
-
+      
     // add auto scroll
     function isNearBottom(container, threshold = 120) {
       const distanceFromBottom = container.scrollHeight - (container.scrollTop + container.clientHeight);
@@ -333,4 +308,5 @@
   </script>
 </div>
 {% endblock %}
+
 
