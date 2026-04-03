@@ -39,13 +39,7 @@ What is the "state" of each LLM? Alternatives:
     * opinions on various issues
     * etc
 
-<<<<<<< HEAD
 If we go with number 2 (state dict), how do we determine the values? Which LLM
-will distill text into those attributes?
-=======
-If we go with #2, how do we determine the values? Which LLM will distill text
-into those attributes?
->>>>>>> 9a555fd72cd1d42a7d612da1dbf4ccc9e3bf40de
 
 LR: can a bot (1) be objective in assessing its own qualities? (2) assess its
 own qualities meaningfully without a training set to do classification the
@@ -71,11 +65,7 @@ to join it?)
 ## Things we don't know the right answer to until we get our hands dirty
 
 1. Is recomputing personality chunk every time too computationally prohibitive?
-<<<<<<< HEAD
    (Can we go with number 2 above, or do we need to do another thing.)
-=======
-   (Can we go with #2 above, or do we need to do another thing.)
->>>>>>> 9a555fd72cd1d42a7d612da1dbf4ccc9e3bf40de
 2. Is the bot going to make good self-assessments of the traits we care about?
    (Or do we need a separate classifier.)
 3. How much overlap between subreddits is there, actually? (do we have a
