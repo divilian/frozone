@@ -105,12 +105,12 @@ measure that?
 # Action items
 
 1. Actually actually for-reals pull the Prolific trigger. (LR)
-1. Do the delete-and-reclone-the-repo thing. (All issue #195)
+1. Do the delete-and-reclone-the-repo thing. ([All #195](../../issues/195))
 1. Dive into the Reddit API and data, and find out if there are any surprises
    about how it works? What volume are we looking at? How many posts per day
    per user? How many users? How many subreddits are political in nature? Which
-   ones look like they are worth pulling from? (GM issue #196)
-1. Personality distillery. (BH issue #197)
+   ones look like they are worth pulling from? ([GM #196](../../issues/196))
+1. Personality distillery. ([BH #197](../../issues/197))
     a. Experiment with a "personality distiller" prompt and see how it does on
     some onesy-twosy reddit content you manually scrape.
     b. Do some deep thinking about what properties should go in the personality
@@ -118,7 +118,7 @@ measure that?
     you think on various issues" type stuff. Make this more refined.)
 1. Lit search: what has been done regarding LLM-based ABMs which modify their
    graph/hypergraph? (see "Big and exciting architectural question," above.)
-   (LR issue #198)
+   ([LR #198](../../issues/198))
 1. Lit search: what has been done regarding the measurement of synthesized bot
    content to assess its fidelity to real human communication? How is this
-   normally measured? (GM/NF issue #199)
+   normally measured? ([GM/NF #199](../../issues/199))
