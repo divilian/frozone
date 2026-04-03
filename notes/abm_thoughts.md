@@ -39,8 +39,8 @@ What is the "state" of each LLM? Alternatives:
     * opinions on various issues
     * etc
 
-If we go with #2, how do we determine the values? Which LLM will distill text
-into those attributes?
+If we go with number 2 (state dict), how do we determine the values? Which LLM
+will distill text into those attributes?
 
 LR: can a bot (1) be objective in assessing its own qualities? (2) assess its
 own qualities meaningfully without a training set to do classification the
@@ -66,7 +66,7 @@ to join it?)
 ## Things we don't know the right answer to until we get our hands dirty
 
 1. Is recomputing personality chunk every time too computationally prohibitive?
-   (Can we go with #2 above, or do we need to do another thing.)
+   (Can we go with number 2 above, or do we need to do another thing.)
 2. Is the bot going to make good self-assessments of the traits we care about?
    (Or do we need a separate classifier.)
 3. How much overlap between subreddits is there, actually? (do we have a
@@ -106,12 +106,12 @@ measure that?
 # Action items
 
 1. Actually actually for-reals pull the Prolific trigger. (LR)
-1. Do the delete-and-reclone-the-repo thing. (All)
+1. Do the delete-and-reclone-the-repo thing. (All issue #195)
 1. Dive into the Reddit API and data, and find out if there are any surprises
    about how it works? What volume are we looking at? How many posts per day
    per user? How many users? How many subreddits are political in nature? Which
-   ones look like they are worth pulling from? (GM)
-1. Personality distillery. (BH)
+   ones look like they are worth pulling from? (GM issue #196)
+1. Personality distillery. (BH issue #197)
     a. Experiment with a "personality distiller" prompt and see how it does on
     some onesy-twosy reddit content you manually scrape.
     b. Do some deep thinking about what properties should go in the personality
@@ -119,7 +119,7 @@ measure that?
     you think on various issues" type stuff. Make this more refined.)
 1. Lit search: what has been done regarding LLM-based ABMs which modify their
    graph/hypergraph? (see "Big and exciting architectural question," above.)
-   (LR)
+   (LR issue #198)
 1. Lit search: what has been done regarding the measurement of synthesized bot
    content to assess its fidelity to real human communication? How is this
-   normally measured? (GM)
+   normally measured? (GM/NF issue #199)
