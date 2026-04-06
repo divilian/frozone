@@ -53,4 +53,39 @@ Tldr; 1 and 3 seem like the best avenues to pursure, here.
 
 ## Deeper Exploration of Solutions
 
-TODO
+### Option 3
+
+Resources:
+- fast-stylometry python library
+- https://www.semanticscholar.org/paper/Surveying-Stylometry-Techniques-and-Applications-Neal-Sundararajan/a0b431dba789801750f247365b05a12e165d364c
+- https://www.sciencedirect.com/science/article/abs/pii/S0957417423012472
+- SBERT (Sentence-BERT) fine-tuned on authorship tasks
+- StyleDistance and similar contrastive learning approaches (explicitly try to separate style from content in the embedding space)
+
+Claude: 
+
+The more directly relevant concept is called **authorship verification via similarity** — specifically the "same author?" binary question. Some approaches here use BERT-style models fine-tuned purely on stylistic pairs, which require surprisingly little per-person data because the model's general language understanding does the heavy lifting.
+
+Siamese BERT is probably your best option for #3 under limited samples — it's more fidelity-aware than raw embeddings and more sample-efficient than a from-scratch classifier. Worth looking at the Tyo, Dhingra & Lipton (2021) "Siamese BERT for Authorship Verification" paper specifically, as it seems directly applicable. 
+
+My thoughts:
+
+Based on some other stuff Claude said, it seems like this type of analysis is also better (than a singular number metric) because it would tell us exactly where the bot is failing to mimic the other style.
+
+#### Burrows's delta tangent
+
+Burrows's delta: https://academic.oup.com/dsh/article-abstract/32/suppl_2/ii4/3865676?redirectedFrom=fulltext&login=false
+
+The downside is, Burrows's delta requires at least a chapter of text to work accurately. But, *if we have at least a chapter worth of text*, it seems like it could work okay. 
+
+Claude thinks using Burrows's delta would be a reasonable first pass, with the following uncertainties:
+
+- Concatenation artifacts — chat messages aren't continuous prose. Burrows Delta was designed for text where function word usage flows naturally. Stitching together hundreds of short turns might create weird boundary effects, though I'm genuinely not sure how much this matters in practice.
+- This gets you a single score, not a feature breakdown. You'd know whether the bot mimics person A well, but not where it's failing. For ABM development that diagnostic information seems really valuable, as we probably want to know "the bot got sentiment right but not hedging patterns" more than just "fidelity score = 0.6."
+- The 50 message test set might still be on the thin side even concatenated, though I'm less certain about this.
+
+Claude's take: It's probably worth trying as a quick baseline precisely because it's so easy to implement. But I'd treat it as a coarse first-pass rather than the final evaluation framework.
+
+## Solution Options to Consider
+
+1. Rough first pass: use Burrows's delta as it is used in the example [here](https://fastdatascience.com/natural-language-processing/fast-stylometry-python-library/)
