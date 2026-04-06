@@ -12,7 +12,7 @@ If we have a *specific* person "A" with some associated chat history, and then t
 
 We specifically want to find meaningful evaluation metric for this.
 
-###  Solutions
+##  Outline of Solutions
 
 ### Claude's Ideas
 
@@ -38,5 +38,19 @@ If the ABM is modeling something specific (opinion shift, persuasion, etc.), che
 
 
 ### A review of Claude's Ideas
+
+1 seems strong, and it feels really simple to implement (and could even be implemented with a LLM instance). However, I'm not sure how well it would work if we only have limited samples for a person or bot.
+
+2 feels problematic because things like typos may not get picked up by something so high-level, and we want high fidelity.
+
+3 may make sense, but I need to do more research as to what the right categories to score on are. Again, would we potentially want a LLM to do this?
+
+4 is clearly the most trustworthy, but it could have wide variance, and can be expensive.
+
+5 seems inapplicable given the desired fidelity.
+
+Tldr; 1 and 3 seem like the best avenues to pursure, here.
+
+## Deeper Exploration of Solutions
 
 TODO
