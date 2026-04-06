@@ -86,6 +86,32 @@ Claude thinks using Burrows's delta would be a reasonable first pass, with the f
 
 Claude's take: It's probably worth trying as a quick baseline precisely because it's so easy to implement. But I'd treat it as a coarse first-pass rather than the final evaluation framework.
 
+### Hybrid of 1 and 3 approach
+
+#### Version 1: Top-level score
+
+"Here are 300 messages from person A: [corpus A]. Here are 50 messages from a bot attempting to mimic person A: [corpus B]. On a scale of 1-10, how well does the bot mimic person A's writing style? Consider overall feel, word choice, and conversational patterns."
+
+Simple and fast, but opaque. We would get one top-level number.
+
+#### Version 2: Feature-based scores
+
+"Here are 300 messages from person A: [corpus A]. Here are 50 messages from a bot attempting to mimic person A: [corpus B]. Rate the bot's mimicry of person A on each of the following axes from 1-10, and briefly justify each score:
+
+- Vocabulary (word choice, complexity, recurring phrases)
+- Sentence/message length patterns
+- Sentiment (positivity, negativity, emotional tone)
+- Hedging language (uncertainty expressions, qualifiers)
+- Turn length and response style
+- Punctuation and formatting habits
+- Etc.
+
+**Need to do more research as to which critera specifically make sense.** The literature could provide a principled, citable list of axes to feed into the prompt.
+
 ## Solution Options to Consider
 
 1. Rough first pass: use Burrows's delta as it is used in the example [here](https://fastdatascience.com/natural-language-processing/fast-stylometry-python-library/)
+
+2. Use a LLM agent:
+    a. Rough first pass: a single similarity score
+    b. More thorough: obtain multiple scores based on features that we define
