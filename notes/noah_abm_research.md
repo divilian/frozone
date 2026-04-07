@@ -115,3 +115,5 @@ Simple and fast, but opaque. We would get one top-level number.
 2. Use a LLM agent:
     a. Rough first pass: a single similarity score
     b. More thorough: obtain multiple scores based on features that we define
+
+But need to look into more options in the literature!
