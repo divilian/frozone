@@ -21,3 +21,6 @@ dev/BH
 
 #API Keys
 detectors/.env
+
+# Experiment Results Data
+data/experiment_results/*
