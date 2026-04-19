@@ -59,7 +59,13 @@ def print_room(doc):
     for msg in doc.get("messages", []):
         sender = msg.get("sender", "")
         message_text = msg.get("message", "")
-        display_name = sender_map.get(sender, sender)
+
+        role = sender_map.get(sender)
+        if role is None:
+            display_name = sender
+        else:
+            display_name = f"{sender} ({role})"
+
         print(f"{display_name}: {message_text}")
 
 
