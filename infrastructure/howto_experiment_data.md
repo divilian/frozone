@@ -9,10 +9,10 @@ Option 1 (if you have access to the HF project):
 
 Option 2:
 1.  Access the Frozone_Data directory that I shared with SD, BH, and GM via OneDrive.  If you are NF, access it via the specific share link that you have.
-2. You can access the chatlogs in the chatlogs/ directory.  Download the appropriate .bson files.
-3. Follow steps 2-5 of the above instructions.
+2.  Change the `USER_IDS` parameter in `data/make_log_files.py` to reflect the user_ids of the chats which you would like to create txt files for.
+3.  Run `python -m data.make_log_files`. The appropriate txt files will be created in the `data/experiment_results/Frozone_Data/chatlogs` directory.
 
 ## To Run Noah's Scripts
 1.  Access the Frozone_Data directory that I shared with SD, BH, and GM via OneDrive.  If you are NF, access it via the specific share link that you have.
-1.  Place the entire Frozone_Data directory in the `data/experiment_results/` directory on your local copy of the repo (download it as a .zip and then unzip it in the appropriate location).  MAKE SURE, that `git status` properly ignores all of `Frozone_Data`.
-2. Run NF's notebooks in `juypter_notebooks/data_analysis/`.
+2.  Place the entire Frozone_Data directory in the `data/experiment_results/` directory on your local copy of the repo (download it as a .zip and then unzip it in the appropriate location).  MAKE SURE, that `git status` properly ignores all of `Frozone_Data`.
+3. Run NF's notebooks in `juypter_notebooks/data_analysis/`.
