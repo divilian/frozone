@@ -24,3 +24,4 @@ detectors/.env
 
 # Experiment Results Data
 data/experiment_results/*
+juypter_notebooks/data_analysis/.ipynb_checkpoints/*
