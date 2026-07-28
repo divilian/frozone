@@ -9,8 +9,13 @@ Option 1 (if you have access to the HF project):
 
 Option 2:
 1.  Access the Frozone_Data directory that I shared with SD, BH, and GM via OneDrive.  If you are NF, access it via the specific share link that you have.
+4.  Run `python -m data.interactive_make_log_files path_to_input_file -o output_directory -ids '["id1", "id2", ...]'`. The appropriate txt files will be created in the specified directory.
+
+Option 3:
+1.  Access the Frozone_Data directory that I shared with SD, BH, and GM via OneDrive.  If you are NF, access it via the specific share link that you have.
 2.  Change the `USER_IDS` parameter in `data/make_log_files.py` to reflect the user_ids of the chats which you would like to create txt files for.
-3.  Run `python -m data.make_log_files`. The appropriate txt files will be created in the `data/experiment_results/Frozone_Data/chatlogs` directory.
+   3.  Change the `INPUT_FILE` parameter to point to the appropriate file as needed.
+4.  Run `python -m data.make_log_files`. The appropriate txt files will be created in the `data/experiment_results/Frozone_Data/chatlogs` directory.
 
 ## To Run Noah's Scripts
 1.  Access the Frozone_Data directory that I shared with SD, BH, and GM via OneDrive.  If you are NF, access it via the specific share link that you have.

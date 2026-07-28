@@ -12,11 +12,11 @@ USER_IDS = ['657fa05267050fd8b627f0bc', '662fb80a4da196677a2d2a16', '6644b750f83
 MAX_LINE_LENGTH = 80  # max line length; NONE for no line length
 
 OUTPUT_DIR = "data/experiment_results/Frozone_Data/chatlogs"
-
+INPUT_FILE = "data/experiment_results/Frozone_Data/chatlogs/chatrooms_4-14.bson"
 
 # SCRIPT
 
-with open("data/experiment_results/Frozone_Data/chatlogs/chatrooms_4-14.bson", "rb") as f:
+with open(INPUT_FILE, "rb") as f:
     data = bson.decode_all(f.read())
 
 found_ids = set()
