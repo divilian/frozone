@@ -24,4 +24,5 @@ detectors/.env
 
 # Experiment Results Data
 data/experiment_results/*
+data/Frozone_Data/*
 juypter_notebooks/data_analysis/.ipynb_checkpoints/*
