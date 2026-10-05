@@ -1,18 +1,47 @@
-import bson
+import bson, json
 import os
 import textwrap
 from datetime import datetime
+import argparse
 
+#change this to the bson chatlog file you want to look at.  Or provide an input command line argument (see below)
+DEFAULT_FILE = "data/experiment_results/Frozone_Data/chatlogs/chatrooms_4-14.bson"
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    #the path to the BSON source file for the chatlog
+    "input",
+    nargs="?",
+    default=DEFAULT_FILE,
+    help="Input BSON file"
+)
+parser.add_argument(
+    #the output directory where files will be saved
+    "-o",
+    "--output",
+    default="./",
+    help="Output directory location"
+)
+parser.add_argument(
+    #optional list the ids in JSON ex --ids='["id1","id2"]'
+    #if nothing specified, all ids in the BSON chatlogs will be output
+    "--ids",
+    type=json.loads,
+    default=None,
+    help="JSON of the user ids you want"
+)
+
+args = parser.parse_args()
 
 # SETTINGS
 
-USER_IDS = ['657fa05267050fd8b627f0bc', '662fb80a4da196677a2d2a16', '6644b750f83b1ad48d9ce14f', '6715b46f9f59f9e05837029a', '67e268cbf13dcd115337894c', '682a1996cd2cfa1f1160cb71', '683cbc0c0c2d722831c8bc17', '699397c4953cfe8ddd54a8f0', '69c2d2d68e61037f1e2f1a06', '69d7ebaa0c636510b15ce777']
-  # change this to whichever rooms you want
+USER_IDS = args.ids
+# change this to whichever rooms you want
 
 MAX_LINE_LENGTH = 80  # max line length; NONE for no line length
 
-OUTPUT_DIR = "data/experiment_results/Frozone_Data/chatlogs"
-INPUT_FILE = "data/experiment_results/Frozone_Data/chatlogs/chatrooms_4-14.bson"
+INPUT_FILE = args.input
+OUTPUT_DIR = args.output
 
 # SCRIPT
 
@@ -23,7 +52,7 @@ found_ids = set()
 
 for doc in data:
     user_id = doc.get('user_id')
-    if user_id not in USER_IDS:
+    if USER_IDS and user_id not in USER_IDS:
         continue
 
     found_ids.add(user_id)
@@ -59,7 +88,11 @@ for doc in data:
     with open(filename, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
     print(f"Saved {filename}")
+if USER_IDS:
+    for id in USER_IDS:
+        if id not in found_ids:
+            print(f"Room corresponding to user with ID {id} not found.")
 
-for id in USER_IDS:
-    if id not in found_ids:
-        print(f"Room corresponding to user with ID {id} not found.")
+
+
+
