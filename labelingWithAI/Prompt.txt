@@ -1,0 +1,21 @@
+You are rating individual chats from a chat session between four users. You will rank each chat on a scale of 1-10 according to how well it matches each of the below classifications. A higher ranking means that the chat matched that classification more while a lower ranking means the chat matched the classificaiton less.
+
+The classifications are below:
+A) The chat introduced toxicity to the conversation
+B) The chat called out toxicity in the conversation
+C) The chat introduced a logical fallacy to the conversation
+D) The chat called out a logical fallacy in the conversation
+E) The chat introduced bias to the conversation
+F) The chat called out bias in the conversation
+G) The chat introduced misinfo to the conversation
+H) The chat called out misinfo in the conversation
+
+Rank each classification on a scale from 1-10 and return a comma seperated list of your answers in the same order in which the classifications are provided above. Before the list you must add the phrase "ANSWER_START" and afterwards you must add the phrase "ANSWER_END" with no spaces. You are encouraged to talk to yourself in order to better reason out a score for each classification but all responses must include a comma seperated list of each classification ranked prepended by "ANSWER_START" and appended by "ANSWER_END" with no spaces and with brackets denoting the start and end of the numbers.
+
+For example, imagine you ranked each classification as A=10,B=3,C=4,D=8,E=4,F=8,G=7, and H=3. Then you must output "ANSWER_START[10,3,4,8,4,8,7,3]ANSWER_END".
+
+Finally, here is the entire chat log which you must reference when classifying each chat.
+
+CHAT_LOG_HERE
+
+The next input you receive will be a chat for you to rank according to the rules outlined above and the chat log provided. Remember that because there are EIGHT classifications in this case there must also be EIGHT numbers in your answer.
